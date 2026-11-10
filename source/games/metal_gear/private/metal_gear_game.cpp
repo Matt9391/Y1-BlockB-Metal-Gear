@@ -128,5 +128,6 @@ void metal_gear_game::draw_debug_shapes()
 void metal_gear_game::on_render_screen(buz::engine& /*engine*/, buz::screen_renderer& screen)
 {
 	const buz::color text_color = { 1.0f, 1.0f, 1.0f, 0.8f };
-	screen.draw_text(m_font, "F1 wireframe   F2 lighting   F3 stats   F4 debug lines", { 16.0f, 16.0f }, 12.0f, text_color);
+	screen.draw_text(m_font, "F1 wireframe   F2 lighting  F3 stats   F4 debug lines", { 16.0f, 16.0f }, 12.0f, text_color);
+	
 }

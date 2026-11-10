@@ -9,7 +9,7 @@ if not exist "%SCRIPT_DIR%CMakeLists.txt" set "SCRIPT_DIR=%~dp0..\..\..\"
 
 set "CONFIG=Debug"
 set "CONFIG_ARG=-debug"
-set "GAME=sample_2d"
+set "GAME=metal_gear"
 set "FORWARD="
 
 :parse_args

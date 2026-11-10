@@ -1,5 +1,4 @@
 #include "metal_gear_game.h"
-
 #include "engine/engine.h"
 
 //--------------------------------------------------------------
@@ -15,7 +14,7 @@
 int main(int argc, char** argv)
 {
 	buz::engine engine(argc, argv, { .window_title = "BuzEngine - Metal Gear" });
-
+	
 	metal_gear_game game(engine);
-	return engine.run(game);
+	return engine.run(game);	
 }
