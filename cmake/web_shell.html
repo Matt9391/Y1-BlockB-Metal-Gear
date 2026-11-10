@@ -1,0 +1,41 @@
+<!doctype html>
+<!--
+  The page a web package opens (emcc --shell-file, see cmake/buz_game.cmake).
+  Emscripten puts the script that loads the game where SCRIPT is. Browsers
+  only play sound after a click, and keys only reach a page that has been
+  clicked, so the game waits behind a "click to play" until then.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>buz</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #000; }
+  body { display: flex; align-items: center; justify-content: center; }
+  canvas { display: block; max-width: 100%; max-height: 100%; outline: none; }
+  #status { position: absolute; color: #ddd; font: 20px sans-serif; cursor: pointer; }
+</style>
+</head>
+<body>
+<canvas id="canvas" tabindex="-1" oncontextmenu="event.preventDefault()"></canvas>
+<div id="status">Loading...</div>
+<script>
+  const status = document.getElementById('status');
+  var Module = {
+    canvas: document.getElementById('canvas'),
+    noInitialRun: true,
+    setStatus: (text) => { if (text) status.textContent = text; },
+    onRuntimeInitialized: () => {
+      status.textContent = 'Click to play';
+      document.body.addEventListener('click', () => {
+        status.remove();
+        Module.canvas.focus();
+        Module.callMain();
+      }, { once: true });
+    },
+  };
+</script>
+{{{ SCRIPT }}}
+</body>
+</html>

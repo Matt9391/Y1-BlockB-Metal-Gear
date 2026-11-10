@@ -1,0 +1,4 @@
+# Vendored code stays exactly as its authors shipped it, so an editor that
+# formats on save never turns an update of a library into a huge diff.
+DisableFormat: true
+SortIncludes: Never

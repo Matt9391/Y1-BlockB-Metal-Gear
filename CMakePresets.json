@@ -1,0 +1,40 @@
+{
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "vs2026",
+            "displayName": "Visual Studio 2026 (x64), OpenGL",
+            "generator": "Visual Studio 18 2026",
+            "architecture": "x64",
+            "binaryDir": "${sourceDir}/build",
+            "cacheVariables": { "BUZ_RHI": "opengl" },
+            "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" }
+        },
+        {
+            "name": "vs2026-d3d12",
+            "displayName": "Visual Studio 2026 (x64), DirectX 12",
+            "inherits": "vs2026",
+            "cacheVariables": { "BUZ_RHI": "d3d12" }
+        },
+        {
+            "name": "linux",
+            "displayName": "Linux (Ninja Multi-Config), OpenGL",
+            "generator": "Ninja Multi-Config",
+            "binaryDir": "${sourceDir}/build",
+            "cacheVariables": { "BUZ_RHI": "opengl" },
+            "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+        },
+        {
+            "name": "linux-vulkan",
+            "displayName": "Linux (Ninja Multi-Config), Vulkan",
+            "inherits": "linux",
+            "cacheVariables": { "BUZ_RHI": "vulkan" }
+        }
+    ],
+    "buildPresets": [
+        { "name": "debug",         "displayName": "Debug",   "configurePreset": "vs2026", "configuration": "Debug" },
+        { "name": "release",       "displayName": "Release", "configurePreset": "vs2026", "configuration": "Release" },
+        { "name": "debug-linux",   "displayName": "Debug",   "configurePreset": "linux",  "configuration": "Debug" },
+        { "name": "release-linux", "displayName": "Release", "configurePreset": "linux",  "configuration": "Release" }
+    ]
+}

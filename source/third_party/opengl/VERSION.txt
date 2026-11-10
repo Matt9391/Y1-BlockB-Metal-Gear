@@ -1,0 +1,1 @@
+Khronos OpenGL Registry (api/GL/glcorearb.h) and EGL Registry (api/KHR/khrplatform.h), main branch on 2026-10-02. MIT licensed (see the headers).

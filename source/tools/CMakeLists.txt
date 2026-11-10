@@ -1,0 +1,3 @@
+MESSAGE(STATUS "Adding tools")
+
+ADD_SUBDIRECTORY(${SOURCE_TOOLS_DIRECTORY}/shader_compiler)

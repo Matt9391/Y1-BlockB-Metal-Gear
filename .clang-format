@@ -1,0 +1,68 @@
+# The buz code style, so formatting is never a review topic ("bikeshedding
+# is bad"). Visual Studio, VS Code and CLion pick this file up on their own.
+# It describes the style the code already has: tabs, braces on their own
+# line, and no column limit (long lines are broken by hand, where it reads
+# best).
+BasedOnStyle: Microsoft
+Language: Cpp
+Standard: c++20
+UseTab: AlignWithSpaces
+IndentWidth: 4
+TabWidth: 4
+ColumnLimit: 0
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterCaseLabel: true
+  AfterClass: true
+  AfterControlStatement: Always
+  AfterEnum: true
+  AfterFunction: true
+  AfterNamespace: true
+  AfterStruct: true
+  AfterUnion: true
+  AfterExternBlock: true
+  BeforeCatch: true
+  BeforeElse: true
+  BeforeLambdaBody: false
+  BeforeWhile: false
+  SplitEmptyFunction: true
+  SplitEmptyRecord: true
+  SplitEmptyNamespace: true
+IndentPPDirectives: BeforeHash
+AlignEscapedNewlines: Left
+NamespaceIndentation: All
+AccessModifierOffset: -4
+IndentCaseLabels: false
+PointerAlignment: Left
+ReferenceAlignment: Left
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: WithoutElse
+AllowShortBlocksOnASingleLine: Always
+AllowShortLambdasOnASingleLine: All
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortEnumsOnASingleLine: false
+SortIncludes: Never
+SortUsingDeclarations: Never
+SpaceAfterTemplateKeyword: false
+BreakBeforeBinaryOperators: All
+LambdaBodyIndentation: OuterScope
+AlignArrayOfStructures: None
+IncludeBlocks: Preserve
+FixNamespaceComments: false
+SpaceBeforeCpp11BracedList: false
+Cpp11BracedListStyle: false
+AlignTrailingComments:
+  Kind: Always
+  OverEmptyLines: 0
+AlignConsecutiveAssignments: None
+AlignConsecutiveDeclarations: None
+AlignOperands: DontAlign
+AlignAfterOpenBracket: DontAlign
+BreakConstructorInitializers: BeforeComma
+ConstructorInitializerIndentWidth: 4
+PackConstructorInitializers: Never
+EmptyLineBeforeAccessModifier: Leave
+KeepEmptyLinesAtTheStartOfBlocks: false
+MaxEmptyLinesToKeep: 1
+InsertNewlineAtEOF: true
+InsertBraces: true
