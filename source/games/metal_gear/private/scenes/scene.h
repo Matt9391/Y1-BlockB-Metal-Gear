@@ -21,7 +21,7 @@ enum class scene_type
 class scene
 {
 public:
-	scene(scene_type this_scene, scene_type next_scene, buz::engine& engine, buz::world_renderer_3d& world_3d, const buz::font& font);
+	scene(scene_type this_scene, scene_type next_scene, buz::world_renderer_3d& world_3d, const buz::font& font);
 	virtual ~scene() = default;
 	//----------------------------------------------------------
 	/// update logic
@@ -32,6 +32,22 @@ public:
 
 	/// draws the HUD on top.
 	virtual void on_render_screen(buz::engine& engine, buz::screen_renderer& screen);
+
+
+	// Getters
+	scene_type get_scene_type() const { return m_scene_type; }
+	scene_type get_next_scene_type() const { return m_next_scene_type; }
+
+	bool get_invoke_next_scene() const { return m_invoke_next_scene; }
+
+	buz::world_renderer_3d& get_world_3d() const { return m_world_3d; }
+	const buz::font& get_font() const { return m_font; }
+
+	// Setters
+	void set_scene_type(scene_type type) { m_scene_type = type; }
+	void set_next_scene_type(scene_type type) { m_next_scene_type = type; }
+	
+	void set_invoke_next_scene(bool value) { m_invoke_next_scene = value; }
 
 private:
 	scene_type m_scene_type;

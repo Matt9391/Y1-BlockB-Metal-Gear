@@ -5,6 +5,7 @@
 #include "renderer_2d/font.h"
 #include "renderer_3d/material.h"
 #include "renderer_3d/world_renderer_3d.h"
+#include "scenes/scene_handler.h"
 
 #include <memory>
 #include <vector>
@@ -31,7 +32,7 @@ public:
 protected:
 	//----------------------------------------------------------
 	/// @brief Switches the debug views with the function keys.
-	void on_update(buz::engine& engine, float delta_seconds) override;
+	void on_update(buz::engine& engine, float dt_s) override;
 
 	//----------------------------------------------------------
 	/// @brief Draws the harbour, the crates and the soldier.
@@ -42,8 +43,6 @@ protected:
 	void on_render_screen(buz::engine& engine, buz::screen_renderer& screen) override;
 
 private:
-	void draw_harbour();
-	void draw_debug_shapes();
 
 	buz::world_renderer_3d m_world_3d; // draws the 3D world
 
@@ -55,4 +54,6 @@ private:
 	buz::vec3 m_soldier_position;              // his feet, in world meters
 
 	buz::font m_font; // for the hud
+
+	scene_handler m_scene_handler;
 };

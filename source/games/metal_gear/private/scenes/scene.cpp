@@ -3,7 +3,7 @@
 #include "engine/input.h"
 #include "renderer_2d/screen_renderer.h"
 
-scene::scene(scene_type this_scene, scene_type next_scene, buz::engine& engine, buz::world_renderer_3d& world_3d, const buz::font& font)
+scene::scene(scene_type this_scene, scene_type next_scene, buz::world_renderer_3d& world_3d, const buz::font& font)
 	: m_scene_type{ this_scene }
 	, m_next_scene_type{ next_scene }
 	, m_invoke_next_scene{ false }
@@ -16,6 +16,7 @@ void scene::on_update(buz::engine& engine, float)
 {
 	const buz::input& input = engine.get_input();
 	if (input.was_key_pressed(buz::key::space)) { m_invoke_next_scene = true; }
+	
 }   
 
 void scene::on_render_world(buz::engine&, buz::world_renderer_2d&)
