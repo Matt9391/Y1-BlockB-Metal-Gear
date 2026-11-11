@@ -8,6 +8,7 @@
 #include "renderer_3d/debug_draw.h"
 #include "renderer_3d/mesh.h"
 #include "renderer_3d/model.h"
+#include "engine/window.h"
 
 #include <iterator>
 
@@ -54,11 +55,12 @@ void metal_gear_game::on_update(buz::engine& engine, float dt_s)
 	}
 }
 
+
+	
 //--------------------------------------------------------------
 void metal_gear_game::on_render_world(buz::engine& engine, buz::world_renderer_2d& world)
 {
 	m_scene_handler.get_current_scene().on_render_world(engine, world);
-	
 }
 
 //--------------------------------------------------------------

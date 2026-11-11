@@ -1,5 +1,6 @@
 #pragma once
 #include "scene.h"
+#include "../camera/camera.h"
 
 class scene_mission : public scene
 {
@@ -17,5 +18,5 @@ public:
 	void on_render_screen(buz::engine& engine, buz::screen_renderer& screen) override;
 
 private:
-
+	camera m_camera;
 };

@@ -19,7 +19,7 @@ void scene_menu::on_render_world(buz::engine&, buz::world_renderer_2d&)
 {
 	// just for testing
 	const buz::material k_concrete = { { 0.55f, 0.55f, 0.58f, 1.0f } };
-	get_world_3d().draw_box({ 0.0f, 1.0f, 5.f }, { 0.0f, 1.0f, 5.f }, k_concrete);
+	get_world_3d().draw_box({ 0.0f, 1.0f, 5.f }, { -5.0f, 1.0f, 5.f }, k_concrete);
 }
 
 void scene_menu::on_render_screen(buz::engine&, buz::screen_renderer& screen)
