@@ -5,7 +5,7 @@
 class scene_mission : public scene
 {
 public:
-	scene_mission(scene_type this_scene, scene_type next_scene, buz::world_renderer_3d& world_3d, const buz::font& font);
+	scene_mission(scene_type this_scene, scene_type next_scene, buz::world_renderer_3d& world_3d, asset_cache& asset_cache_);
 	~scene_mission() = default;
 	//----------------------------------------------------------
 	/// update logic

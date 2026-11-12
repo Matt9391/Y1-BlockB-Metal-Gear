@@ -14,7 +14,10 @@ class asset_cache
 
 public:
 	asset_cache(buz::engine& engine);
-	~asset_cache();
+	~asset_cache() = default;
+    
+    asset_cache(const asset_cache& other) = delete;
+
 
 	const buz::model& get_model(const std::string& key);
 	const buz::font& get_font(const std::string& key);

@@ -2,10 +2,11 @@
 #include <memory>
 
 #include "scene.h"
+#include "assets/asset_cache.h"
 
 class scene_handler {
     public:
-    scene_handler(scene_type startup_scene, buz::world_renderer_3d& world_3d, const buz::font& font);
+    scene_handler(scene_type startup_scene, buz::world_renderer_3d& world_3d, asset_cache& asset_cache_);
     scene_handler() = default;
     scene_handler(const scene_handler& other) = delete;
 
@@ -24,6 +25,6 @@ class scene_handler {
     std::unique_ptr<scene> m_current_scene;
 
     buz::world_renderer_3d& m_world_3d;
-	const buz::font& m_font; // for the hud
+    asset_cache& m_asset_cache;
 };
 

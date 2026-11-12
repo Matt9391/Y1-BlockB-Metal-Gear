@@ -4,7 +4,7 @@
 class scene_menu : public scene
 {
 public:
-	scene_menu(scene_type this_scene, scene_type next_scene, buz::world_renderer_3d& world_3d, const buz::font& font);
+	scene_menu(scene_type this_scene, scene_type next_scene, buz::world_renderer_3d& world_3d, asset_cache& asset_cache_);
 	~scene_menu() = default;
 	//----------------------------------------------------------
 	/// update logic

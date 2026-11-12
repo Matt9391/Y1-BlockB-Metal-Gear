@@ -2,6 +2,7 @@
 
 #include "renderer_3d/world_renderer_3d.h"
 #include "renderer_2d/font.h"
+#include "assets/asset_cache.h"
 
 namespace buz
 {
@@ -21,7 +22,7 @@ enum class scene_type
 class scene
 {
 public:
-	scene(scene_type this_scene, scene_type next_scene, buz::world_renderer_3d& world_3d, const buz::font& font);
+	scene(scene_type this_scene, scene_type next_scene, buz::world_renderer_3d& world_3d, asset_cache& asset_cache_);;
 	virtual ~scene() = default;
 	//----------------------------------------------------------
 	/// update logic
@@ -41,6 +42,7 @@ public:
 	bool get_invoke_next_scene() const { return m_invoke_next_scene; }
 
 	buz::world_renderer_3d& get_world_3d() const { return m_world_3d; }
+	asset_cache& get_asset_cache() const { return m_asset_cache; }
 	const buz::font& get_font() const { return m_font; }
 
 	// Setters
@@ -56,5 +58,7 @@ private:
 	bool m_invoke_next_scene;
 
 	buz::world_renderer_3d& m_world_3d;
-	const buz::font& m_font; // for the hud
+	asset_cache& m_asset_cache;
+	const buz::font& m_font;
+
 };

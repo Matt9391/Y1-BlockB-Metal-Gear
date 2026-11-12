@@ -3,12 +3,14 @@
 #include "engine/input.h"
 #include "renderer_2d/screen_renderer.h"
 
-scene::scene(scene_type this_scene, scene_type next_scene, buz::world_renderer_3d& world_3d, const buz::font& font)
+
+scene::scene(scene_type this_scene, scene_type next_scene, buz::world_renderer_3d& world_3d, asset_cache& asset_cache_)
 	: m_scene_type{ this_scene }
 	, m_next_scene_type{ next_scene }
 	, m_invoke_next_scene{ false }
 	, m_world_3d{ world_3d }
-	, m_font{ font }
+	, m_asset_cache{ asset_cache_ }
+	, m_font(m_asset_cache.get_font("fonts/font_8x8.png"))
 {
 }
 
@@ -29,5 +31,5 @@ void scene::on_render_world(buz::engine&, buz::world_renderer_2d&)
 void scene::on_render_screen(buz::engine&, buz::screen_renderer& screen)
 {
 	const buz::color text_color = { 1.0f, 1.0f, 1.0f, 0.8f };
-	screen.draw_text(m_font, "base scene", { 16.0f, 16.0f }, 12.0f, text_color);
+	screen.draw_text(get_font(), "base scene", { 16.0f, 16.0f }, 12.0f, text_color);
 }

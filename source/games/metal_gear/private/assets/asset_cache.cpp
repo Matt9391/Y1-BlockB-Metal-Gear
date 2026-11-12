@@ -8,9 +8,6 @@ asset_cache::asset_cache(buz::engine& engine)
 {
 }
 
-asset_cache::~asset_cache()
-{
-}
 
 const buz::model& asset_cache::get_model(const std::string& key)
 {
@@ -70,7 +67,7 @@ std::shared_ptr<buz::texture> asset_cache::get_texture(const std::string& key)
 
     m_cache_texture[key] = buz::load_texture(m_engine, key);
     buz::log::info("return new texture from {}", key);
-    
+
     return m_cache_texture.at(key);
 
 }

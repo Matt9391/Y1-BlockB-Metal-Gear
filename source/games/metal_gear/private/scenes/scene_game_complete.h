@@ -4,7 +4,7 @@
 class scene_game_complete : public scene
 {
 public:
-	scene_game_complete(scene_type this_scene, scene_type next_scene, buz::world_renderer_3d& world_3d, const buz::font& font);
+	scene_game_complete(scene_type this_scene, scene_type next_scene, buz::world_renderer_3d& world_3d, asset_cache& asset_cache_);
 	~scene_game_complete() = default;
 	//----------------------------------------------------------
 	/// update logic

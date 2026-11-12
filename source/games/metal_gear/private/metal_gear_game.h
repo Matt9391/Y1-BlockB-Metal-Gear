@@ -6,6 +6,7 @@
 #include "renderer_3d/material.h"
 #include "renderer_3d/world_renderer_3d.h"
 #include "scenes/scene_handler.h"
+#include "assets/asset_cache.h"
 
 #include <memory>
 #include <vector>
@@ -53,7 +54,7 @@ private:
 	std::shared_ptr<buz::mesh> m_soldier_mesh; // every part of the soldier in one mesh, or nullptr
 	buz::vec3 m_soldier_position;              // his feet, in world meters
 
-	buz::font m_font; // for the hud
 
+	asset_cache m_asset_cache;
 	scene_handler m_scene_handler;
 };

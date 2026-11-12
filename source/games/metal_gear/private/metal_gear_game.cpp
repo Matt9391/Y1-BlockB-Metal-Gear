@@ -30,9 +30,9 @@ namespace
 metal_gear_game::metal_gear_game(buz::engine& engine)
 	: m_world_3d(engine)
 	, m_soldier_position{ 0.0f, 0.0f, 2.0f }
-	, m_scene_handler(scene_type::menu, m_world_3d, m_font)
+	, m_asset_cache(engine)
+	, m_scene_handler(scene_type::menu, m_world_3d, m_asset_cache)
 {
-	m_font.atlas = buz::load_texture(engine, "fonts/font_8x8.png");
 
 	// load_mesh gives the triangles only; the texture is loaded separately
 	// so the same mesh can be drawn with other materials too.
@@ -50,13 +50,12 @@ metal_gear_game::metal_gear_game(buz::engine& engine)
 void metal_gear_game::on_update(buz::engine& engine, float dt_s)
 {
 	m_scene_handler.get_current_scene().on_update(engine, dt_s);
-	if(m_scene_handler.has_pending_scene()){
+	if (m_scene_handler.has_pending_scene())
+	{
 		m_scene_handler.switch_scene();
 	}
 }
 
-
-	
 //--------------------------------------------------------------
 void metal_gear_game::on_render_world(buz::engine& engine, buz::world_renderer_2d& world)
 {
@@ -67,6 +66,4 @@ void metal_gear_game::on_render_world(buz::engine& engine, buz::world_renderer_2
 void metal_gear_game::on_render_screen(buz::engine& engine, buz::screen_renderer& screen)
 {
 	m_scene_handler.get_current_scene().on_render_screen(engine, screen);
-
-	
 }
