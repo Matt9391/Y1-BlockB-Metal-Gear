@@ -26,9 +26,9 @@ scene& scene_handler::get_current_scene(){
 
 
 
-void scene_handler::set_scene(scene_type scene)
+void scene_handler::set_scene(scene_type scene_t)
 {
-	switch (scene)
+	switch (scene_t)
 	{
 	case scene_type::menu:
 		m_current_scene = std::make_unique<scene_menu>(scene_type::menu, scene_type::mission, m_world_3d, m_font);
@@ -40,6 +40,7 @@ void scene_handler::set_scene(scene_type scene)
 		m_current_scene = std::make_unique<scene_game_complete>(scene_type::game_complete, scene_type::menu, m_world_3d, m_font);
 		break;
 	default:
+		m_current_scene = std::make_unique<scene>(scene_type::game_complete, scene_type::menu, m_world_3d, m_font);
 		break;
 	}
 }

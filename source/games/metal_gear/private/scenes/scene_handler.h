@@ -19,7 +19,7 @@ class scene_handler {
 
     private:
 
-    void set_scene(scene_type scene);
+    void set_scene(scene_type scene_t);
 
     std::unique_ptr<scene> m_current_scene;
 
