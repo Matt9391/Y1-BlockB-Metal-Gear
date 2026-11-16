@@ -15,11 +15,11 @@ scene_mission::scene_mission(scene_type this_scene, scene_type next_scene, asset
 {
 
 	for(const buz::joint_pose& j : m_model.get_rest_pose()){
-		buz::mat4 m4(1);
-		m4 *= glm::translate(m4, j.translation);
-		m4 *= glm::mat4_cast(j.rotation);
-		m4 *= glm::scale(m4, j.scale);
-		mats4.push_back(m4);
+		buz::mat4 move = glm::translate(glm::mat4(1.0f), j.translation);
+		buz::mat4 turn = glm::mat4_cast(j.rotation);
+		buz::mat4 grow = glm::scale(glm::mat4(1.0f), j.scale);
+		buz::mat4 result = move * turn * grow;
+		mats4.push_back(result);
 	}
 	
 }
@@ -34,7 +34,7 @@ void scene_mission::on_update(buz::engine& engine, float)
 	if (input.is_key_down(buz::key::s)) { root.z-= 0.05f; }
 	if (input.is_key_down(buz::key::a)) { root.x-= 0.05f; }
 	if (input.is_key_down(buz::key::d)) { root.x+= 0.05f; }
-	m_camera.set_target(target);
+	m_camera.set_target(root);
 
 }   
 
@@ -49,18 +49,16 @@ void scene_mission::on_render_world(buz::engine& engine,buz::world_renderer_3d& 
 	buz::debug_draw::box(world_3d, buz::aabb_from_center_size({ 0.0f, 1.0f, 2.f }, { 5.0f, 1.0f, 5.f }), collider_color);
 
 	std::vector<buz::mat4> model_mats;
-
+	buz::mat4 root_m4 = glm::translate(glm::mat4(1.0f), root);
 
 
 	for(std::size_t i = 0; i < m_model.nodes.size(); i++)
 	{
 		int indx = m_model.nodes[i].parent;
 		if(indx == -1){
-			model_mats.push_back(glm::translate(mats4[i], root));
+			model_mats.push_back(root_m4 * mats4[i]);
 		}else{
-			buz::mat4 mm= glm::translate(mats4[i], m_model.nodes[indx].local_pose.translation);
-			mm *= glm::mat4_cast(m_model.nodes[indx].local_pose.rotation);
-			mm *= glm::scale(mm, m_model.nodes[indx].local_pose.scale);
+			buz::mat4 mm = model_mats[indx] * mats4[i];
 			
 			model_mats.push_back(mm);
 		}
