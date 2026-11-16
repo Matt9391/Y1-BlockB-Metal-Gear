@@ -19,4 +19,5 @@ public:
 
 private:
 	camera m_camera;
+	const buz::model& m_model;
 };
