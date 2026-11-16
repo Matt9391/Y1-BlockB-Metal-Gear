@@ -64,19 +64,8 @@ namespace buz
 		void draw_lines(std::span<const line_vertex> vertices);
 
 		//----------------------------------------------------------
-		/// @brief Switches between solid triangles and their edges only.
-		void toggle_wireframe();
-
-		//----------------------------------------------------------
-		/// @brief Switches the lighting off and on again.
-		void toggle_lighting();
-
-		//----------------------------------------------------------
-		/// @brief Switches the debug lines off and on again.
-		void toggle_debug_lines();
-
-		//----------------------------------------------------------
-		/// @brief Draws meshes with other shaders from now on.
+		/// @brief Draws meshes with other shaders from now on; does nothing
+		/// when they are the ones in use.
 		void set_mesh_shading(const mesh_shading& shading);
 
 	private:
@@ -91,17 +80,13 @@ namespace buz
 
 		const render_context& m_context; // the engine's: the device, and the world pass while it runs
 
-		// Mesh pipelines: [wireframe]
+		// Mesh pipelines: [wireframe], built for m_mesh_shading
 		std::unique_ptr<rhi::pipeline> m_mesh_pipelines[2];
+		mesh_shading m_mesh_shading;
 		std::unique_ptr<rhi::pipeline> m_line_pipeline;
 		std::array<std::shared_ptr<mesh>, static_cast<size_t>(primitive::count)> m_primitives;
 		std::shared_ptr<texture> m_white_texture;
 
 		mat4 m_view_projection; // the camera: world positions to the screen
-
-		// Debug views
-		bool m_wireframe;    // triangle edges only
-		bool m_lighting_off; // every surface at its plain color
-		bool m_show_debug;   // debug lines drawn
 	};
 }

@@ -1,5 +1,6 @@
 #include "asset_cache.h"
 
+#include "asset_management/model_loading.h"
 #include "core/log.h"
 #include "core/assert.h"
 

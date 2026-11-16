@@ -22,14 +22,14 @@ enum class scene_type
 class scene
 {
 public:
-	scene(scene_type this_scene, scene_type next_scene, buz::world_renderer_3d& world_3d, asset_cache& asset_cache_);;
+	scene(scene_type this_scene, scene_type next_scene, asset_cache& asset_cache_);;
 	virtual ~scene() = default;
 	//----------------------------------------------------------
 	/// update logic
 	virtual void on_update(buz::engine& engine, float delta_seconds);
 
 	/// draw object in the world
-	virtual void on_render_world(buz::engine& engine, buz::world_renderer_2d& world);
+	virtual void on_render_world(buz::engine& engine, buz::world_renderer_3d& world_3d);
 
 	/// draws the HUD on top.
 	virtual void on_render_screen(buz::engine& engine, buz::screen_renderer& screen);
@@ -41,7 +41,6 @@ public:
 
 	bool get_invoke_next_scene() const { return m_invoke_next_scene; }
 
-	buz::world_renderer_3d& get_world_3d() const { return m_world_3d; }
 	asset_cache& get_asset_cache() const { return m_asset_cache; }
 	const buz::font& get_font() const { return m_font; }
 
@@ -57,7 +56,6 @@ private:
 
 	bool m_invoke_next_scene;
 
-	buz::world_renderer_3d& m_world_3d;
 	asset_cache& m_asset_cache;
 	const buz::font& m_font;
 

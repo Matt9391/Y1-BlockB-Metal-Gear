@@ -18,9 +18,13 @@ namespace buz
 		std::string vertex_shader = "mesh_vs";
 		std::string pixel_shader = "mesh_ps";
 		texture_filter filter = texture_filter::linear;
+
+		bool operator==(const mesh_shading& other) const = default;
 	};
 
 	//--------------------------------------------------------------
 	/// @brief Draws the meshes of world with other shaders from now on.
+	/// Setting the shading that is already in use does nothing, so it can be
+	/// called every frame.
 	void set_mesh_shading(world_renderer_3d& world, const mesh_shading& shading);
 }

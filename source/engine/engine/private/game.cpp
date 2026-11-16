@@ -1,7 +1,15 @@
 #include "engine/game.h"
 
+#include "engine/engine.h"
+
 namespace buz
 {
+	//--------------------------------------------------------------
+	game::game(engine& engine)
+		: m_screen_renderer(engine.get_render_context())
+	{
+	}
+
 	//--------------------------------------------------------------
 	game::~game() = default;
 
@@ -12,27 +20,21 @@ namespace buz
 	}
 
 	//--------------------------------------------------------------
-	void game::render_world(engine& engine, world_renderer_2d& world)
+	void game::render_world(engine& engine)
 	{
-		on_render_world(engine, world);
+		draw_world(engine);
 	}
 
 	//--------------------------------------------------------------
-	void game::render_screen(engine& engine, screen_renderer& screen)
+	void game::render_screen(engine& engine)
 	{
-		on_render_screen(engine, screen);
+		on_render_screen(engine, m_screen_renderer);
 	}
 
 	//--------------------------------------------------------------
 	void game::on_update(engine& /*engine*/, float /*delta_seconds*/)
 	{
 		// A game that only draws has nothing to update
-	}
-
-	//--------------------------------------------------------------
-	void game::on_render_world(engine& /*engine*/, world_renderer_2d& /*world*/)
-	{
-		// A game without a level (a menu, say) draws no world
 	}
 
 	//--------------------------------------------------------------

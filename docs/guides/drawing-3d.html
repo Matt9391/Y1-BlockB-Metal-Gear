@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" data-root="../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Drawing in 3D &middot; BuzEngine guides</title>
+<meta name="description" content="Cameras, shapes, materials and debug lines.">
+<meta name="theme-color" content="#1d222d">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="../assets/fonts/nunito-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/montserrat.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/site.css">
+<script>document.documentElement.classList.add('js')</script>
+<script src="../assets/search-index.js" defer></script>
+<script src="../assets/site.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="../index.html"><span class="mark" aria-hidden="true">//</span>Buz<span class="thin">Engine</span></a>
+    <nav class="site-nav" aria-label="Main">
+      <ul>
+        <li><a href="../guides/getting-started.html" aria-current="page">Guides</a></li>
+        <li><a href="../reference/index.html">Reference</a></li>
+        <li><a href="../about.html">About</a></li>
+      </ul>
+    </nav>
+    <div class="tools">
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-controls="search"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.75"/><path d="m10.5 10.5 3.5 3.5"/></svg><span class="label-text">Search</span><kbd>/</kbd></button>
+    </div>
+  </div>
+</header>
+<dialog class="search-dialog" id="search" aria-label="Search the guides and the reference">
+  <div class="search-field">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.75"/><path d="m10.5 10.5 3.5 3.5"/></svg>
+    <label class="visually-hidden" for="search-input">Search the guides and the reference</label>
+    <input id="search-input" type="search" placeholder="Search guides and API" autocomplete="off" spellcheck="false"
+           role="combobox" aria-autocomplete="list" aria-expanded="true" aria-controls="search-results">
+    <span class="esc" aria-hidden="true">Esc</span>
+  </div>
+  <ul class="search-results" id="search-results" role="listbox" aria-label="Results"></ul>
+  <p class="search-hint">Arrow keys to move, Enter to open, Esc to close.</p>
+</dialog>
+<main id="main" tabindex="-1">
+  <article>
+    <header class="wrap page-head">
+      
+      <h1>Drawing in 3D</h1>
+      <p class="lede">Cameras, shapes, materials and debug lines.</p>
+    </header>
+    <div class="doc">
+    <aside class="side" aria-label="All guides">
+      <button class="side-toggle" type="button" aria-expanded="false" aria-controls="side-nav"><span>All guides</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></button>
+      <nav class="side-nav" id="side-nav" aria-label="Guides">
+        <div class="side-group"><p class="side-title">Guides</p><ol><li><a href="getting-started.html">Getting started</a></li><li><a href="drawing.html">Drawing in 2D</a></li><li><a href="drawing-3d.html" aria-current="page">Drawing in 3D</a></li><li><a href="input.html">Input</a></li><li><a href="textures-and-fonts.html">Textures &amp; fonts</a></li><li><a href="audio.html">Audio</a></li><li><a href="utilities.html">Utilities</a></li><li><a href="diagnostics.html">Diagnostics</a></li><li><a href="json.html">JSON files</a></li><li><a href="models.html">Models</a></li><li><a href="under-the-hood.html">Under the hood</a></li></ol></div>
+        <div class="side-group"><p class="side-title">Guided experiences</p><ol><li><a href="guided-experiences.html">Guided experiences</a></li><li><a href="camera-2d.html">A 2D camera</a></li><li><a href="sprite-animation.html">Sprite animation</a></li><li><a href="sprite-batching.html">Sprite batching</a></li><li><a href="animation-player.html">An animation player</a></li><li><a href="collision.html">Collision</a></li><li><a href="asset-cache.html">An asset cache</a></li></ol></div>
+      </nav>
+    </aside>
+    <div class="prose">
+<blockquote class="note"><p>Needs the 3D template. A 3D game derives from <a href="../reference/classbuz_1_1game__3d.html"><code><span class="ns">buz::</span>game_3d</code></a> and must link <code>buz_renderer_3d</code>.</p></blockquote>
+<p>A 3D game draws its world with a <a href="../reference/classbuz_1_1world__renderer__3d.html"><code><span class="ns">buz::</span>world_renderer_3d</code></a>. <a href="../reference/classbuz_1_1game__3d.html"><code><span class="ns">buz::</span>game_3d</code></a> owns it and hands it to <code>on_render_world</code> every frame, the same way a 2D game gets its <a href="../reference/classbuz_1_1world__renderer__2d.html"><code><span class="ns">buz::</span>world_renderer_2d</code></a>. The hud is drawn as in a 2D game, with the screen renderer in <code>on_render_screen</code> (see <a href="drawing.html">Drawing in 2D</a>).</p>
+<figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">C++</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-key">#include</span> <span class="tok-str">&quot;engine/game_3d.h&quot;</span>
+<span class="tok-key">#include</span> <span class="tok-str">&quot;renderer_3d/material.h&quot;</span>
+
+<span class="tok-key">class</span> my_game : <span class="tok-key">public</span> <span class="tok-type">buz</span>::game_3d
+{
+<span class="tok-key">public</span>:
+    <span class="tok-key">explicit</span> <span class="tok-fn">my_game</span>(<span class="tok-type">buz</span>::engine&amp; engine)
+        : <span class="tok-type">buz</span>::<span class="tok-fn">game_3d</span>(engine)
+    {
+    }
+
+<span class="tok-key">protected</span>:
+    <span class="tok-key">void</span> <span class="tok-fn">on_render_world</span>(<span class="tok-type">buz</span>::engine&amp; engine, <span class="tok-type">buz</span>::world_renderer_3d&amp; world) <span class="tok-key">override</span>
+    {
+        <span class="tok-key">const</span> <span class="tok-type">buz</span>::material crate_look = { { <span class="tok-num">0.6f</span>, <span class="tok-num">0.4f</span>, <span class="tok-num">0.2f</span>, <span class="tok-num">1.0f</span> } };
+        world.<span class="tok-fn">draw_box</span>({ <span class="tok-num">0.0f</span>, <span class="tok-num">0.5f</span>, <span class="tok-num">0.0f</span> }, { <span class="tok-num">1.0f</span>, <span class="tok-num">1.0f</span>, <span class="tok-num">1.0f</span> }, crate_look);
+    }
+};</code></pre></figure>
+<p>The renderer only exists in <code>on_render_world</code>, so everything that uses it happens there: drawing, the camera and the debug views below.</p>
+<h2 id="built-in-shapes">Built-in shapes<a class="anchor" href="#built-in-shapes" aria-label="Link to this section">#</a></h2>
+<p>Five shapes, each drawn at a position (its center) and a size:</p>
+<div class="tablewrap"><table>
+<thead><tr>
+<th>function</th>
+<th>shape</th>
+</tr></thead><tbody>
+<tr><td><a href="../reference/classbuz_1_1world__renderer__3d.html"><code><span class="ns">buz::</span>world_renderer_3d::draw_box</code></a></td><td>a cube</td></tr>
+<tr><td><a href="../reference/classbuz_1_1world__renderer__3d.html"><code><span class="ns">buz::</span>world_renderer_3d::draw_sphere</code></a></td><td>a sphere</td></tr>
+<tr><td><a href="../reference/classbuz_1_1world__renderer__3d.html"><code><span class="ns">buz::</span>world_renderer_3d::draw_plane</code></a></td><td>a flat square facing up</td></tr>
+<tr><td><a href="../reference/classbuz_1_1world__renderer__3d.html"><code><span class="ns">buz::</span>world_renderer_3d::draw_cylinder</code></a></td><td>an upright cylinder</td></tr>
+<tr><td><a href="../reference/classbuz_1_1world__renderer__3d.html"><code><span class="ns">buz::</span>world_renderer_3d::draw_octahedron</code></a></td><td>two pyramids base to base</td></tr>
+</tbody></table></div>
+<figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">C++</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-com">// a 20 x 3 x 0.5 wall standing on the floor</span>
+world.<span class="tok-fn">draw_box</span>({ <span class="tok-num">0.0f</span>, <span class="tok-num">1.5f</span>, <span class="tok-num">7.0f</span> }, { <span class="tok-num">20.0f</span>, <span class="tok-num">3.0f</span>, <span class="tok-num">0.5f</span> }, wall_look);</code></pre></figure>
+<p>Unlike sprites, the order you draw shapes in doesn&#x27;t matter: nearer surfaces hide farther ones, because the engine keeps a depth buffer.</p>
+<p>With a few boxes and cylinders you can block out a whole level (&quot;greybox&quot; it) before any art exists. <code>sample_3d</code> does exactly that.</p>
+<h2 id="materials">Materials<a class="anchor" href="#materials" aria-label="Link to this section">#</a></h2>
+<p>A <a href="../reference/structbuz_1_1material.html"><code><span class="ns">buz::</span>material</code></a> says how a surface looks: a color, optionally a texture (multiplied with the color), and whether it is lit.</p>
+<figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">C++</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-key">#include</span> <span class="tok-str">&quot;asset_management/texture_loading.h&quot;</span>
+<span class="tok-key">#include</span> <span class="tok-str">&quot;renderer_3d/material.h&quot;</span>
+
+<span class="tok-type">buz</span>::material crate;
+crate.base_texture = <span class="tok-type">buz</span>::<span class="tok-fn">load_texture</span>(engine, <span class="tok-str">&quot;my_game/models/crate.png&quot;</span>);
+
+<span class="tok-com">// Unlit: the same color from every side, for things that glow</span>
+<span class="tok-key">const</span> <span class="tok-type">buz</span>::material pickup = { { <span class="tok-num">0.3f</span>, <span class="tok-num">1.0f</span>, <span class="tok-num">0.5f</span>, <span class="tok-num">1.0f</span> }, <span class="tok-key">nullptr</span>, <span class="tok-type">buz</span>::lighting::no };</code></pre></figure>
+<p>Lit surfaces get one fixed light from above plus a little ambient light, so shapes read clearly without any setup.</p>
+<p>Some surfaces have holes in them. On the first PlayStation, where every triangle counted, a railing or a fence was usually one flat quad whose texture has alpha 0 between the bars. Modern games often model the bars instead, but the same trick is still common for leaves, grass and wire fences. Set <code>alpha_cutoff</code> to cut the transparent parts out: pixels whose alpha (texture times color) is below it are not drawn at all, so you see what is behind them, whatever order you draw in.</p>
+<figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">C++</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-type">buz</span>::material railing;
+railing.base_texture = <span class="tok-type">buz</span>::<span class="tok-fn">load_texture</span>(engine, <span class="tok-str">&quot;my_game/models/railing.png&quot;</span>);
+railing.alpha_cutoff = <span class="tok-num">0.5f</span>;</code></pre></figure>
+<p>Without a cutoff, alpha between 0 and 1 blends with what is already on screen, which makes water or glass see-through. Blending can only mix with what has been drawn before: an object behind the glass that is drawn after it does not show through. So draw blended surfaces <strong>after everything else</strong>.</p>
+<h2 id="meshes">Meshes<a class="anchor" href="#meshes" aria-label="Link to this section">#</a></h2>
+<p>Your own models are <a href="../reference/classbuz_1_1mesh.html"><code><span class="ns">buz::</span>mesh</code></a> objects, loaded from glTF files (see <a href="models.html">Models</a>) or built from code with <code><span class="ns">buz::</span>create_mesh</code>. Draw one with a material and a transform:</p>
+<figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">C++</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-key">#include</span> <span class="tok-str">&quot;renderer_3d/mesh.h&quot;</span>
+
+world.<span class="tok-fn">draw</span>(*m_crate_mesh, crate, transform);</code></pre></figure>
+<h2 id="your-camera">Your camera<a class="anchor" href="#your-camera" aria-label="Link to this section">#</a></h2>
+<p>Until you set a camera, <a href="../reference/classbuz_1_1world__renderer__3d.html"><code><span class="ns">buz::</span>world_renderer_3d</code></a> shows the world from a fixed spot up and to the side of the origin, looking at it. Your own camera is two matrices, handed to <a href="../reference/classbuz_1_1world__renderer__3d.html"><code><span class="ns">buz::</span>world_renderer_3d::set_camera</code></a>:</p>
+<ul>
+<li>the <strong>view</strong> matrix moves and turns the world so the camera sits at the origin, looking down <strong>-z</strong>, with <strong>y up</strong>;</li>
+<li>the <strong>projection</strong> matrix maps what the camera sees onto the window.</li>
+</ul>
+<p>The conventions your matrices have to follow:</p>
+<ul>
+<li>The world is right-handed with <strong>y up</strong>: x to the right, y up and z towards the viewer. One unit is a meter.</li>
+<li>Matrices are glm&#x27;s: stored by column (<code>m[column][row]</code>), and a position is a column vector transformed as <code>v&#x27; = M * v</code>. The translation lives in the last column, <code>m[3]</code>.</li>
+<li>After the projection and the divide by w, x and y run from -1 to 1 across the window, and depth runs from <strong>0 at the near plane to 1 at the far plane</strong> on every graphics api buz uses. A projection made for OpenGL&#x27;s -1 to 1 depth (glm&#x27;s plain <code>perspective</code>) clips the wrong things.</li>
+</ul>
+<h2 id="debug-views">Debug views<a class="anchor" href="#debug-views" aria-label="Link to this section">#</a></h2>
+<p>When a model looks wrong, it helps to see it without its textures and light. Press F1 while the game runs to draw only the edges of every triangle. Press F2 to draw every surface at its plain color, without lighting, so you can tell a dark texture from a surface that faces away from the light. Press F4 to hide the debug lines described below, and again to show them.</p>
+<p>The engine handles these keys in every 3D game, so your game doesn&#x27;t check them. To use other keys, see <code>debug_controls</code> in <a href="getting-started.html">Getting started</a>.</p>
+<h2 id="debug-drawing">Debug drawing<a class="anchor" href="#debug-drawing" aria-label="Link to this section">#</a></h2>
+<p>Lines that show what your code <em>thinks</em> is there: colliders, a guard&#x27;s view, a patrol path, a ray you cast. When the game misbehaves, draw what it believes and the mistake is usually obvious.</p>
+<figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">C++</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-key">#include</span> <span class="tok-str">&quot;renderer_3d/debug_draw.h&quot;</span>
+
+<span class="tok-type">buz</span>::debug_draw::<span class="tok-fn">box</span>(world, crate_bounds, { <span class="tok-num">0.2f</span>, <span class="tok-num">1.0f</span>, <span class="tok-num">0.2f</span>, <span class="tok-num">1.0f</span> });
+<span class="tok-type">buz</span>::debug_draw::<span class="tok-fn">line</span>(world, from, to, { <span class="tok-num">0.3f</span>, <span class="tok-num">0.6f</span>, <span class="tok-num">1.0f</span>, <span class="tok-num">1.0f</span> });
+<span class="tok-type">buz</span>::debug_draw::<span class="tok-fn">sphere</span>(world, center, <span class="tok-num">0.6f</span>, { <span class="tok-num">1.0f</span>, <span class="tok-num">0.4f</span>, <span class="tok-num">0.4f</span>, <span class="tok-num">1.0f</span> });
+<span class="tok-type">buz</span>::debug_draw::<span class="tok-fn">cone</span>(world, eyes, facing, <span class="tok-num">7.0f</span>, <span class="tok-type">buz</span>::<span class="tok-fn">radians</span>(<span class="tok-num">30.0f</span>), { <span class="tok-num">1.0f</span>, <span class="tok-num">0.9f</span>, <span class="tok-num">0.2f</span>, <span class="tok-num">1.0f</span> });</code></pre></figure>
+<p>Debug lines are depth tested like every other surface, so a wall in front of a line hides it. They start switched on, and F4 hides all of them at once (see <em>Debug views</em>), so the calls can stay in your code instead of being removed when you are done debugging.</p>
+    </div>
+    <nav class="toc" aria-labelledby="toc-title"><p class="toc-title" id="toc-title">On this page</p><ol><li><a href="#built-in-shapes">Built-in shapes</a></li><li><a href="#materials">Materials</a></li><li><a href="#meshes">Meshes</a></li><li><a href="#your-camera">Your camera</a></li><li><a href="#debug-views">Debug views</a></li><li><a href="#debug-drawing">Debug drawing</a></li></ol></nav>
+    </div>
+    <nav class="wrap pager" aria-label="Previous and next guide"><a href="../index.html#guides" class="back">&larr; All guides</a><a href="drawing.html" class="p" rel="prev"><span class="meta">&larr; Previous</span>Drawing in 2D</a><a href="input.html" class="n" rel="next"><span class="meta">Next &rarr;</span>Input</a></nav>
+  </article>
+</main>
+<footer class="site-footer">
+  <div class="wrap row">
+    <a href="../index.html" class="mark" aria-label="BuzEngine home">//</a>
+    <p class="who">BuzEngine &middot; Breda University of Applied Sciences &middot; MIT licensed</p>
+    <ul>
+      <li><a href="../guides/getting-started.html">Guides</a></li>
+      <li><a href="../reference/index.html">Reference</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>

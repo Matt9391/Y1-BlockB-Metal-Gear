@@ -4,7 +4,7 @@
 #include "renderer_3d/mesh.h"
 #include "renderer_3d/model.h"
 #include "renderer_2d/font.h"
-#include "engine/texture_loading.h"
+#include "asset_management/texture_loading.h"
 
 #include <string>
 #include <unordered_map>

@@ -1,7 +1,7 @@
 # Math, logging, asserts, json, random numbers and file paths: the basics
 # every other module builds on. glm and nlohmann are public because math.h
 # and json.h expose their types.
-BUZ_MODULE(core TIER tmpl_2d
+BUZ_MODULE(core
            PUBLIC_DEPS glm nlohmann
            PRIVATE_DEPS rnd stb)
 

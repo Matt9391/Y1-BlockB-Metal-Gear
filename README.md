@@ -1,7 +1,8 @@
 # buz
 
 A template to build games in C++. Your game derives one class from
-`buz::game`, which the engine drives; the engine handles the main loop,
+`buz::game_2d` (or `buz::game_3d` in the 3D template), which the engine
+drives; the engine handles the main loop,
 rendering, input and asset loading. It runs on Windows and Linux and draws with OpenGL, or with DirectX
 12 (Windows) or Vulkan (Linux) when you pick the DirectX 12 or Vulkan preset.
 

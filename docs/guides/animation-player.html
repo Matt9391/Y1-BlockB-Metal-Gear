@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" data-root="../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>An animation player &middot; BuzEngine guides</title>
+<meta name="description" content="Play keyframe clips with looping and blending.">
+<meta name="theme-color" content="#1d222d">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="../assets/fonts/nunito-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/montserrat.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/site.css">
+<script>document.documentElement.classList.add('js')</script>
+<script src="../assets/search-index.js" defer></script>
+<script src="../assets/site.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="../index.html"><span class="mark" aria-hidden="true">//</span>Buz<span class="thin">Engine</span></a>
+    <nav class="site-nav" aria-label="Main">
+      <ul>
+        <li><a href="../guides/getting-started.html" aria-current="page">Guides</a></li>
+        <li><a href="../reference/index.html">Reference</a></li>
+        <li><a href="../about.html">About</a></li>
+      </ul>
+    </nav>
+    <div class="tools">
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-controls="search"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.75"/><path d="m10.5 10.5 3.5 3.5"/></svg><span class="label-text">Search</span><kbd>/</kbd></button>
+    </div>
+  </div>
+</header>
+<dialog class="search-dialog" id="search" aria-label="Search the guides and the reference">
+  <div class="search-field">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.75"/><path d="m10.5 10.5 3.5 3.5"/></svg>
+    <label class="visually-hidden" for="search-input">Search the guides and the reference</label>
+    <input id="search-input" type="search" placeholder="Search guides and API" autocomplete="off" spellcheck="false"
+           role="combobox" aria-autocomplete="list" aria-expanded="true" aria-controls="search-results">
+    <span class="esc" aria-hidden="true">Esc</span>
+  </div>
+  <ul class="search-results" id="search-results" role="listbox" aria-label="Results"></ul>
+  <p class="search-hint">Arrow keys to move, Enter to open, Esc to close.</p>
+</dialog>
+<main id="main" tabindex="-1">
+  <article>
+    <header class="wrap page-head">
+      <span class="label">Guided experience</span>
+      <h1>An animation player</h1>
+      <p class="lede">Play keyframe clips with looping and blending.</p>
+    </header>
+    <div class="doc">
+    <aside class="side" aria-label="All guides">
+      <button class="side-toggle" type="button" aria-expanded="false" aria-controls="side-nav"><span>All guides</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></button>
+      <nav class="side-nav" id="side-nav" aria-label="Guides">
+        <div class="side-group"><p class="side-title">Guides</p><ol><li><a href="getting-started.html">Getting started</a></li><li><a href="drawing.html">Drawing in 2D</a></li><li><a href="drawing-3d.html">Drawing in 3D</a></li><li><a href="input.html">Input</a></li><li><a href="textures-and-fonts.html">Textures &amp; fonts</a></li><li><a href="audio.html">Audio</a></li><li><a href="utilities.html">Utilities</a></li><li><a href="diagnostics.html">Diagnostics</a></li><li><a href="json.html">JSON files</a></li><li><a href="models.html">Models</a></li><li><a href="under-the-hood.html">Under the hood</a></li></ol></div>
+        <div class="side-group"><p class="side-title">Guided experiences</p><ol><li><a href="guided-experiences.html">Guided experiences</a></li><li><a href="camera-2d.html">A 2D camera</a></li><li><a href="sprite-animation.html">Sprite animation</a></li><li><a href="sprite-batching.html">Sprite batching</a></li><li><a href="animation-player.html" aria-current="page">An animation player</a></li><li><a href="collision.html">Collision</a></li><li><a href="asset-cache.html">An asset cache</a></li></ol></div>
+      </nav>
+    </aside>
+    <div class="prose">
+<blockquote class="note"><p><strong>Guided exercise:</strong> Use the 3D template and write the animation player yourself (see <a href="guided-experiences.html">Guided experiences</a>).</p></blockquote>
+<h2 id="what-you-will-build">What you will build<a class="anchor" href="#what-you-will-build" aria-label="Link to this section">#</a></h2>
+<p>You will build an animation player that makes a character play a walk, idle or other animation. It will keep track of playback time, repeat animations when needed and make transitions between animations smooth.</p>
+<p><code><span class="ns">buz::</span>load_model</code> loads animations as <a href="../reference/structbuz_1_1keyframe__clip.html"><code><span class="ns">buz::</span>keyframe_clip</code></a> objects. Each clip contains a sequence of frames, sampled at 30 frames per second. Before starting, make sure these terms are clear:</p>
+<ul>
+<li>A <strong>node</strong> is one part of the model&#x27;s hierarchy. A node can have a parent, so moving the parent also moves its children.</li>
+<li>A <strong>joint pose</strong> (<a href="../reference/structbuz_1_1joint__pose.html"><code><span class="ns">buz::</span>joint_pose</code></a>) stores one node&#x27;s translation, rotation and scale, relative to its parent.</li>
+<li>A <strong>pose</strong> contains a joint pose for every node. It describes the whole character at one moment.</li>
+<li>A <strong>frame</strong> stores one of those poses. An animation <strong>clip</strong> stores the sequence, such as all the frames of a walk cycle.</li>
+</ul>
+<p>For example, this retrieves the character&#x27;s pose at the start of a walk:</p>
+<figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">C++</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-key">const</span> <span class="tok-type">std</span>::<span class="tok-type">vector</span>&lt;<span class="tok-type">buz</span>::joint_pose&gt;&amp; pose = walk-&gt;frames[<span class="tok-num">0</span>];</code></pre></figure>
+<p>Start by drawing a single pose. Once that works, you can change the pose over time to animate the character. The examples below are pseudocode; you will need to turn them into C++.</p>
+<h2 id="step-1-draw-a-single-pose">Step 1: draw a single pose<a class="anchor" href="#step-1-draw-a-single-pose" aria-label="Link to this section">#</a></h2>
+<p>Each joint pose describes a node relative to its parent. For example, the head&#x27;s position is relative to the torso. To draw the head in the world, you also need the torso&#x27;s transform.</p>
+<p>Work through the hierarchy so that every parent is handled before its children; the nodes of a <a href="../reference/structbuz_1_1model.html"><code><span class="ns">buz::</span>model</code></a> are already stored in that order. Each node needs two things: a local transform, built from its joint pose, and its parent&#x27;s world transform, which the loop worked out earlier. A root node has no parent, so use the character&#x27;s <code>placement</code> instead: the transform that positions, rotates and scales the whole character in the world.</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">world_transforms(model, pose, placement):
+    for each node, parents first:
+        local  = a matrix built from this node&#x27;s joint pose
+        parent = the parent&#x27;s world transform, or placement for a root
+        world  = parent and local combined
+
+draw(model, pose, placement):
+    work out the world transforms
+    draw every node that has a shape, with its look and its world transform</code></pre></figure>
+<p>Questions to answer before you write it:</p>
+<ul>
+<li><strong>The local matrix.</strong> A joint pose holds a translation, a rotation and a scale. In which order should they act on a vertex? With glm&#x27;s column vectors (<code>v&#x27; = M * v</code>), in which order do you multiply the three matrices to get that?</li>
+<li><strong>Combining.</strong> Is a node&#x27;s world transform <code>parent * local</code> or <code>local * parent</code>? Test your answer on the head: it should move when the torso turns, not the other way around.</li>
+<li><strong>Storage.</strong> Where do you keep the world transforms during the loop, so a child can read its parent&#x27;s?</li>
+</ul>
+<p><strong>Check:</strong> Draw the model in its rest pose, then draw frame 0 of a clip. Make sure every part is in the right place before adding playback.</p>
+<h2 id="step-2-calculate-the-pose-between-two-frames">Step 2: calculate the pose between two frames<a class="anchor" href="#step-2-calculate-the-pose-between-two-frames" aria-label="Link to this section">#</a></h2>
+<p>Playback time will often fall between stored frames. For example, at 30 frames per second, a time of 0.25 seconds corresponds to frame 7.5. That is halfway between frames 7 and 8.</p>
+<p>To find the pose at that time, interpolate between those two frames. Do this for every node: blend its translation and scale with <code>lerp</code>, and its quaternion rotation with <code>glm::slerp</code>.</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">frame  = t * fps
+first  = floor(frame)
+second = min(first + 1, last_frame_index)
+amount = frame - first
+
+for each node index i:
+    a = frames[first][i]
+    b = frames[second][i]
+
+    pose[i].translation = lerp(a.translation, b.translation, amount)
+    pose[i].scale       = lerp(a.scale, b.scale, amount)
+    pose[i].rotation    = glm::slerp(a.rotation, b.rotation, amount)</code></pre></figure>
+<p>An <code>amount</code> of 0 gives the first pose; 1 gives the second. At 0.5, the result is halfway between them. Calculating a pose at a particular time is called <strong>sampling</strong> the clip.</p>
+<p>Rotations are stored as quaternions (<code><span class="ns">buz::</span>quat</code>). Use <code>glm::slerp</code> here to interpolate along the shortest arc between the rotations. Ordinary component-wise <code>lerp</code> does not keep a quaternion normalized.</p>
+<p>For now, sample only times between the start and end of the clip. The next step handles what happens when playback reaches the end.</p>
+<p><strong>Check:</strong> Sample at time 0, at exactly one stored frame and halfway between two frames. The first two should reproduce the stored poses; the third should produce a pose between them.</p>
+<h2 id="step-3-repeat-the-clip-or-hold-its-final-pose">Step 3: repeat the clip or hold its final pose<a class="anchor" href="#step-3-repeat-the-clip-or-hold-its-final-pose" aria-label="Link to this section">#</a></h2>
+<p>Frame 0 occurs at time 0. In this exercise, the final frame marks the end of the clip, so a clip with <code>n</code> frames has a duration of <code>(n - 1) / fps</code> seconds. For example, 31 frames at 30 frames per second span one second.</p>
+<p>Before sampling, adjust the playback time according to how the clip should end:</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">if looping:
+    sample_time = fmod(time, duration)
+else:
+    sample_time = min(time, duration)
+
+pose = sample(clip, sample_time)</code></pre></figure>
+<p>For a one-second looping clip, a playback time of 1.25 seconds samples at 0.25 seconds. For a clip that plays once, it samples at 1 second and keeps showing the final pose.</p>
+<p>A seamless loop needs matching poses at the start and end. Wrapping the time alone will not hide a mismatch between them.</p>
+<p>Use <code>utl::yes_no_t</code> for the looping setting, following the engine&#x27;s convention for yes/no parameters. These examples assume non-negative playback time and a clip with at least two frames. Handle a single-frame clip by returning its only pose, without calling <code>fmod</code> with a zero duration. An empty clip has no pose to sample.</p>
+<p><strong>Check:</strong> Let a clip run past its duration. It should either repeat or hold its final pose, depending on the looping setting.</p>
+<h2 id="step-4-keep-track-of-playback">Step 4: keep track of playback<a class="anchor" href="#step-4-keep-track-of-playback" aria-label="Link to this section">#</a></h2>
+<p>Put the sampling and looping code into a player. It needs to remember the current clip, the elapsed playback time, the looping setting and the resulting pose.</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">class pose_player:
+    clip       // no clip until play() is called
+    time       // elapsed playback time in seconds
+    looping
+    pose       // one joint_pose per node
+
+    play(new_clip, new_looping):
+        if new_clip is already playing:
+            return
+
+        clip = new_clip
+        looping = new_looping
+        time = 0
+        pose = sample(clip, 0)
+
+    update(delta_seconds):
+        if there is no clip:
+            return
+
+        time += delta_seconds
+        pose = sample using the time rules from step 3</code></pre></figure>
+<p>The early return in <code>play()</code> lets the game request the walk animation every update while the character is moving. Without it, each request would restart the animation at time 0. When the character stops, the game can request idle instead.</p>
+<p>Give each character its own player. Characters can share the model and clips while keeping separate playback times. To make guards walk out of sync, start them at different times or give them different starting offsets.</p>
+<p><strong>Check:</strong> Request the same clip every update. It should keep playing. Request another clip and check that the new one starts at time 0.</p>
+<h2 id="step-5-make-clip-changes-smooth">Step 5: make clip changes smooth<a class="anchor" href="#step-5-make-clip-changes-smooth" aria-label="Link to this section">#</a></h2>
+<p>Switching directly from idle to walk can make the body snap into a new pose. To smooth the change, save the currently displayed pose when a new clip starts. Over a short transition, blend from that saved pose towards the new clip&#x27;s sampled pose. Start with a transition of 0.2 seconds.</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">play(new_clip, new_looping, blend_seconds):
+    if new_clip is already playing:
+        return
+
+    blend_from = pose            // save before replacing the current pose
+    blend_time = 0
+    blend_duration = max(blend_seconds, 0)
+
+    clip = new_clip
+    looping = new_looping
+    time = 0
+    // If there is no previous pose, skip blending and sample the new clip.
+
+update(delta_seconds):
+    if there is no clip:
+        return
+
+    time += delta_seconds
+    target_pose = sample using the time rules from step 3
+
+    if there is a previous pose and blend_time &lt; blend_duration:
+        blend_time = min(blend_time + delta_seconds, blend_duration)
+        amount = blend_time / blend_duration
+        pose = blend(blend_from, target_pose, amount)
+    else:
+        pose = target_pose</code></pre></figure>
+<p>Use the same per-node interpolation as in step 2. This time, you blend between the saved pose and the new animation&#x27;s pose. The saved pose stays fixed during the transition while the new animation continues playing.</p>
+<p>Clamping <code>blend_time</code> keeps <code>amount</code> between 0 and 1. A transition duration of zero skips the blend and switches immediately.</p>
+<p><strong>Check:</strong> Switch between idle and walk. Then switch again before a transition finishes. Each transition should start from the pose currently on screen.</p>
+<h2 id="levels">Levels<a class="anchor" href="#levels" aria-label="Link to this section">#</a></h2>
+<p>Complete the basic level before adding the intermediate and hard features.</p>
+<p><strong>Basic</strong></p>
+<ul class="tasklist">
+<li class="task"><input type="checkbox" disabled> Draw every part of the soldier in the correct place, both in the rest pose and in a clip&#x27;s frame.</li>
+<li class="task"><input type="checkbox" disabled> Test sampling at time 0, at a stored frame and between frames.</li>
+<li class="task"><input type="checkbox" disabled> Use slerp for rotations and lerp for translations and scales.</li>
+<li class="task"><input type="checkbox" disabled> Repeat looping clips and hold the final pose of clips that play once.</li>
+</ul>
+<p><strong>Intermediate</strong></p>
+<ul class="tasklist">
+<li class="task"><input type="checkbox" disabled> Keep playing when <code>play()</code> is called again with the current clip.</li>
+<li class="task"><input type="checkbox" disabled> Blend from the displayed pose when switching clips.</li>
+<li class="task"><input type="checkbox" disabled> Add playback speed so the walk animation can play faster when the character runs.</li>
+<li class="task"><input type="checkbox" disabled> Attach an object to a node, such as a gun that follows the hand.</li>
+</ul>
+<p><strong>Hard</strong></p>
+<ul class="tasklist">
+<li class="task"><input type="checkbox" disabled> Let the game check whether a one-shot clip has finished, for example before a guard resumes walking after a turn.</li>
+<li class="task"><input type="checkbox" disabled> Play two clips on different parts of the body, such as walking with the legs while aiming with the arms.</li>
+</ul>
+    </div>
+    <nav class="toc" aria-labelledby="toc-title"><p class="toc-title" id="toc-title">On this page</p><ol><li><a href="#what-you-will-build">What you will build</a></li><li><a href="#step-1-draw-a-single-pose">Step 1: draw a single pose</a></li><li><a href="#step-2-calculate-the-pose-between-two-frames">Step 2: calculate the pose between two frames</a></li><li><a href="#step-3-repeat-the-clip-or-hold-its-final-pose">Step 3: repeat the clip or hold its final pose</a></li><li><a href="#step-4-keep-track-of-playback">Step 4: keep track of playback</a></li><li><a href="#step-5-make-clip-changes-smooth">Step 5: make clip changes smooth</a></li><li><a href="#levels">Levels</a></li></ol></nav>
+    </div>
+    <nav class="wrap pager" aria-label="Previous and next guide"><a href="../index.html#guides" class="back">&larr; All guides</a><a href="sprite-batching.html" class="p" rel="prev"><span class="meta">&larr; Previous</span>Sprite batching</a><a href="collision.html" class="n" rel="next"><span class="meta">Next &rarr;</span>Collision</a></nav>
+  </article>
+</main>
+<footer class="site-footer">
+  <div class="wrap row">
+    <a href="../index.html" class="mark" aria-label="BuzEngine home">//</a>
+    <p class="who">BuzEngine &middot; Breda University of Applied Sciences &middot; MIT licensed</p>
+    <ul>
+      <li><a href="../guides/getting-started.html">Guides</a></li>
+      <li><a href="../reference/index.html">Reference</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>

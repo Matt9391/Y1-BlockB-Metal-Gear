@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" data-root="../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Collision &middot; BuzEngine guides</title>
+<meta name="description" content="Walls, rays, line of sight and view cones.">
+<meta name="theme-color" content="#1d222d">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="../assets/fonts/nunito-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/montserrat.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/site.css">
+<script>document.documentElement.classList.add('js')</script>
+<script src="../assets/search-index.js" defer></script>
+<script src="../assets/site.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="../index.html"><span class="mark" aria-hidden="true">//</span>Buz<span class="thin">Engine</span></a>
+    <nav class="site-nav" aria-label="Main">
+      <ul>
+        <li><a href="../guides/getting-started.html" aria-current="page">Guides</a></li>
+        <li><a href="../reference/index.html">Reference</a></li>
+        <li><a href="../about.html">About</a></li>
+      </ul>
+    </nav>
+    <div class="tools">
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-controls="search"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.75"/><path d="m10.5 10.5 3.5 3.5"/></svg><span class="label-text">Search</span><kbd>/</kbd></button>
+    </div>
+  </div>
+</header>
+<dialog class="search-dialog" id="search" aria-label="Search the guides and the reference">
+  <div class="search-field">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.75"/><path d="m10.5 10.5 3.5 3.5"/></svg>
+    <label class="visually-hidden" for="search-input">Search the guides and the reference</label>
+    <input id="search-input" type="search" placeholder="Search guides and API" autocomplete="off" spellcheck="false"
+           role="combobox" aria-autocomplete="list" aria-expanded="true" aria-controls="search-results">
+    <span class="esc" aria-hidden="true">Esc</span>
+  </div>
+  <ul class="search-results" id="search-results" role="listbox" aria-label="Results"></ul>
+  <p class="search-hint">Arrow keys to move, Enter to open, Esc to close.</p>
+</dialog>
+<main id="main" tabindex="-1">
+  <article>
+    <header class="wrap page-head">
+      <span class="label">Guided experience</span>
+      <h1>Collision and line of sight</h1>
+      <p class="lede">Walls, rays, line of sight and view cones.</p>
+    </header>
+    <div class="doc">
+    <aside class="side" aria-label="All guides">
+      <button class="side-toggle" type="button" aria-expanded="false" aria-controls="side-nav"><span>All guides</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></button>
+      <nav class="side-nav" id="side-nav" aria-label="Guides">
+        <div class="side-group"><p class="side-title">Guides</p><ol><li><a href="getting-started.html">Getting started</a></li><li><a href="drawing.html">Drawing in 2D</a></li><li><a href="drawing-3d.html">Drawing in 3D</a></li><li><a href="input.html">Input</a></li><li><a href="textures-and-fonts.html">Textures &amp; fonts</a></li><li><a href="audio.html">Audio</a></li><li><a href="utilities.html">Utilities</a></li><li><a href="diagnostics.html">Diagnostics</a></li><li><a href="json.html">JSON files</a></li><li><a href="models.html">Models</a></li><li><a href="under-the-hood.html">Under the hood</a></li></ol></div>
+        <div class="side-group"><p class="side-title">Guided experiences</p><ol><li><a href="guided-experiences.html">Guided experiences</a></li><li><a href="camera-2d.html">A 2D camera</a></li><li><a href="sprite-animation.html">Sprite animation</a></li><li><a href="sprite-batching.html">Sprite batching</a></li><li><a href="animation-player.html">An animation player</a></li><li><a href="collision.html" aria-current="page">Collision</a></li><li><a href="asset-cache.html">An asset cache</a></li></ol></div>
+      </nav>
+    </aside>
+    <div class="prose">
+<blockquote class="note"><p><strong>Guided exercise:</strong> Use the 3D template and write the collision code yourself (see <a href="guided-experiences.html">Guided experiences</a>). The engine provides <a href="../reference/structbuz_1_1aabb.html"><code><span class="ns">buz::</span>aabb</code></a> in <code>core/aabb.h</code> and <code><span class="ns">buz::</span>debug_draw::box</code> for drawing boxes. You will implement the overlap, movement and visibility tests.</p></blockquote>
+<h2 id="what-you-will-build">What you will build<a class="anchor" href="#what-you-will-build" aria-label="Link to this section">#</a></h2>
+<p>You will stop the player from walking through walls, then use the same level geometry to check whether a guard can see the player.</p>
+<p>For this exercise, represent the player and solid objects with <strong>axis-aligned bounding boxes</strong>, or <strong>AABBs</strong>. These boxes stay aligned with the x, y and z axes; they do not rotate with the object. Each box stores two corners: <code>min</code>, with the lowest coordinate on each axis, and <code>max</code>, with the highest.</p>
+<p>Draw the boxes with <code><span class="ns">buz::</span>debug_draw::box</code> before implementing collision. Check that they match the walls, crates and player. A box in the wrong place will produce incorrect collisions even if the tests are correct.</p>
+<p>The examples below are pseudocode. Implement and test each operation separately before connecting it to the game.</p>
+<h2 id="step-1-test-whether-two-boxes-overlap">Step 1: test whether two boxes overlap<a class="anchor" href="#step-1-test-whether-two-boxes-overlap" aria-label="Link to this section">#</a></h2>
+<p>Start with one axis. If one box covers x = 0 to 2 and another covers x = 1 to 3, their x ranges overlap. If the second starts at x = 3, there is a gap.</p>
+<p>Two boxes overlap only when their ranges overlap on all three axes:</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">overlaps(a, b):
+    return a.min.x &lt; b.max.x and b.min.x &lt; a.max.x
+       and a.min.y &lt; b.max.y and b.min.y &lt; a.max.y
+       and a.min.z &lt; b.max.z and b.min.z &lt; a.max.z</code></pre></figure>
+<p>Use <code>&lt;</code> here. Two boxes whose faces only touch should not count as overlapping. This lets the player rest against a wall without being treated as inside it.</p>
+<p><strong>Check:</strong> Test overlapping boxes, separated boxes and boxes that just touch. Also test boxes that overlap on two axes but are separated on the third.</p>
+<h2 id="step-2-stop-the-player-at-walls">Step 2: stop the player at walls<a class="anchor" href="#step-2-stop-the-player-at-walls" aria-label="Link to this section">#</a></h2>
+<p>For a first version, move the player&#x27;s box and test it against the walls. If it overlaps a wall, restore its previous position. This stops the player from entering walls, but it also cancels movement along a wall when the player approaches diagonally.</p>
+<p>To allow sliding, resolve one axis at a time. Move along x and correct any overlap, then do the same for y and z.</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">move(box, motion):
+    for axis in x, y, z:
+        move box by motion[axis] along this axis
+
+        for each wall that overlaps box:
+            if motion[axis] &gt; 0:
+                shift box so box.max[axis] equals wall.min[axis]
+            else if motion[axis] &lt; 0:
+                shift box so box.min[axis] equals wall.max[axis]
+
+    return box</code></pre></figure>
+<p>Shift both corners of the box by the same amount so its size stays the same. Use the corrected box position to update the player&#x27;s position. This approach assumes the player starts outside the walls.</p>
+<p>For example, if a wall blocks movement along x but allows movement along z, only the x movement is stopped. The player can still slide along z.</p>
+<p><strong>Check:</strong> Walk straight into a wall, diagonally along it and into a corner. Check both positive and negative movement directions.</p>
+<h3 id="fast-movement-and-thin-walls">Fast movement and thin walls<a class="anchor" href="#fast-movement-and-thin-walls" aria-label="Link to this section">#</a></h3>
+<p>Testing only the final position can miss a wall. If one update moves the player completely through it, the final box no longer overlaps the wall. This is called <strong>tunneling</strong>.</p>
+<p>For the hard level, check the path of each axis movement. Find walls ahead that overlap the player&#x27;s box on the other two axes, calculate the gap to each wall and limit movement to the nearest gap. Test this with a deliberately large movement step and a thin wall.</p>
+<h2 id="step-3-find-where-a-ray-hits-a-box">Step 3: find where a ray hits a box<a class="anchor" href="#step-3-find-where-a-ray-hits-a-box" aria-label="Link to this section">#</a></h2>
+<p>A <strong>ray</strong> starts at an origin and travels in a direction. For this exercise, also give it a maximum distance. Normalize the direction so the parameter <code>t</code> in <code>origin + direction * t</code> represents distance.</p>
+<p>The <strong>slab method</strong> checks one axis at a time. On each axis, calculate when the ray enters and leaves the range between <code>box.min</code> and <code>box.max</code>. The ray hits the box if there is a distance interval where it is inside all three ranges at once.</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">raycast(origin, direction, max_distance, box):
+    enter = 0
+    leave = max_distance
+
+    for axis in x, y, z:
+        if direction[axis] == 0:
+            if origin[axis] &lt; box.min[axis] or origin[axis] &gt; box.max[axis]:
+                return no hit
+            continue
+
+        t1 = (box.min[axis] - origin[axis]) / direction[axis]
+        t2 = (box.max[axis] - origin[axis]) / direction[axis]
+        if t1 &gt; t2:
+            swap(t1, t2)
+
+        enter = max(enter, t1)
+        leave = min(leave, t2)
+        if enter &gt; leave:
+            return no hit
+
+    return hit at distance enter</code></pre></figure>
+<p>If the ray is parallel to an axis&#x27;s boundary planes, there is no division to perform on that axis. Its origin must already lie within that range. A ray starting inside the box reports distance 0 with this implementation.</p>
+<p>Draw the ray with <code><span class="ns">buz::</span>debug_draw::line</code>. Draw a small <code><span class="ns">buz::</span>debug_draw::sphere</code> at <code>origin + direction * enter</code> when it hits.</p>
+<p><strong>Check:</strong> Test a hit, a miss, a ray parallel to a face and a ray starting inside the box. A box beyond <code>max_distance</code> should not produce a hit.</p>
+<h2 id="step-4-check-line-of-sight">Step 4: check line of sight<a class="anchor" href="#step-4-check-line-of-sight" aria-label="Link to this section">#</a></h2>
+<p>To check visibility from point <code>a</code> to point <code>b</code>, calculate:</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">offset = b - a
+distance = length(offset)
+direction = offset / distance</code></pre></figure>
+<p>Cast this ray against the level&#x27;s blocking boxes, with <code>distance</code> as its maximum distance. If an obstacle is hit before <code>b</code>, it blocks the view. A wall behind <code>b</code> should not matter.</p>
+<p>Exclude the guard&#x27;s and target player&#x27;s own boxes from the obstacle test. If <code>a</code> and <code>b</code> are the same point, handle that case before dividing by <code>distance</code>.</p>
+<p><strong>Check:</strong> Place a wall between the two points, then move it behind the target. Draw the tested line so you can see which points it connects.</p>
+<h2 id="step-5-limit-the-guard-s-view">Step 5: limit the guard&#x27;s view<a class="anchor" href="#step-5-limit-the-guard-s-view" aria-label="Link to this section">#</a></h2>
+<p>A clear line of sight does not mean a guard should see through the back of its head or across the whole level. Add distance and direction checks.</p>
+<p>Choose a target point on the player, such as the chest. Let <code>to_player</code> be the vector from the guard&#x27;s eyes to that point. Test these conditions in order:</p>
+<ol>
+<li><strong>Distance:</strong> <code>length(to_player) &lt; view_distance</code>.</li>
+<li><strong>Direction:</strong> <code>dot(normalize(to_player), forward) &gt; cos(half_angle)</code>.</li>
+<li><strong>Obstacles:</strong> the line of sight to the target point is clear.</li>
+</ol>
+<p><code>forward</code> must be a unit vector pointing where the guard is looking. <code>half_angle</code> is half the cone&#x27;s full opening angle; pass it in radians to the cosine function. The dot product is 1 when the two directions match and decreases as they turn apart. Comparing it with <code>cos(half_angle)</code> checks whether the target is inside the cone. Handle a zero-length <code>to_player</code> before normalizing it.</p>
+<p>The distance and direction checks avoid ray tests for players who are already too far away or outside the guard&#x27;s view.</p>
+<p>Draw the view cone with <code><span class="ns">buz::</span>debug_draw::cone</code> and change its color when the guard sees the player. The target point matters: a crate may hide the player&#x27;s chest while leaving the head visible. As an extension, test several points and decide how they contribute to visibility.</p>
+<p><strong>Check:</strong> Move the player outside the range, behind the guard and behind a wall. Each should prevent detection for a different reason.</p>
+<h2 id="levels">Levels<a class="anchor" href="#levels" aria-label="Link to this section">#</a></h2>
+<p>Complete the basic level before adding the intermediate and hard features.</p>
+<p><strong>Basic</strong></p>
+<ul class="tasklist">
+<li class="task"><input type="checkbox" disabled> Draw every collision box with debug drawing while developing.</li>
+<li class="task"><input type="checkbox" disabled> Use strict overlap tests so touching a wall does not count as being inside it.</li>
+<li class="task"><input type="checkbox" disabled> Stop the player at walls.</li>
+</ul>
+<p><strong>Intermediate</strong></p>
+<ul class="tasklist">
+<li class="task"><input type="checkbox" disabled> Resolve movement one axis at a time so the player can slide along walls.</li>
+<li class="task"><input type="checkbox" disabled> Test ray-box intersection separately: hit, miss, parallel ray and ray starting inside.</li>
+<li class="task"><input type="checkbox" disabled> Check guard visibility using distance, view cone and line of sight, in that order.</li>
+</ul>
+<p><strong>Hard</strong></p>
+<ul class="tasklist">
+<li class="task"><input type="checkbox" disabled> Check the movement path so large steps cannot carry the player through thin walls.</li>
+<li class="task"><input type="checkbox" disabled> Build the level&#x27;s collision boxes from <code>col_*</code> nodes in the level file (see <a href="models.html">Models</a>).</li>
+</ul>
+    </div>
+    <nav class="toc" aria-labelledby="toc-title"><p class="toc-title" id="toc-title">On this page</p><ol><li><a href="#what-you-will-build">What you will build</a></li><li><a href="#step-1-test-whether-two-boxes-overlap">Step 1: test whether two boxes overlap</a></li><li><a href="#step-2-stop-the-player-at-walls">Step 2: stop the player at walls</a><ol><li><a href="#fast-movement-and-thin-walls">Fast movement and thin walls</a></li></ol></li><li><a href="#step-3-find-where-a-ray-hits-a-box">Step 3: find where a ray hits a box</a></li><li><a href="#step-4-check-line-of-sight">Step 4: check line of sight</a></li><li><a href="#step-5-limit-the-guard-s-view">Step 5: limit the guard&#x27;s view</a></li><li><a href="#levels">Levels</a></li></ol></nav>
+    </div>
+    <nav class="wrap pager" aria-label="Previous and next guide"><a href="../index.html#guides" class="back">&larr; All guides</a><a href="animation-player.html" class="p" rel="prev"><span class="meta">&larr; Previous</span>An animation player</a><a href="asset-cache.html" class="n" rel="next"><span class="meta">Next &rarr;</span>An asset cache</a></nav>
+  </article>
+</main>
+<footer class="site-footer">
+  <div class="wrap row">
+    <a href="../index.html" class="mark" aria-label="BuzEngine home">//</a>
+    <p class="who">BuzEngine &middot; Breda University of Applied Sciences &middot; MIT licensed</p>
+    <ul>
+      <li><a href="../guides/getting-started.html">Guides</a></li>
+      <li><a href="../reference/index.html">Reference</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>

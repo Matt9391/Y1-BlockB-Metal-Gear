@@ -10,27 +10,21 @@
 
 namespace buz
 {
-	class engine;
+	struct render_context;
 	class mesh;
 	class renderer_3d;
 
 	//--------------------------------------------------------------
 	/// @brief Draws the 3D game world, through a camera.
 	///
-	/// Your game makes one in its constructor and draws with it in
-	/// on_render_world; the world is drawn in the order of your calls, and
-	/// nearer surfaces hide farther ones whatever that order (there is a
-	/// depth buffer).
+	/// Owned by buz::game_3d and handed to on_render_world every frame; the
+	/// world is drawn in the order of your calls, and nearer surfaces hide
+	/// farther ones whatever that order (there is a depth buffer).
 	/// @code{.cpp}
-	/// my_game::my_game(buz::engine& engine)
-	///     : m_world_3d(engine)
+	/// void my_game::on_render_world(buz::engine& engine, buz::world_renderer_3d& world)
 	/// {
-	/// }
-	///
-	/// void my_game::on_render_world(buz::engine& engine, buz::world_renderer_2d& world)
-	/// {
-	///     m_world_3d.draw_box({ 0.0f, 0.5f, 0.0f }, { 1.0f, 1.0f, 1.0f }, m_crate_material);
-	///     m_world_3d.draw(*m_snake_mesh, m_snake_material, m_snake_transform);
+	///     world.draw_box({ 0.0f, 0.5f, 0.0f }, { 1.0f, 1.0f, 1.0f }, m_crate_material);
+	///     world.draw(*m_snake_mesh, m_snake_material, m_snake_transform);
 	/// }
 	/// @endcode
 	///
@@ -44,7 +38,9 @@ namespace buz
 		//----------------------------------------------------------
 		/// @brief Creates the pipelines and the built-in shapes on the
 		/// engine's graphics card.
-		explicit world_renderer_3d(engine& engine);
+		/// @param context The engine's render context
+		/// (engine::get_render_context).
+		explicit world_renderer_3d(const render_context& context);
 		~world_renderer_3d();
 
 		world_renderer_3d(const world_renderer_3d&) = delete;
@@ -64,7 +60,7 @@ namespace buz
 		void set_camera(const mat4& view, const mat4& projection);
 
 		//----------------------------------------------------------
-		// Drawing; only while game::on_render_world runs
+		// Drawing; only while on_render_world runs
 	public:
 		//----------------------------------------------------------
 		/// @brief Draws a mesh.
@@ -109,23 +105,6 @@ namespace buz
 		/// @param size Its width, height and depth, corner to corner.
 		/// @param look Its material.
 		void draw_octahedron(vec3 position, vec3 size, const material& look);
-
-		//----------------------------------------------------------
-		// Debug views
-	public:
-		//----------------------------------------------------------
-		/// @brief Switches between solid triangles and their edges only.
-		void toggle_wireframe();
-
-		//----------------------------------------------------------
-		/// @brief Switches the lighting off (every surface at its plain
-		/// color) and on again.
-		void toggle_lighting();
-
-		//----------------------------------------------------------
-		/// @brief Switches the debug lines (see debug_draw.h) off and on
-		/// again; they start on.
-		void toggle_debug_lines();
 
 		//----------------------------------------------------------
 		// For engine modules

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" data-root="../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diagnostics &middot; BuzEngine guides</title>
+<meta name="description" content="Logging, asserts, fatal errors and exceptions.">
+<meta name="theme-color" content="#1d222d">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="../assets/fonts/nunito-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/montserrat.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/site.css">
+<script>document.documentElement.classList.add('js')</script>
+<script src="../assets/search-index.js" defer></script>
+<script src="../assets/site.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="../index.html"><span class="mark" aria-hidden="true">//</span>Buz<span class="thin">Engine</span></a>
+    <nav class="site-nav" aria-label="Main">
+      <ul>
+        <li><a href="../guides/getting-started.html" aria-current="page">Guides</a></li>
+        <li><a href="../reference/index.html">Reference</a></li>
+        <li><a href="../about.html">About</a></li>
+      </ul>
+    </nav>
+    <div class="tools">
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-controls="search"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.75"/><path d="m10.5 10.5 3.5 3.5"/></svg><span class="label-text">Search</span><kbd>/</kbd></button>
+    </div>
+  </div>
+</header>
+<dialog class="search-dialog" id="search" aria-label="Search the guides and the reference">
+  <div class="search-field">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.75"/><path d="m10.5 10.5 3.5 3.5"/></svg>
+    <label class="visually-hidden" for="search-input">Search the guides and the reference</label>
+    <input id="search-input" type="search" placeholder="Search guides and API" autocomplete="off" spellcheck="false"
+           role="combobox" aria-autocomplete="list" aria-expanded="true" aria-controls="search-results">
+    <span class="esc" aria-hidden="true">Esc</span>
+  </div>
+  <ul class="search-results" id="search-results" role="listbox" aria-label="Results"></ul>
+  <p class="search-hint">Arrow keys to move, Enter to open, Esc to close.</p>
+</dialog>
+<main id="main" tabindex="-1">
+  <article>
+    <header class="wrap page-head">
+      
+      <h1>Diagnostics</h1>
+      <p class="lede">Logging, asserts, fatal errors and exceptions.</p>
+    </header>
+    <div class="doc">
+    <aside class="side" aria-label="All guides">
+      <button class="side-toggle" type="button" aria-expanded="false" aria-controls="side-nav"><span>All guides</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></button>
+      <nav class="side-nav" id="side-nav" aria-label="Guides">
+        <div class="side-group"><p class="side-title">Guides</p><ol><li><a href="getting-started.html">Getting started</a></li><li><a href="drawing.html">Drawing in 2D</a></li><li><a href="drawing-3d.html">Drawing in 3D</a></li><li><a href="input.html">Input</a></li><li><a href="textures-and-fonts.html">Textures &amp; fonts</a></li><li><a href="audio.html">Audio</a></li><li><a href="utilities.html">Utilities</a></li><li><a href="diagnostics.html" aria-current="page">Diagnostics</a></li><li><a href="json.html">JSON files</a></li><li><a href="models.html">Models</a></li><li><a href="under-the-hood.html">Under the hood</a></li></ol></div>
+        <div class="side-group"><p class="side-title">Guided experiences</p><ol><li><a href="guided-experiences.html">Guided experiences</a></li><li><a href="camera-2d.html">A 2D camera</a></li><li><a href="sprite-animation.html">Sprite animation</a></li><li><a href="sprite-batching.html">Sprite batching</a></li><li><a href="animation-player.html">An animation player</a></li><li><a href="collision.html">Collision</a></li><li><a href="asset-cache.html">An asset cache</a></li></ol></div>
+      </nav>
+    </aside>
+    <div class="prose">
+<p>Logging tells you what your game is doing, an assert tells you when one of your assumptions turns out to be wrong, and <code><span class="ns">buz::</span>fatal_error</code> stops a game that cannot go on.</p>
+<h2 id="logging-core-log-h">Logging (core/log.h)<a class="anchor" href="#logging-core-log-h" aria-label="Link to this section">#</a></h2>
+<p>There are three severities, and all three format with std::format&#x27;s <code>{}</code> placeholders. The format string is checked at compile time, so a placeholder without an argument (or the other way around) does not compile. Messages appear in the console window and in <code>buz.log</code> next to the executable:</p>
+<figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">C++</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-type">buz</span>::log::<span class="tok-fn">info</span>(<span class="tok-str">&quot;loaded {} textures&quot;</span>, texture_count);
+<span class="tok-type">buz</span>::log::<span class="tok-fn">warn</span>(<span class="tok-str">&quot;health {} is above the maximum, clamping&quot;</span>, health);
+<span class="tok-type">buz</span>::log::<span class="tok-fn">error</span>(<span class="tok-str">&quot;could not read {}&quot;</span>, <span class="tok-type">path</span>.<span class="tok-type">string</span>());
+
+<span class="tok-com">// format specifiers work too: {:.2f} = two decimals</span>
+<span class="tok-type">buz</span>::log::<span class="tok-fn">info</span>(<span class="tok-str">&quot;New ball tint: ({:.2f}, {:.2f}, {:.2f})&quot;</span>, tint.r, tint.g, tint.b);</code></pre></figure>
+<p>Logging is compiled into the Debug and Development builds. In the shipping build (Release) every log call collapses to nothing, so the game pays no formatting cost. <a href="getting-started.html">Getting started</a> lists the three builds.</p>
+<h2 id="asserts-core-assert-h">Asserts (core/assert.h)<a class="anchor" href="#asserts-core-assert-h" aria-label="Link to this section">#</a></h2>
+<p>Use BUZ_ASSERT to write down an assumption your code makes. When the condition is false, the assert logs the failed condition with its file and line and stops in the debugger at the call site:</p>
+<figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">C++</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-fn">BUZ_ASSERT</span>(frame_index &lt; frame_count);
+<span class="tok-fn">BUZ_ASSERT_MSG</span>(frame_index &lt; frame_count, <span class="tok-str">&quot;frame {} out of range&quot;</span>, frame_index);</code></pre></figure>
+<p>Asserts are compiled into the Debug build only. In Development and Release they disappear, and <strong>the condition is not even evaluated</strong>, so never put code with side effects inside one.</p>
+<h2 id="fatal-errors">Fatal errors<a class="anchor" href="#fatal-errors" aria-label="Link to this section">#</a></h2>
+<p>For errors the game cannot recover from, in any configuration, <code><span class="ns">buz::</span>fatal_error</code> logs the message and exits. On Windows it also shows the message in a message box, so the player sees it even when logging is compiled out:</p>
+<figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">C++</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-key">if</span> (!m_ball_texture)
+{
+    <span class="tok-type">buz</span>::<span class="tok-fn">fatal_error</span>(<span class="tok-str">&quot;could not load {}&quot;</span>, <span class="tok-type">path</span>.<span class="tok-type">string</span>());
+}</code></pre></figure>
+<h2 id="exceptions">Exceptions<a class="anchor" href="#exceptions" aria-label="Link to this section">#</a></h2>
+<p>Games rarely use C++ exceptions, and the engine doesn&#x27;t throw any. A function that can fail returns something you can check instead, such as the checkerboard <code><span class="ns">buz::</span>load_texture</code> returns for a file it cannot load, and <code><span class="ns">buz::</span>fatal_error</code> handles the errors the game cannot go on from.</p>
+<p>The reason is how an exception travels. A <code>throw</code> leaves the current function at once and keeps unwinding the call stack until a <code>catch</code> takes it, and that catch has to deal with it there and then. A game often doesn&#x27;t want that: a sound that fails to play is better ignored than allowed to abort the rest of the frame.</p>
+<p>Exceptions still have their uses, which is why the engine leaves them switched on in the compiler:</p>
+<ul>
+<li><strong>While debugging</strong>, a <code>throw</code> in code you suspect stops the debugger at that line, with the call stack that led there. Turning exceptions off for the whole project would mean whoever needs them later first has to find the compiler setting that turns them back on.</li>
+<li><strong>For crash reports</strong>, an exception can carry an error from deep inside the game straight to <code>main</code>, instead of passing an error value back through every function in between. Your template&#x27;s <code>main</code> calls <code>engine.run(game)</code>, so a <code>try</code> around that call is where a crash handler can log what went wrong before the game closes.</li>
+</ul>
+<figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">C++</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-key">#include</span> <span class="tok-str">&quot;core/log.h&quot;</span>
+<span class="tok-key">#include</span> <span class="tok-str">&quot;engine/engine.h&quot;</span>
+
+<span class="tok-key">#include</span> &lt;exception&gt;
+
+<span class="tok-key">int</span> <span class="tok-fn">main</span>(<span class="tok-key">int</span> argc, <span class="tok-key">char</span>** argv)
+{
+    <span class="tok-key">const</span> <span class="tok-type">buz</span>::engine_settings settings = { <span class="tok-com">/* as in your template */</span> };
+    <span class="tok-type">buz</span>::engine <span class="tok-fn">engine</span>(argc, argv, settings);
+    my_game <span class="tok-fn">game</span>(engine);
+
+    <span class="tok-key">try</span>
+    {
+        <span class="tok-key">return</span> engine.<span class="tok-fn">run</span>(game);
+    }
+    <span class="tok-key">catch</span> (<span class="tok-key">const</span> <span class="tok-type">std</span>::exception&amp; error)
+    {
+        <span class="tok-type">buz</span>::log::<span class="tok-fn">error</span>(<span class="tok-str">&quot;crashed: {}&quot;</span>, error.<span class="tok-fn">what</span>());
+        <span class="tok-key">return</span> <span class="tok-num">1</span>;
+    }
+}</code></pre></figure>
+<p>The standard library throws too: <code>std::vector::at</code> with an index out of range, <code>std::stoi</code> with text that is not a number. An exception nobody catches ends the game.</p>
+    </div>
+    <nav class="toc" aria-labelledby="toc-title"><p class="toc-title" id="toc-title">On this page</p><ol><li><a href="#logging-core-log-h">Logging (core/log.h)</a></li><li><a href="#asserts-core-assert-h">Asserts (core/assert.h)</a></li><li><a href="#fatal-errors">Fatal errors</a></li><li><a href="#exceptions">Exceptions</a></li></ol></nav>
+    </div>
+    <nav class="wrap pager" aria-label="Previous and next guide"><a href="../index.html#guides" class="back">&larr; All guides</a><a href="utilities.html" class="p" rel="prev"><span class="meta">&larr; Previous</span>Utilities</a><a href="json.html" class="n" rel="next"><span class="meta">Next &rarr;</span>JSON files</a></nav>
+  </article>
+</main>
+<footer class="site-footer">
+  <div class="wrap row">
+    <a href="../index.html" class="mark" aria-label="BuzEngine home">//</a>
+    <p class="who">BuzEngine &middot; Breda University of Applied Sciences &middot; MIT licensed</p>
+    <ul>
+      <li><a href="../guides/getting-started.html">Guides</a></li>
+      <li><a href="../reference/index.html">Reference</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>

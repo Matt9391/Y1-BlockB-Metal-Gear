@@ -5,9 +5,8 @@
 namespace buz
 {
 	//--------------------------------------------------------------
-	world_renderer_2d::world_renderer_2d(sprite_pass& pass)
-		: renderer_2d(pass)
-		, m_pass(pass)
+	world_renderer_2d::world_renderer_2d(const render_context& context)
+		: renderer_2d(context)
 	{
 	}
 
@@ -16,6 +15,6 @@ namespace buz
 	{
 		// Column-vector convention: the view applies first, then the
 		// projection, so the projection comes first in the product.
-		m_pass.set_view_projection(projection * view);
+		get_pass().set_view_projection(projection * view);
 	}
 }

@@ -4,11 +4,12 @@
 # Every game lives in its own folder under source/games, and its
 # CMakeLists.txt is a single call:
 #
-#   BUZ_GAME(sample_2d TIER tmpl_2d
-#            LINKS buz_engine)
+#   BUZ_GAME(sample_2d
+#            LINKS buz_engine buz_asset_management)
 #
 # LINKS are the engine modules the game uses: buz_engine for every game,
-# plus the 3D modules for a 3D one (see the 3D sample's CMakeLists.txt).
+# buz_asset_management to load textures (and models), plus the 3D modules
+# for a 3D one (see the 3D sample's CMakeLists.txt).
 #
 # What it sets up, so no game has to repeat it:
 # - Sources: every .cpp/.h/.hpp file under the game's private/ folder. You
@@ -32,14 +33,11 @@
 # which passes the property on unexpanded.
 # -------------------------------
 FUNCTION(BUZ_GAME name)
-    CMAKE_PARSE_ARGUMENTS(GAME "" "TIER" "LINKS" ${ARGN})
-    IF(NOT GAME_TIER)
-        MESSAGE(FATAL_ERROR "BUZ_GAME(${name}) needs a TIER")
-    ENDIF()
+    SET(value_arguments "")
+    CMAKE_PARSE_ARGUMENTS(GAME "" "${value_arguments}" "LINKS" ${ARGN})
 
     MESSAGE(STATUS "Adding game - ${name}")
     ADD_EXECUTABLE(${name})
-    BUZ_TIER(${name} ${GAME_TIER})
 
     FILE(GLOB_RECURSE game_sources CONFIGURE_DEPENDS
          "${CMAKE_CURRENT_LIST_DIR}/private/*.cpp"
@@ -98,11 +96,7 @@ FUNCTION(BUZ_GAME name)
         BUZ_PACKAGE_TARGETS(${name})
     ENDIF()
 
-    IF(GAME_TIER STREQUAL "staff")
-        SET_TARGET_PROPERTIES(${name} PROPERTIES FOLDER "games/staff")
-    ELSE()
-        SET_TARGET_PROPERTIES(${name} PROPERTIES FOLDER "games")
-    ENDIF()
+    SET_TARGET_PROPERTIES(${name} PROPERTIES FOLDER "games")
 ENDFUNCTION()
 
 #--------------------------------------------------------------

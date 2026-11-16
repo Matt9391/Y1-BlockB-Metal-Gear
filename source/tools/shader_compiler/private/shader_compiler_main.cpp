@@ -214,7 +214,10 @@ int main(int argument_count, char* arguments[])
 	if (spirv)
 	{
 		compile_arguments.push_back(L"-spirv");
-		compile_arguments.push_back(L"-fspv-target-env=vulkan1.3");
+		// For Vulkan 1.3 dxc turns discard into a "demote" instruction that
+		// only Vulkan has. SPIR-V that becomes GLSL targets Vulkan 1.1, where
+		// discard stays a discard that OpenGL understands.
+		compile_arguments.push_back(glsl ? L"-fspv-target-env=vulkan1.1" : L"-fspv-target-env=vulkan1.3");
 
 		// Vulkan's clip space has y pointing down where DirectX (and
 		// OpenGL) have it pointing up. Flipping the position the vertex

@@ -1,11 +1,11 @@
 #include "sample_2d_game.h"
 
+#include "asset_management/texture_loading.h"
 #include "core/random.h"
 #include "core/rect.h"
 #include "engine/audio.h"
 #include "engine/engine.h"
 #include "engine/input.h"
-#include "engine/texture_loading.h"
 #include "renderer_2d/screen_renderer.h"
 #include "renderer_2d/world_renderer_2d.h"
 
@@ -30,9 +30,10 @@ namespace
 
 //--------------------------------------------------------------
 sample_2d_game::sample_2d_game(buz::engine& engine)
+	: buz::game_2d(engine)
 	// Load the images once, here. Paths are relative to the content folder
     // that sits next to the executable.
-	: m_ball(buz::load_texture(engine, "textures/ball.png"))
+	, m_ball(buz::load_texture(engine, "textures/ball.png"))
 	, m_font{ .atlas = buz::load_texture(engine, "fonts/font_8x8.png") }
 	, m_ball_position{ 640.0f, 0.0f }
 	, m_ball_speed(300.0f)

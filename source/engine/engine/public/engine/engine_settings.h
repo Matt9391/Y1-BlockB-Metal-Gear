@@ -4,6 +4,7 @@
 #pragma once
 
 #include "core/math.h"
+#include "engine/input.h"
 #include "rhi/settings.h"
 
 #include <yes_no.h>
@@ -16,6 +17,31 @@ namespace buz
 	//--------------------------------------------------------------
 	/// @brief Whether the stats overlay is visible.
 	using stats_overlay = utl::yes_no_t<struct stats_overlay_tag>;
+
+	//--------------------------------------------------------------
+	/// @brief The keys that switch the engine's debug views while the game
+	/// runs. They work in every game, so your game does not check them
+	/// itself; pick other keys here when you need these ones for the game.
+	/// @code{.cpp}
+	/// buz::engine engine(argc, argv, { .debug_controls = { .wireframe = buz::key::f5 } });
+	/// @endcode
+	struct debug_keys
+	{
+		/// @brief Shows and hides the stats overlay (frame rate, draw calls).
+		key stats = key::f3;
+
+		/// @brief 3D only: draws every triangle's edges instead of the solid
+		/// triangle, and back.
+		key wireframe = key::f1;
+
+		/// @brief 3D only: draws every surface at its plain color, without
+		/// lighting, and back.
+		key lighting = key::f2;
+
+		/// @brief 3D only: hides the debug lines (see debug_draw.h), and
+		/// shows them again. They start shown.
+		key debug_lines = key::f4;
+	};
 
 	//--------------------------------------------------------------
 	/// @brief Settings the engine starts with.
@@ -69,6 +95,9 @@ namespace buz
 		/// @brief Show the stats overlay (frame rate, draw calls) from the
 		/// start. A debug key switches it while the game runs.
 		stats_overlay show_stats = stats_overlay::no;
+
+		/// @brief The keys that switch the debug views while the game runs.
+		debug_keys debug_controls;
 
 		/// @brief When set, the engine saves frame screenshot_frame as a png
 		/// at this path and quits. Until then every frame lasts exactly

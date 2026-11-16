@@ -12,13 +12,16 @@ namespace buz
 	/// lives, menus. It ignores the world's camera, so the hud stays put
 	/// while the level scrolls underneath it.
 	///
-	/// Handed to game::on_render_screen every frame, after on_render_world.
+	/// Every game has one, owned by buz::game and handed to on_render_screen
+	/// every frame, after on_render_world.
 	class screen_renderer : public renderer_2d
 	{
 	public:
 		//----------------------------------------------------------
-		/// @brief Draws into the engine's screen pass; only the engine has
-		/// one to pass in.
-		explicit screen_renderer(sprite_pass& pass);
+		/// @brief Creates the renderer and its pipeline on the engine's
+		/// graphics card; buz::game makes one for your game.
+		/// @param context The engine's render context
+		/// (engine::get_render_context).
+		explicit screen_renderer(const render_context& context);
 	};
 }

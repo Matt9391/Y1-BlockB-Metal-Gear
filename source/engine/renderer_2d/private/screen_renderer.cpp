@@ -3,8 +3,8 @@
 namespace buz
 {
 	//--------------------------------------------------------------
-	screen_renderer::screen_renderer(sprite_pass& pass)
-		: renderer_2d(pass)
+	screen_renderer::screen_renderer(const render_context& context)
+		: renderer_2d(context)
 	{
 	}
 }

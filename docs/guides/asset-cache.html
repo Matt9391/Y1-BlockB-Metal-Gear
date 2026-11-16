@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" data-root="../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>An asset cache &middot; BuzEngine guides</title>
+<meta name="description" content="Load every model once, however often it is used.">
+<meta name="theme-color" content="#1d222d">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="../assets/fonts/nunito-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/montserrat.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/site.css">
+<script>document.documentElement.classList.add('js')</script>
+<script src="../assets/search-index.js" defer></script>
+<script src="../assets/site.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="../index.html"><span class="mark" aria-hidden="true">//</span>Buz<span class="thin">Engine</span></a>
+    <nav class="site-nav" aria-label="Main">
+      <ul>
+        <li><a href="../guides/getting-started.html" aria-current="page">Guides</a></li>
+        <li><a href="../reference/index.html">Reference</a></li>
+        <li><a href="../about.html">About</a></li>
+      </ul>
+    </nav>
+    <div class="tools">
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-controls="search"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.75"/><path d="m10.5 10.5 3.5 3.5"/></svg><span class="label-text">Search</span><kbd>/</kbd></button>
+    </div>
+  </div>
+</header>
+<dialog class="search-dialog" id="search" aria-label="Search the guides and the reference">
+  <div class="search-field">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.75"/><path d="m10.5 10.5 3.5 3.5"/></svg>
+    <label class="visually-hidden" for="search-input">Search the guides and the reference</label>
+    <input id="search-input" type="search" placeholder="Search guides and API" autocomplete="off" spellcheck="false"
+           role="combobox" aria-autocomplete="list" aria-expanded="true" aria-controls="search-results">
+    <span class="esc" aria-hidden="true">Esc</span>
+  </div>
+  <ul class="search-results" id="search-results" role="listbox" aria-label="Results"></ul>
+  <p class="search-hint">Arrow keys to move, Enter to open, Esc to close.</p>
+</dialog>
+<main id="main" tabindex="-1">
+  <article>
+    <header class="wrap page-head">
+      <span class="label">Guided experience</span>
+      <h1>An asset cache</h1>
+      <p class="lede">Load every model once, however often it is used.</p>
+    </header>
+    <div class="doc">
+    <aside class="side" aria-label="All guides">
+      <button class="side-toggle" type="button" aria-expanded="false" aria-controls="side-nav"><span>All guides</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></button>
+      <nav class="side-nav" id="side-nav" aria-label="Guides">
+        <div class="side-group"><p class="side-title">Guides</p><ol><li><a href="getting-started.html">Getting started</a></li><li><a href="drawing.html">Drawing in 2D</a></li><li><a href="drawing-3d.html">Drawing in 3D</a></li><li><a href="input.html">Input</a></li><li><a href="textures-and-fonts.html">Textures &amp; fonts</a></li><li><a href="audio.html">Audio</a></li><li><a href="utilities.html">Utilities</a></li><li><a href="diagnostics.html">Diagnostics</a></li><li><a href="json.html">JSON files</a></li><li><a href="models.html">Models</a></li><li><a href="under-the-hood.html">Under the hood</a></li></ol></div>
+        <div class="side-group"><p class="side-title">Guided experiences</p><ol><li><a href="guided-experiences.html">Guided experiences</a></li><li><a href="camera-2d.html">A 2D camera</a></li><li><a href="sprite-animation.html">Sprite animation</a></li><li><a href="sprite-batching.html">Sprite batching</a></li><li><a href="animation-player.html">An animation player</a></li><li><a href="collision.html">Collision</a></li><li><a href="asset-cache.html" aria-current="page">An asset cache</a></li></ol></div>
+      </nav>
+    </aside>
+    <div class="prose">
+<blockquote class="note"><p><strong>Guided exercise:</strong> Use the 3D template and write the asset cache yourself (see <a href="guided-experiences.html">Guided experiences</a>). The functions in <code>asset_management</code> load an asset each time you call them. Your cache will let several objects share an asset that has already been loaded.</p></blockquote>
+<h2 id="what-you-will-build">What you will build<a class="anchor" href="#what-you-will-build" aria-label="Link to this section">#</a></h2>
+<p>Suppose ten guards use <code>models/soldier.glb</code>. If every guard calls <code><span class="ns">buz::</span>load_model</code>, the game repeats the file loading, decoding and mesh uploads for each guard. The guards need separate positions and animation state, but they can share the same model data.</p>
+<p>An <strong>asset cache</strong> stores loaded assets so the game can reuse them. The first request for the soldier loads its model. Later requests return the model already in the cache.</p>
+<p>You will first cache models by path, then decide who keeps them alive and how to handle failed loads. The examples below are pseudocode.</p>
+<h2 id="step-1-look-up-a-model-by-its-path">Step 1: look up a model by its path<a class="anchor" href="#step-1-look-up-a-model-by-its-path" aria-label="Link to this section">#</a></h2>
+<p>Use a map whose key is the asset&#x27;s path and whose value refers to the loaded model. Check the map before calling the loader:</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">get_model(path):
+    key = normalize_path(path)
+
+    if key is in models:
+        return models[key]
+
+    model = load_model(key)
+    models[key] = model
+    return model</code></pre></figure>
+<p>The lookup must recognize equivalent paths. For example, <code>models/soldier.glb</code> and <code>models/./soldier.glb</code> should use the same entry. Normalize the path before both the lookup and the insertion.</p>
+<p><code>std::filesystem::path::lexically_normal()</code> can remove redundant path components such as <code>.</code>. Decide on one asset root and one separator format for your keys. Lexical normalization alone does not resolve every way two paths can name the same file, such as symbolic links.</p>
+<p>The input can be a <code>std::string_view</code>, as it is for <code><span class="ns">buz::</span>load_model</code>, but the stored key must own its text. Use a <code>std::string</code>; a stored <code>std::string_view</code> could point at text that no longer exists. If you use <code>generic_u8string()</code> to produce a key, account for its <code>std::u8string</code> return type in C++20 and later rather than assuming it returns <code>std::string</code>.</p>
+<p><strong>Check:</strong> Request the same model twice and compare the returned pointers. Then repeat with the two path spellings above. Both requests should refer to the same object.</p>
+<h2 id="step-2-decide-who-keeps-the-model-alive">Step 2: decide who keeps the model alive<a class="anchor" href="#step-2-decide-who-keeps-the-model-alive" aria-label="Link to this section">#</a></h2>
+<p>The cache and the guards now refer to the same model. You need a clear rule for when that model can be destroyed.</p>
+<p>Start by returning <code>std::shared_ptr&lt;const buz::model&gt;</code>. A <code>shared_ptr</code> keeps an object alive while at least one shared owner remains. The engine also uses shared pointers for textures and meshes.</p>
+<p>There are two choices for the cache itself:</p>
+<div class="tablewrap"><table>
+<thead><tr>
+<th>Stored in the cache</th>
+<th>What happens when the last guard releases the model?</th>
+<th>What happens on the next request?</th>
+</tr></thead><tbody>
+<tr><td><code>std::shared_ptr</code></td><td>The cache still keeps it alive.</td><td>Return the existing model.</td></tr>
+<tr><td><code>std::weak_ptr</code></td><td>The model is destroyed if no other shared owner remains.</td><td>Load it again if the weak pointer has expired.</td></tr>
+</tbody></table></div>
+<p>A cache of shared pointers is a simple starting point for one level. Its <code>clear()</code> releases the cache&#x27;s references. Models still used by the game remain alive until those users release them too.</p>
+<p>A cache of weak pointers allows unused models to be destroyed sooner. Use <code>lock()</code> to obtain a shared pointer when looking up an entry. If the model has expired, load it again. This can mean repeated loading when characters frequently enter and leave the level.</p>
+<p>Choose one approach and write down why it suits your game.</p>
+<h3 id="keep-shared-model-data-separate-from-character-state">Keep shared model data separate from character state<a class="anchor" href="#keep-shared-model-data-separate-from-character-state" aria-label="Link to this section">#</a></h3>
+<p>Returning a pointer to a <code>const</code> model prevents a guard from directly editing that shared model through the returned pointer. Keep each guard&#x27;s position and animation playback state outside it.</p>
+<p>For changes such as per-character colors, copy the model and change the copy&#x27;s per-model settings. Its mesh pointers still refer to the shared meshes, so copying the model does not duplicate the mesh data. Do not modify shared mesh or texture objects expecting the change to affect only one character; <code>const</code> on the model is not deep immutability.</p>
+<p><strong>Check:</strong> Release one guard&#x27;s model pointer while another guard still uses the model. The remaining guard must still be able to draw. Then verify that your cache releases or retains the unused model as intended.</p>
+<h2 id="step-3-remember-failed-loads">Step 3: remember failed loads<a class="anchor" href="#step-3-remember-failed-loads" aria-label="Link to this section">#</a></h2>
+<p>A missing file can be requested repeatedly, perhaps once per update. Without a record of the failure, each request repeats the load attempt and may print the same error again.</p>
+<p>Store a failed result as an entry too. In a shared-pointer cache, an entry containing an empty pointer can mean that loading failed. A key that is absent means the cache has not tried to load it yet.</p>
+<p>For a weak-pointer cache, record failure separately: an expired weak pointer could also mean a valid model was unloaded and should be loaded again. Those cases need different behavior.</p>
+<p>Log the failure on the first attempt. Decide how to retry after the file is fixed, for example by clearing the entry or clearing the cache.</p>
+<p><strong>Check:</strong> Request a missing file several times. There should be one load attempt and one error report until you explicitly allow another attempt.</p>
+<h2 id="step-4-cache-other-asset-types">Step 4: cache other asset types<a class="anchor" href="#step-4-cache-other-asset-types" aria-label="Link to this section">#</a></h2>
+<p>Apply the same lookup and ownership rules to textures and meshes. Separate maps and functions for each type are fine. Once they work, consider whether a template would remove useful duplication without making the code harder to follow.</p>
+<p>Show counters on screen with <code>draw_text</code>, or log them. State what each counter measures: cached entries, assets still alive or successful loads, for example. Those numbers are not necessarily the same, especially with weak pointers or cached failures.</p>
+<p><strong>Check:</strong> Repeated requests should reuse each asset type. Watch the counters while entering and leaving a level.</p>
+<h2 id="levels">Levels<a class="anchor" href="#levels" aria-label="Link to this section">#</a></h2>
+<p>Complete the basic level before adding the intermediate and hard features.</p>
+<p><strong>Basic</strong></p>
+<ul class="tasklist">
+<li class="task"><input type="checkbox" disabled> Loading the same path twice returns the same object; compare the pointers.</li>
+<li class="task"><input type="checkbox" disabled> Normalize paths before using them as cache keys.</li>
+<li class="task"><input type="checkbox" disabled> Return shared models as <code>const</code>; make per-character model changes on a copy.</li>
+</ul>
+<p><strong>Intermediate</strong></p>
+<ul class="tasklist">
+<li class="task"><input type="checkbox" disabled> Report a missing file once rather than on every request.</li>
+<li class="task"><input type="checkbox" disabled> Implement <code>clear()</code> between levels or weak-pointer eviction, and explain the ownership choice.</li>
+<li class="task"><input type="checkbox" disabled> Count loaded assets and show the counts on screen.</li>
+</ul>
+<p><strong>Hard</strong></p>
+<ul class="tasklist">
+<li class="task"><input type="checkbox" disabled> Give the cache exclusive ownership with <code>std::unique_ptr</code> and return small handles to game code.</li>
+<li class="task"><input type="checkbox" disabled> Detect handles to unloaded assets, for example with a generation number.</li>
+<li class="task"><input type="checkbox" disabled> Compare the handle design with shared pointers: explain the benefits and additional work.</li>
+</ul>
+    </div>
+    <nav class="toc" aria-labelledby="toc-title"><p class="toc-title" id="toc-title">On this page</p><ol><li><a href="#what-you-will-build">What you will build</a></li><li><a href="#step-1-look-up-a-model-by-its-path">Step 1: look up a model by its path</a></li><li><a href="#step-2-decide-who-keeps-the-model-alive">Step 2: decide who keeps the model alive</a><ol><li><a href="#keep-shared-model-data-separate-from-character-state">Keep shared model data separate from character state</a></li></ol></li><li><a href="#step-3-remember-failed-loads">Step 3: remember failed loads</a></li><li><a href="#step-4-cache-other-asset-types">Step 4: cache other asset types</a></li><li><a href="#levels">Levels</a></li></ol></nav>
+    </div>
+    <nav class="wrap pager" aria-label="Previous and next guide"><a href="../index.html#guides" class="back">&larr; All guides</a><a href="collision.html" class="p" rel="prev"><span class="meta">&larr; Previous</span>Collision</a></nav>
+  </article>
+</main>
+<footer class="site-footer">
+  <div class="wrap row">
+    <a href="../index.html" class="mark" aria-label="BuzEngine home">//</a>
+    <p class="who">BuzEngine &middot; Breda University of Applied Sciences &middot; MIT licensed</p>
+    <ul>
+      <li><a href="../guides/getting-started.html">Guides</a></li>
+      <li><a href="../reference/index.html">Reference</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>

@@ -15,9 +15,9 @@ namespace buz
 	// your colliders, a guard's vision cone, a patrol path, a ray you cast,
 	// and you see at a glance whether the math does what you meant.
 	//
-	// Lines only show while debug lines are on (world_renderer_3d::
-	// toggle_debug_lines), so they can stay in the code. They are hidden
-	// behind walls like everything else.
+	// Lines only show while debug lines are on (F4 switches them, see
+	// engine_settings::debug_controls), so they can stay in the code. They
+	// are hidden behind walls like everything else.
 	//--------------------------------------------------------------
 	namespace debug_draw
 	{

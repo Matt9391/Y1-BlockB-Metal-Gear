@@ -1,13 +1,12 @@
 #include "sample_3d_game.h"
 
+#include "asset_management/model_loading.h"
+#include "asset_management/texture_loading.h"
 #include "core/aabb.h"
 #include "engine/engine.h"
-#include "engine/input.h"
-#include "engine/texture_loading.h"
 #include "renderer_2d/screen_renderer.h"
 #include "renderer_3d/debug_draw.h"
 #include "renderer_3d/mesh.h"
-#include "renderer_3d/model.h"
 
 #include <iterator>
 
@@ -27,7 +26,7 @@ namespace
 
 //--------------------------------------------------------------
 sample_3d_game::sample_3d_game(buz::engine& engine)
-	: m_world_3d(engine)
+	: buz::game_3d(engine)
 	, m_soldier_position{ 0.0f, 0.0f, 2.0f }
 {
 	m_font.atlas = buz::load_texture(engine, "fonts/font_8x8.png");
@@ -45,83 +44,74 @@ sample_3d_game::sample_3d_game(buz::engine& engine)
 }
 
 //--------------------------------------------------------------
-void sample_3d_game::on_update(buz::engine& engine, float /*delta_seconds*/)
-{
-	const buz::input& input = engine.get_input();
-	if (input.was_key_pressed(buz::key::f1)) { m_world_3d.toggle_wireframe(); }
-	if (input.was_key_pressed(buz::key::f2)) { m_world_3d.toggle_lighting(); }
-	if (input.was_key_pressed(buz::key::f4)) { m_world_3d.toggle_debug_lines(); }
-}
-
-//--------------------------------------------------------------
-void sample_3d_game::on_render_world(buz::engine& /*engine*/, buz::world_renderer_2d& /*world*/)
+void sample_3d_game::on_render_world(buz::engine& /*engine*/, buz::world_renderer_3d& world)
 {
 	// No camera is set, so the world is seen from the renderer's default
 	// spot. A camera of your own is two matrices (see Drawing in 3D).
-	draw_harbour();
+	draw_harbour(world);
 
 	for (const buz::vec3& position : m_crate_positions)
 	{
-		m_world_3d.draw(*m_crate_mesh, m_crate_material, glm::translate(buz::mat4(1.0f), position));
+		world.draw(*m_crate_mesh, m_crate_material, glm::translate(buz::mat4(1.0f), position));
 	}
 
 	if (m_soldier_mesh)
 	{
-		m_world_3d.draw(*m_soldier_mesh, k_fatigues, glm::translate(buz::mat4(1.0f), m_soldier_position));
+		world.draw(*m_soldier_mesh, k_fatigues, glm::translate(buz::mat4(1.0f), m_soldier_position));
 	}
 
-	draw_debug_shapes();
+	draw_debug_shapes(world);
 }
 
 //--------------------------------------------------------------
-void sample_3d_game::draw_harbour()
+void sample_3d_game::draw_harbour(buz::world_renderer_3d& world) const
 {
 	// The quay, and the water next to it
-	m_world_3d.draw_plane({ 0.0f, 0.0f, 0.0f }, { 20.0f, 1.0f, 14.0f }, k_concrete);
-	m_world_3d.draw_plane({ 0.0f, -0.6f, -12.0f }, { 40.0f, 1.0f, 10.0f }, k_water);
+	world.draw_plane({ 0.0f, 0.0f, 0.0f }, { 20.0f, 1.0f, 14.0f }, k_concrete);
+	world.draw_plane({ 0.0f, -0.6f, -12.0f }, { 40.0f, 1.0f, 10.0f }, k_water);
 
 	// Walls around the back and the sides
-	m_world_3d.draw_box({ 0.0f, 1.5f, 7.0f }, { 20.0f, 3.0f, 0.5f }, k_wall);
-	m_world_3d.draw_box({ -10.0f, 1.5f, 0.0f }, { 0.5f, 3.0f, 14.0f }, k_wall);
-	m_world_3d.draw_box({ 10.0f, 1.5f, 0.0f }, { 0.5f, 3.0f, 14.0f }, k_wall);
+	world.draw_box({ 0.0f, 1.5f, 7.0f }, { 20.0f, 3.0f, 0.5f }, k_wall);
+	world.draw_box({ -10.0f, 1.5f, 0.0f }, { 0.5f, 3.0f, 14.0f }, k_wall);
+	world.draw_box({ 10.0f, 1.5f, 0.0f }, { 0.5f, 3.0f, 14.0f }, k_wall);
 
 	// Mooring posts along the edge of the quay
 	const buz::vec3 posts[] = { { -8.0f, 0.35f, -6.6f }, { -4.0f, 0.35f, -6.6f }, { 0.0f, 0.35f, -6.6f }, { 4.0f, 0.35f, -6.6f }, { 8.0f, 0.35f, -6.6f } };
 	for (const buz::vec3& post : posts)
 	{
-		m_world_3d.draw_cylinder(post, { 0.4f, 0.7f, 0.4f }, k_rust);
+		world.draw_cylinder(post, { 0.4f, 0.7f, 0.4f }, k_rust);
 	}
 
 	// A container, a buoy in the water and a pickup
-	m_world_3d.draw_box({ -5.0f, 1.25f, 4.5f }, { 6.0f, 2.5f, 2.4f }, k_rust);
-	m_world_3d.draw_sphere({ 4.0f, -0.4f, -9.0f }, { 0.9f, 0.9f, 0.9f }, k_buoy);
-	m_world_3d.draw_octahedron({ 0.0f, 0.8f, -3.0f }, { 0.5f, 0.7f, 0.5f }, k_pickup);
+	world.draw_box({ -5.0f, 1.25f, 4.5f }, { 6.0f, 2.5f, 2.4f }, k_rust);
+	world.draw_sphere({ 4.0f, -0.4f, -9.0f }, { 0.9f, 0.9f, 0.9f }, k_buoy);
+	world.draw_octahedron({ 0.0f, 0.8f, -3.0f }, { 0.5f, 0.7f, 0.5f }, k_pickup);
 }
 
 //--------------------------------------------------------------
-void sample_3d_game::draw_debug_shapes()
+void sample_3d_game::draw_debug_shapes(buz::world_renderer_3d& world) const
 {
 	// What the game "knows" about the world
 	const buz::color collider_color = { 0.2f, 1.0f, 0.2f, 1.0f };
 	for (const buz::vec3& position : m_crate_positions)
 	{
-		buz::debug_draw::box(m_world_3d, buz::aabb_from_center_size(position + buz::vec3(0.0f, 0.5f, 0.0f), { 1.0f, 1.0f, 1.0f }), collider_color);
+		buz::debug_draw::box(world, buz::aabb_from_center_size(position + buz::vec3(0.0f, 0.5f, 0.0f), { 1.0f, 1.0f, 1.0f }), collider_color);
 	}
-	buz::debug_draw::box(m_world_3d, buz::aabb_from_center_size({ -5.0f, 1.25f, 4.5f }, { 6.0f, 2.5f, 2.4f }), collider_color);
+	buz::debug_draw::box(world, buz::aabb_from_center_size({ -5.0f, 1.25f, 4.5f }, { 6.0f, 2.5f, 2.4f }), collider_color);
 
 	// What the soldier sees: a cone from his eyes along +z, the way his
 	// model faces
 	const buz::vec3 eyes = m_soldier_position + buz::vec3(0.0f, 1.6f, 0.0f);
-	buz::debug_draw::cone(m_world_3d, eyes, { 0.0f, 0.0f, 1.0f }, 5.0f, buz::radians(25.0f), { 1.0f, 0.9f, 0.2f, 1.0f });
+	buz::debug_draw::cone(world, eyes, { 0.0f, 0.0f, 1.0f }, 5.0f, buz::radians(25.0f), { 1.0f, 0.9f, 0.2f, 1.0f });
 
 	// A patrol route, as a guard would walk it
 	const buz::vec3 patrol[] = { { -7.0f, 0.05f, -4.0f }, { 7.0f, 0.05f, -4.0f }, { 7.0f, 0.05f, 2.0f }, { 0.0f, 0.05f, 5.0f } };
 	for (size_t point = 0; point < std::size(patrol); ++point)
 	{
-		buz::debug_draw::line(m_world_3d, patrol[point], patrol[(point + 1) % std::size(patrol)], { 0.3f, 0.6f, 1.0f, 1.0f });
+		buz::debug_draw::line(world, patrol[point], patrol[(point + 1) % std::size(patrol)], { 0.3f, 0.6f, 1.0f, 1.0f });
 	}
 
-	buz::debug_draw::sphere(m_world_3d, { 4.0f, -0.4f, -9.0f }, 0.6f, { 1.0f, 0.4f, 0.4f, 1.0f });
+	buz::debug_draw::sphere(world, { 4.0f, -0.4f, -9.0f }, 0.6f, { 1.0f, 0.4f, 0.4f, 1.0f });
 }
 
 //--------------------------------------------------------------

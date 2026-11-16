@@ -13,7 +13,7 @@ namespace buz
 	/// @brief A 2d image living in gpu memory, ready to be drawn.
 	///
 	/// The engine makes textures: buz::load_texture reads an image file,
-	/// buz::create_texture takes pixels made in code (engine/texture_loading.h).
+	/// buz::create_texture takes pixels made in code (asset_management/texture_loading.h).
 	/// Both hand them out as a std::shared_ptr, so you never new/delete a
 	/// texture yourself.
 	class texture

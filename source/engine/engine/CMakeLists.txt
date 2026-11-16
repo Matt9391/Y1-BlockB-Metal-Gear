@@ -1,8 +1,9 @@
 # The main loop: owns every system, runs the game and draws its frames. Also
-# the window, keyboard and mouse (on top of SDL3) and sound effects and music
-# (on top of miniaudio).
-BUZ_MODULE(engine TIER tmpl_2d
-           PUBLIC_DEPS buz_renderer_2d yesno
+# the window, keyboard and mouse (on top of SDL3), sound effects and music
+# (on top of miniaudio), and the game classes: game, game_2d, and game_3d
+# for the 3D template.
+BUZ_MODULE(engine
+           PUBLIC_DEPS buz_renderer_2d yesno buz_renderer_3d
            PRIVATE_DEPS args buz_core_internal buz_renderer_2d_internal buz_rhi_internal SDL3::SDL3-static miniaudio stb)
 
 IF(NOT WIN32)

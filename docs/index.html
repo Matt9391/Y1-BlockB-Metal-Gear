@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en" data-root="">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BuzEngine documentation</title>
+<meta name="description" content="Guides and API reference for BuzEngine, a template to build 2D and 3D games in C++.">
+<meta name="theme-color" content="#1d222d">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/nunito-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/montserrat.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/site.css">
+<script>document.documentElement.classList.add('js')</script>
+<script src="assets/search-index.js" defer></script>
+<script src="assets/site.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="index.html"><span class="mark" aria-hidden="true">//</span>Buz<span class="thin">Engine</span></a>
+    <nav class="site-nav" aria-label="Main">
+      <ul>
+        <li><a href="guides/getting-started.html">Guides</a></li>
+        <li><a href="reference/index.html">Reference</a></li>
+        <li><a href="about.html">About</a></li>
+      </ul>
+    </nav>
+    <div class="tools">
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-controls="search"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.75"/><path d="m10.5 10.5 3.5 3.5"/></svg><span class="label-text">Search</span><kbd>/</kbd></button>
+    </div>
+  </div>
+</header>
+<dialog class="search-dialog" id="search" aria-label="Search the guides and the reference">
+  <div class="search-field">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.75"/><path d="m10.5 10.5 3.5 3.5"/></svg>
+    <label class="visually-hidden" for="search-input">Search the guides and the reference</label>
+    <input id="search-input" type="search" placeholder="Search guides and API" autocomplete="off" spellcheck="false"
+           role="combobox" aria-autocomplete="list" aria-expanded="true" aria-controls="search-results">
+    <span class="esc" aria-hidden="true">Esc</span>
+  </div>
+  <ul class="search-results" id="search-results" role="listbox" aria-label="Results"></ul>
+  <p class="search-hint">Arrow keys to move, Enter to open, Esc to close.</p>
+</dialog>
+
+<main id="main" tabindex="-1">
+
+<section class="hero">
+  <div class="hero-media" aria-hidden="true">
+    <img src="assets/img/sample_3d.png" width="640" height="360" alt="">
+  </div>
+  <div class="wrap">
+    <h1>Buz<span class="thin">Engine</span></h1>
+    <p class="tagline">A template to build games</p>
+    <div class="btn-row">
+      <a class="btn btn-primary" href="guides/getting-started.html">Getting started</a>
+      <a class="btn" href="reference/index.html">API reference</a>
+    </div>
+  </div>
+  <p class="hero-credit">Background: the 3D template's starting game.</p>
+</section>
+
+<section class="intro">
+  <div class="wrap">
+    <div class="intro-panel">
+      <p>BuzEngine is a C++ engine for 2D and 3D games. These pages explain how to set it up, how each part works and where to look things up.</p>
+      <table class="platforms">
+        <thead><tr><td></td><th scope="col">Windows 10 and 11</th><th scope="col">Linux</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Graphics</th><td>OpenGL, DirectX&nbsp;12</td><td>OpenGL, Vulkan</td></tr>
+          <tr><th scope="row">Toolchain</th><td>Visual Studio 2026 with the C++ desktop workload</td><td>GCC 13 or Clang 17, CMake and Ninja</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="what">
+  <div class="wrap">
+    <div class="center-head">
+      <h2 id="what">How a game starts</h2>
+    </div>
+    <div class="pair">
+      <figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">my_game.cpp</span><span class="lines"> &middot; a ball in the middle of the screen</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-key">class</span> my_game : <span class="tok-key">public</span> <span class="tok-type">buz</span>::game_2d
+{
+<span class="tok-key">public</span>:
+    <span class="tok-key">explicit</span> <span class="tok-fn">my_game</span>(<span class="tok-type">buz</span>::engine&amp; engine)
+        : <span class="tok-type">buz</span>::<span class="tok-fn">game_2d</span>(engine)
+        , <span class="tok-fn">m_ball</span>(<span class="tok-type">buz</span>::<span class="tok-fn">load_texture</span>(engine, <span class="tok-str">&quot;textures/ball.png&quot;</span>))
+    {
+    }
+
+<span class="tok-key">protected</span>:
+    <span class="tok-key">void</span> <span class="tok-fn">on_render_world</span>(<span class="tok-type">buz</span>::engine&amp; engine, <span class="tok-type">buz</span>::world_renderer_2d&amp; world) <span class="tok-key">override</span>
+    {
+        world.<span class="tok-fn">draw_sprite</span>(*m_ball, { <span class="tok-num">640</span>, <span class="tok-num">360</span> }, { <span class="tok-num">120</span>, <span class="tok-num">120</span> });
+    }
+
+<span class="tok-key">private</span>:
+    <span class="tok-type">std</span>::<span class="tok-type">shared_ptr</span>&lt;<span class="tok-type">buz</span>::texture&gt; m_ball;
+};</code></pre></figure>
+      <div class="pair-text why">
+        <h3>What the engine does for you</h3>
+        <p>Every game needs the same groundwork before there is anything to play: a window to draw in, a loop that runs once per frame, input from the keyboard and mouse, and a way to draw and play sound. The engine provides that groundwork, so the code you write is about the game itself.</p>
+        <p>Your game connects to the engine through a class that derives from <code>buz::game_2d</code>, like <code>my_game</code> here, or from <code>buz::game_3d</code> for a 3D world. Its constructor loads what the game needs while it runs, in this case the texture of a ball. From then on the engine calls the class every frame: in <code>on_update</code> the game reacts to input and moves things, and in <code>on_render_world</code> and <code>on_render_screen</code> it draws them, each with the renderer it gets. This example has nothing to move, so it only draws.</p>
+        <p>In a real game, this class doesn't do all the work itself. The player, the enemies and the level are usually classes of their own, in separate files, and the game class creates them and updates them every frame. All of it is plain C++; there is no editor or scripting language.</p>
+        <h3>Your template</h3>
+        <p>You don't start from an empty folder. A template is a CMake project that already contains the engine's source code, a small game that runs, and scripts to build, run and package your games. Run that game first, then change it or add your own next to it.</p>
+        <a class="more" href="about.html">About BuzEngine &gt;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="guides" aria-labelledby="guides-title">
+  <div class="wrap">
+    <div class="center-head">
+      <h2 id="guides-title">Contents</h2>
+    </div>
+    <ol class="path">
+      <li><div class="card"><h3><a href="guides/getting-started.html">Getting started</a></h3><p class="sum">Build the project and write your first game.</p></div></li>
+      <li><div class="card"><h3><a href="guides/drawing.html">Drawing in 2D</a></h3><p class="sum">Sprites, shapes and text, in the world and on the screen.</p></div></li>
+      <li><div class="card"><h3><a href="guides/drawing-3d.html">Drawing in 3D</a></h3><p class="sum">Cameras, shapes, materials and debug lines.</p></div></li>
+      <li><div class="card"><h3><a href="guides/input.html">Input</a></h3><p class="sum">Reading the keyboard and mouse each frame.</p></div></li>
+      <li><div class="card"><h3><a href="guides/textures-and-fonts.html">Textures &amp; fonts</a></h3><p class="sum">Loading images, procedural textures, bitmap fonts.</p></div></li>
+      <li><div class="card"><h3><a href="guides/audio.html">Audio</a></h3><p class="sum">Sound effects and music.</p></div></li>
+      <li><div class="card"><h3><a href="guides/utilities.html">Utilities</a></h3><p class="sum">Math, rects, timers, random numbers and noise.</p></div></li>
+      <li><div class="card"><h3><a href="guides/diagnostics.html">Diagnostics</a></h3><p class="sum">Logging, asserts, fatal errors and exceptions.</p></div></li>
+      <li><div class="card"><h3><a href="guides/json.html">JSON files</a></h3><p class="sum">Reading and writing json.</p></div></li>
+      <li><div class="card"><h3><a href="guides/models.html">Models</a></h3><p class="sum">glTF meshes, characters made of rigid parts, and their animations.</p></div></li>
+      <li><div class="card"><h3><a href="guides/under-the-hood.html">Under the hood</a></h3><p class="sum">How the engine works inside, module by module.</p></div></li>
+    </ol>
+
+    <div class="blocks">
+      <div class="block">
+        <h3>Guided experiences &middot; 2D</h3>
+        <ul>
+          <li><a href="guides/camera-2d.html"><strong>A 2D camera</strong><span>Build a scrolling 2D camera.</span></a></li>
+          <li><a href="guides/sprite-animation.html"><strong>Sprite animation</strong><span>Build a sprite-animation helper.</span></a></li>
+          <li><a href="guides/sprite-batching.html"><strong>Sprite batching</strong><span>Draw thousands of sprites with a handful of draw calls.</span></a></li>
+        </ul>
+      </div>
+      <div class="block">
+        <h3>Guided experiences &middot; 3D</h3>
+        <ul>
+          <li><a href="guides/animation-player.html"><strong>An animation player</strong><span>Play keyframe clips with looping and blending.</span></a></li>
+          <li><a href="guides/collision.html"><strong>Collision</strong><span>Walls, rays, line of sight and view cones.</span></a></li>
+          <li><a href="guides/asset-cache.html"><strong>An asset cache</strong><span>Load every model once, however often it is used.</span></a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="center-more"><a class="more" href="guides/guided-experiences.html">How the exercises work &gt;</a></p>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="ship">
+  <div class="wrap">
+    <div class="center-head">
+      <h2 id="ship">Sharing your game</h2>
+      <a class="more" href="guides/getting-started.html#sharing-your-game">Sharing your game &gt;</a>
+    </div>
+    <ul class="targets" aria-label="Package targets">
+      <li>
+        <h3>Windows</h3>
+        <div class="cmd"><code>package.bat -game=awesome_game</code><span class="out">package/awesome_game-windows.zip</span></div>
+        <p>The game and its content folder. Extract the archive and run the game.</p>
+      </li>
+      <li>
+        <h3>Linux</h3>
+        <div class="cmd"><code>./package.sh -game=awesome_game</code><span class="out">package/awesome_game-linux.tar.gz</span></div>
+        <p>The game and its content folder. Extract the archive and run the game.</p>
+      </li>
+      <li>
+        <h3>The web</h3>
+        <div class="cmd"><code>package.bat -game=awesome_game -web</code><span class="out">package/awesome_game-web.zip</span></div>
+        <p>The game as a web page. Upload the zip to itch.io as an HTML game.</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap row">
+    <a href="index.html" class="mark" aria-label="BuzEngine home">//</a>
+    <p class="who">BuzEngine &middot; Breda University of Applied Sciences &middot; MIT licensed</p>
+    <ul>
+      <li><a href="guides/getting-started.html">Guides</a></li>
+      <li><a href="reference/index.html">Reference</a></li>
+    </ul>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" data-root="../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Audio &middot; BuzEngine guides</title>
+<meta name="description" content="Sound effects and music.">
+<meta name="theme-color" content="#1d222d">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="../assets/fonts/nunito-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/montserrat.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/site.css">
+<script>document.documentElement.classList.add('js')</script>
+<script src="../assets/search-index.js" defer></script>
+<script src="../assets/site.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="../index.html"><span class="mark" aria-hidden="true">//</span>Buz<span class="thin">Engine</span></a>
+    <nav class="site-nav" aria-label="Main">
+      <ul>
+        <li><a href="../guides/getting-started.html" aria-current="page">Guides</a></li>
+        <li><a href="../reference/index.html">Reference</a></li>
+        <li><a href="../about.html">About</a></li>
+      </ul>
+    </nav>
+    <div class="tools">
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-controls="search"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.75"/><path d="m10.5 10.5 3.5 3.5"/></svg><span class="label-text">Search</span><kbd>/</kbd></button>
+    </div>
+  </div>
+</header>
+<dialog class="search-dialog" id="search" aria-label="Search the guides and the reference">
+  <div class="search-field">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.75"/><path d="m10.5 10.5 3.5 3.5"/></svg>
+    <label class="visually-hidden" for="search-input">Search the guides and the reference</label>
+    <input id="search-input" type="search" placeholder="Search guides and API" autocomplete="off" spellcheck="false"
+           role="combobox" aria-autocomplete="list" aria-expanded="true" aria-controls="search-results">
+    <span class="esc" aria-hidden="true">Esc</span>
+  </div>
+  <ul class="search-results" id="search-results" role="listbox" aria-label="Results"></ul>
+  <p class="search-hint">Arrow keys to move, Enter to open, Esc to close.</p>
+</dialog>
+<main id="main" tabindex="-1">
+  <article>
+    <header class="wrap page-head">
+      
+      <h1>Audio</h1>
+      <p class="lede">Sound effects and music.</p>
+    </header>
+    <div class="doc">
+    <aside class="side" aria-label="All guides">
+      <button class="side-toggle" type="button" aria-expanded="false" aria-controls="side-nav"><span>All guides</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></button>
+      <nav class="side-nav" id="side-nav" aria-label="Guides">
+        <div class="side-group"><p class="side-title">Guides</p><ol><li><a href="getting-started.html">Getting started</a></li><li><a href="drawing.html">Drawing in 2D</a></li><li><a href="drawing-3d.html">Drawing in 3D</a></li><li><a href="input.html">Input</a></li><li><a href="textures-and-fonts.html">Textures &amp; fonts</a></li><li><a href="audio.html" aria-current="page">Audio</a></li><li><a href="utilities.html">Utilities</a></li><li><a href="diagnostics.html">Diagnostics</a></li><li><a href="json.html">JSON files</a></li><li><a href="models.html">Models</a></li><li><a href="under-the-hood.html">Under the hood</a></li></ol></div>
+        <div class="side-group"><p class="side-title">Guided experiences</p><ol><li><a href="guided-experiences.html">Guided experiences</a></li><li><a href="camera-2d.html">A 2D camera</a></li><li><a href="sprite-animation.html">Sprite animation</a></li><li><a href="sprite-batching.html">Sprite batching</a></li><li><a href="animation-player.html">An animation player</a></li><li><a href="collision.html">Collision</a></li><li><a href="asset-cache.html">An asset cache</a></li></ol></div>
+      </nav>
+    </aside>
+    <div class="prose">
+<p>The engine plays sound effects and music through <a href="../reference/classbuz_1_1audio.html"><code><span class="ns">buz::</span>audio</code></a>, a thin layer over <a href="https://miniaud.io" target="_blank" rel="noopener">miniaudio</a>.</p>
+<figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">C++</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-key">#include</span> <span class="tok-str">&quot;engine/audio.h&quot;</span>
+<span class="tok-key">#include</span> <span class="tok-str">&quot;engine/engine.h&quot;</span>
+<span class="tok-key">#include</span> <span class="tok-str">&quot;engine/input.h&quot;</span>
+
+my_game::<span class="tok-fn">my_game</span>(<span class="tok-type">buz</span>::engine&amp; engine)
+{
+    engine.<span class="tok-fn">get_audio</span>().<span class="tok-fn">play_music</span>(<span class="tok-str">&quot;my_game/music/theme.mp3&quot;</span>, <span class="tok-type">buz</span>::looping::yes);
+}
+
+<span class="tok-key">void</span> my_game::<span class="tok-fn">on_update</span>(<span class="tok-type">buz</span>::engine&amp; engine, <span class="tok-key">float</span> delta_seconds)
+{
+    <span class="tok-key">if</span> (engine.<span class="tok-fn">get_input</span>().<span class="tok-fn">was_key_pressed</span>(<span class="tok-type">buz</span>::key::space))
+    {
+        engine.<span class="tok-fn">get_audio</span>().<span class="tok-fn">play_sound</span>(<span class="tok-str">&quot;my_game/sounds/jump.wav&quot;</span>);
+    }
+}</code></pre></figure>
+<p>Paths are relative to the content folder, like textures. <code>.wav</code>, <code>.mp3</code> and <code>.flac</code> files work.</p>
+<p>Unlike textures and models, sounds have no loading step: you play a file by its path. The first time a file plays, the engine reads it and decodes it completely, and it keeps the decoded sound, so playing the same file again doesn&#x27;t read it from disk a second time. That first play has to wait for the file, which you can notice with a long piece of music.</p>
+<div class="tablewrap"><table>
+<thead><tr>
+<th>function</th>
+<th>what it does</th>
+</tr></thead><tbody>
+<tr><td><a href="../reference/classbuz_1_1audio.html"><code><span class="ns">buz::</span>audio::play_sound</code></a></td><td>plays a sound once; the same sound can overlap itself (rapid gun shots)</td></tr>
+<tr><td><a href="../reference/classbuz_1_1audio.html"><code><span class="ns">buz::</span>audio::play_music</code></a></td><td>starts the background music, replacing what was playing; it loops unless you pass <code><span class="ns">buz::</span>looping::no</code></td></tr>
+<tr><td><a href="../reference/classbuz_1_1audio.html"><code><span class="ns">buz::</span>audio::stop_music</code></a></td><td>stops the music</td></tr>
+<tr><td><a href="../reference/classbuz_1_1audio.html"><code><span class="ns">buz::</span>audio::set_master_volume</code></a></td><td>the volume of everything; 1 is the default</td></tr>
+</tbody></table></div>
+<p><code>play_sound</code> and <code>play_music</code> take an optional volume: 1 plays the file as it is, 0.5 half as loud.</p>
+<p>On a computer without an audio device (a build server, say) the engine plays nothing and the game still runs.</p>
+<h2 id="choosing-a-file-format">Choosing a file format<a class="anchor" href="#choosing-a-file-format" aria-label="Link to this section">#</a></h2>
+<p>Use <code>.wav</code> for short effects: they start instantly. Use <code>.mp3</code> or <code>.flac</code> for music: the files are much smaller. They take longer to decode, so a long track can take a moment to start the first time it plays.</p>
+    </div>
+    
+    </div>
+    <nav class="wrap pager" aria-label="Previous and next guide"><a href="../index.html#guides" class="back">&larr; All guides</a><a href="textures-and-fonts.html" class="p" rel="prev"><span class="meta">&larr; Previous</span>Textures &amp; fonts</a><a href="utilities.html" class="n" rel="next"><span class="meta">Next &rarr;</span>Utilities</a></nav>
+  </article>
+</main>
+<footer class="site-footer">
+  <div class="wrap row">
+    <a href="../index.html" class="mark" aria-label="BuzEngine home">//</a>
+    <p class="who">BuzEngine &middot; Breda University of Applied Sciences &middot; MIT licensed</p>
+    <ul>
+      <li><a href="../guides/getting-started.html">Guides</a></li>
+      <li><a href="../reference/index.html">Reference</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>

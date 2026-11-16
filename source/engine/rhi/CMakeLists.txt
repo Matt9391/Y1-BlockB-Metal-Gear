@@ -25,7 +25,7 @@ ELSE()
     SET(rhi_excluded_backends "/private/d3d12/" "/private/vulkan/")
 ENDIF()
 
-BUZ_MODULE(rhi TIER tmpl_2d
+BUZ_MODULE(rhi
            PUBLIC_DEPS buz_core yesno
            PRIVATE_DEPS SDL3::SDL3-static stb ${rhi_backend_libraries}
            EXCLUDE ${rhi_excluded_backends})

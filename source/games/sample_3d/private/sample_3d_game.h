@@ -1,10 +1,9 @@
 #pragma once
 
 #include "core/math.h"
-#include "engine/game.h"
+#include "engine/game_3d.h"
 #include "renderer_2d/font.h"
 #include "renderer_3d/material.h"
-#include "renderer_3d/world_renderer_3d.h"
 
 #include <memory>
 #include <vector>
@@ -21,7 +20,7 @@ namespace buz
 ///
 /// Things to build from here: a camera that follows the soldier, play his
 /// animations, move him around, collision with the crates...
-class sample_3d_game : public buz::game
+class sample_3d_game : public buz::game_3d
 {
 public:
 	//----------------------------------------------------------
@@ -30,22 +29,17 @@ public:
 
 protected:
 	//----------------------------------------------------------
-	/// @brief Switches the debug views with the function keys.
-	void on_update(buz::engine& engine, float delta_seconds) override;
-
-	//----------------------------------------------------------
-	/// @brief Draws the harbour, the crates and the soldier.
-	void on_render_world(buz::engine& engine, buz::world_renderer_2d& world) override;
+	/// @brief Switches the debug views with the function keys, and draws
+	/// the harbour, the crates and the soldier.
+	void on_render_world(buz::engine& engine, buz::world_renderer_3d& world) override;
 
 	//----------------------------------------------------------
 	/// @brief Draws the controls on top.
 	void on_render_screen(buz::engine& engine, buz::screen_renderer& screen) override;
 
 private:
-	void draw_harbour();
-	void draw_debug_shapes();
-
-	buz::world_renderer_3d m_world_3d; // draws the 3D world
+	void draw_harbour(buz::world_renderer_3d& world) const;
+	void draw_debug_shapes(buz::world_renderer_3d& world) const;
 
 	std::shared_ptr<buz::mesh> m_crate_mesh;  // one mesh, drawn at every crate position
 	buz::material m_crate_material;           // how the crates look

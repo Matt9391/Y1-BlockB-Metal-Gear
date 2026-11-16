@@ -1,7 +1,7 @@
 #pragma once
 
 #include "core/math.h"
-#include "engine/game.h"
+#include "engine/game_3d.h"
 #include "renderer_2d/font.h"
 #include "renderer_3d/material.h"
 #include "renderer_3d/world_renderer_3d.h"
@@ -23,7 +23,7 @@ namespace buz
 ///
 /// Things to build from here: a camera that follows the soldier, play his
 /// animations, move him around, collision with the crates...
-class metal_gear_game : public buz::game
+class metal_gear_game : public buz::game_3d
 {
 public:
 	//----------------------------------------------------------
@@ -37,7 +37,7 @@ protected:
 
 	//----------------------------------------------------------
 	/// @brief Draws the harbour, the crates and the soldier.
-	void on_render_world(buz::engine& engine, buz::world_renderer_2d& world) override;
+	void on_render_world(buz::engine& engine, buz::world_renderer_3d& world) override;
 
 	//----------------------------------------------------------
 	/// @brief Draws the controls on top.
@@ -45,7 +45,6 @@ protected:
 
 private:
 
-	buz::world_renderer_3d m_world_3d; // draws the 3D world
 
 	std::shared_ptr<buz::mesh> m_crate_mesh;  // one mesh, drawn at every crate position
 	buz::material m_crate_material;           // how the crates look

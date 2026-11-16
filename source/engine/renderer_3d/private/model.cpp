@@ -2,8 +2,8 @@
 
 #include "core/log.h"
 #include "core/paths.h"
-#include "engine/engine.h"
 #include "renderer_3d/mesh.h"
+#include "renderer_3d/model_loading.h"
 #include "rhi/render_context.h"
 #include "rhi/texture_loader.h"
 
@@ -134,7 +134,7 @@ namespace
 	}
 
 	//--------------------------------------------------------------
-	/// @brief Loads a material's color and (at most one) texture.
+	/// @brief Loads a material's color, (at most one) texture, lighting and alpha cutoff.
 	buz::material read_material(const cgltf_data& data, const cgltf_material* source, buz::texture_loader& textures, const buz::fs::path& directory, image_textures& loaded_images)
 	{
 		buz::material look;
@@ -146,6 +146,12 @@ namespace
 		const cgltf_pbr_metallic_roughness& pbr = source->pbr_metallic_roughness;
 		look.base_color = { pbr.base_color_factor[0], pbr.base_color_factor[1], pbr.base_color_factor[2], pbr.base_color_factor[3] };
 		look.lit = source->unlit ? buz::lighting::no : buz::lighting::yes;
+		// Alpha mode MASK cuts out the pixels below the file's cutoff (0.5
+		// unless the artist changed it); OPAQUE and BLEND draw every pixel
+		if (source->alpha_mode == cgltf_alpha_mode_mask)
+		{
+			look.alpha_cutoff = source->alpha_cutoff;
+		}
 
 		const cgltf_texture* texture = pbr.base_color_texture.texture;
 		if (texture == nullptr || texture->image == nullptr)
@@ -249,7 +255,7 @@ namespace
 
 	//--------------------------------------------------------------
 	/// @brief Parses a glTF file into nodes, cpu meshes and sampled clips.
-	std::optional<loaded_file> read_file(buz::engine& engine, std::string_view content_relative_path)
+	std::optional<loaded_file> read_file(const buz::render_context& context, std::string_view content_relative_path)
 	{
 		const buz::fs::path path = buz::paths::get_content_path(content_relative_path);
 
@@ -300,7 +306,7 @@ namespace
 			if (node->mesh != nullptr && node->mesh->primitives_count > 0)
 			{
 				const cgltf_material* first_material = node->mesh->primitives[0].material;
-				buz::texture_loader& textures = *engine.get_render_context().textures;
+				buz::texture_loader& textures = *context.textures;
 				const buz::fs::path directory = path.parent_path();
 				loaded.look = read_material(data, first_material, textures, directory, loaded_images);
 			}
@@ -410,9 +416,9 @@ namespace buz
 	}
 
 	//--------------------------------------------------------------
-	std::optional<model> load_model(engine& engine, std::string_view content_relative_path)
+	std::optional<model> load_model(const render_context& context, std::string_view content_relative_path)
 	{
-		std::optional<loaded_file> file = read_file(engine, content_relative_path);
+		std::optional<loaded_file> file = read_file(context, content_relative_path);
 		if (!file)
 		{
 			return std::nullopt;
@@ -423,7 +429,7 @@ namespace buz
 			const cpu_mesh& triangles = file->meshes[index];
 			if (!triangles.indices.empty())
 			{
-				file->model.nodes[index].shape = create_mesh(engine, triangles.vertices, triangles.indices);
+				file->model.nodes[index].shape = create_mesh(context, triangles.vertices, triangles.indices);
 			}
 		}
 
@@ -432,9 +438,9 @@ namespace buz
 	}
 
 	//--------------------------------------------------------------
-	std::shared_ptr<mesh> load_mesh(engine& engine, std::string_view content_relative_path)
+	std::shared_ptr<mesh> load_mesh(const render_context& context, std::string_view content_relative_path)
 	{
-		const std::optional<loaded_file> file = read_file(engine, content_relative_path);
+		const std::optional<loaded_file> file = read_file(context, content_relative_path);
 		if (!file)
 		{
 			return nullptr;
@@ -478,6 +484,6 @@ namespace buz
 			return nullptr;
 		}
 
-		return create_mesh(engine, merged.vertices, merged.indices);
+		return create_mesh(context, merged.vertices, merged.indices);
 	}
 }

@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -26 760 340" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+<rect x="0" y="-26" width="760" height="340" fill="#171b24"/>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#f7f5f2"/></marker></defs>
+<text x="40" y="164" fill="#f7f5f2" font-size="15">tileset texture, 64 by 16 pixels</text>
+<rect x="40" y="50" width="50" height="50" fill="#2f5f8f" stroke="#171b24" stroke-width="2"/>
+<text x="65" y="80" text-anchor="middle" fill="#f7f5f2" font-size="15" font-weight="700">0</text>
+<text x="65" y="118" text-anchor="middle" fill="#95a0b2" font-size="12">sky</text>
+<text x="40" y="136" text-anchor="middle" fill="#95a0b2" font-size="11" font-family="Cascadia Code, Consolas, monospace">0</text>
+<rect x="90" y="50" width="50" height="50" fill="#00b33c" stroke="#171b24" stroke-width="2"/>
+<text x="115" y="80" text-anchor="middle" fill="#f7f5f2" font-size="15" font-weight="700">1</text>
+<text x="115" y="118" text-anchor="middle" fill="#95a0b2" font-size="12">grass</text>
+<text x="90" y="136" text-anchor="middle" fill="#95a0b2" font-size="11" font-family="Cascadia Code, Consolas, monospace">16</text>
+<rect x="140" y="50" width="50" height="50" fill="#8a80e0" stroke="#171b24" stroke-width="2"/>
+<text x="165" y="80" text-anchor="middle" fill="#f7f5f2" font-size="15" font-weight="700">2</text>
+<text x="165" y="118" text-anchor="middle" fill="#95a0b2" font-size="12">stone</text>
+<text x="140" y="136" text-anchor="middle" fill="#95a0b2" font-size="11" font-family="Cascadia Code, Consolas, monospace">32</text>
+<rect x="190" y="50" width="50" height="50" fill="#b8743a" stroke="#171b24" stroke-width="2"/>
+<text x="215" y="80" text-anchor="middle" fill="#f7f5f2" font-size="15" font-weight="700">3</text>
+<text x="215" y="118" text-anchor="middle" fill="#95a0b2" font-size="12">dirt</text>
+<text x="190" y="136" text-anchor="middle" fill="#95a0b2" font-size="11" font-family="Cascadia Code, Consolas, monospace">48</text>
+<text x="240" y="136" text-anchor="middle" fill="#95a0b2" font-size="11" font-family="Cascadia Code, Consolas, monospace">64</text>
+<rect x="138" y="48" width="54" height="54" fill="none" stroke="#f7f5f2" stroke-width="2.5"/>
+<rect x="40" y="180" width="330" height="122" fill="#262c3a" stroke="#3b4459"/>
+<text x="54" y="206" fill="#95a0b2" font-size="13" font-family="Cascadia Code, Consolas, monospace" xml:space="preserve">buz::sprite_instance tile;</text>
+<text x="54" y="227" fill="#f7f5f2" font-size="13" font-family="Cascadia Code, Consolas, monospace" xml:space="preserve">tile.position    = { 112, 80 };</text>
+<text x="54" y="248" fill="#f7f5f2" font-size="13" font-family="Cascadia Code, Consolas, monospace" xml:space="preserve">tile.size        = { 32, 32 };</text>
+<text x="54" y="269" fill="#f7f5f2" font-size="13" font-family="Cascadia Code, Consolas, monospace" xml:space="preserve">tile.source_rect = { { 32, 0 },</text>
+<text x="54" y="290" fill="#f7f5f2" font-size="13" font-family="Cascadia Code, Consolas, monospace" xml:space="preserve">                    { 48, 16 } };</text>
+<text x="420" y="256" fill="#f7f5f2" font-size="15">the tile map, 32 by 32 pixels per cell</text>
+<rect x="420" y="50" width="40" height="40" fill="#2f5f8f" stroke="#171b24" stroke-width="2"/>
+<rect x="460" y="50" width="40" height="40" fill="#2f5f8f" stroke="#171b24" stroke-width="2"/>
+<rect x="500" y="50" width="40" height="40" fill="#2f5f8f" stroke="#171b24" stroke-width="2"/>
+<rect x="540" y="50" width="40" height="40" fill="#2f5f8f" stroke="#171b24" stroke-width="2"/>
+<rect x="580" y="50" width="40" height="40" fill="#2f5f8f" stroke="#171b24" stroke-width="2"/>
+<rect x="620" y="50" width="40" height="40" fill="#2f5f8f" stroke="#171b24" stroke-width="2"/>
+<rect x="660" y="50" width="40" height="40" fill="#2f5f8f" stroke="#171b24" stroke-width="2"/>
+<rect x="700" y="50" width="40" height="40" fill="#2f5f8f" stroke="#171b24" stroke-width="2"/>
+<rect x="420" y="90" width="40" height="40" fill="#2f5f8f" stroke="#171b24" stroke-width="2"/>
+<rect x="460" y="90" width="40" height="40" fill="#2f5f8f" stroke="#171b24" stroke-width="2"/>
+<rect x="500" y="90" width="40" height="40" fill="#2f5f8f" stroke="#171b24" stroke-width="2"/>
+<rect x="540" y="90" width="40" height="40" fill="#2f5f8f" stroke="#171b24" stroke-width="2"/>
+<rect x="580" y="90" width="40" height="40" fill="#2f5f8f" stroke="#171b24" stroke-width="2"/>
+<rect x="620" y="90" width="40" height="40" fill="#2f5f8f" stroke="#171b24" stroke-width="2"/>
+<rect x="660" y="90" width="40" height="40" fill="#2f5f8f" stroke="#171b24" stroke-width="2"/>
+<rect x="700" y="90" width="40" height="40" fill="#2f5f8f" stroke="#171b24" stroke-width="2"/>
+<rect x="420" y="130" width="40" height="40" fill="#00b33c" stroke="#171b24" stroke-width="2"/>
+<rect x="460" y="130" width="40" height="40" fill="#00b33c" stroke="#171b24" stroke-width="2"/>
+<rect x="500" y="130" width="40" height="40" fill="#00b33c" stroke="#171b24" stroke-width="2"/>
+<rect x="540" y="130" width="40" height="40" fill="#8a80e0" stroke="#171b24" stroke-width="2"/>
+<rect x="580" y="130" width="40" height="40" fill="#00b33c" stroke="#171b24" stroke-width="2"/>
+<rect x="620" y="130" width="40" height="40" fill="#00b33c" stroke="#171b24" stroke-width="2"/>
+<rect x="660" y="130" width="40" height="40" fill="#8a80e0" stroke="#171b24" stroke-width="2"/>
+<rect x="700" y="130" width="40" height="40" fill="#00b33c" stroke="#171b24" stroke-width="2"/>
+<rect x="420" y="170" width="40" height="40" fill="#b8743a" stroke="#171b24" stroke-width="2"/>
+<rect x="460" y="170" width="40" height="40" fill="#b8743a" stroke="#171b24" stroke-width="2"/>
+<rect x="500" y="170" width="40" height="40" fill="#b8743a" stroke="#171b24" stroke-width="2"/>
+<rect x="540" y="170" width="40" height="40" fill="#b8743a" stroke="#171b24" stroke-width="2"/>
+<rect x="580" y="170" width="40" height="40" fill="#b8743a" stroke="#171b24" stroke-width="2"/>
+<rect x="620" y="170" width="40" height="40" fill="#b8743a" stroke="#171b24" stroke-width="2"/>
+<rect x="660" y="170" width="40" height="40" fill="#b8743a" stroke="#171b24" stroke-width="2"/>
+<rect x="700" y="170" width="40" height="40" fill="#b8743a" stroke="#171b24" stroke-width="2"/>
+<rect x="538" y="128" width="44" height="44" fill="none" stroke="#f7f5f2" stroke-width="2.5"/>
+<circle cx="560" cy="150" r="3" fill="#f7f5f2"/>
+<text x="420" y="228" text-anchor="middle" fill="#95a0b2" font-size="11" font-family="Cascadia Code, Consolas, monospace">0</text>
+<text x="500" y="228" text-anchor="middle" fill="#95a0b2" font-size="11" font-family="Cascadia Code, Consolas, monospace">64</text>
+<text x="580" y="228" text-anchor="middle" fill="#95a0b2" font-size="11" font-family="Cascadia Code, Consolas, monospace">128</text>
+<text x="660" y="228" text-anchor="middle" fill="#95a0b2" font-size="11" font-family="Cascadia Code, Consolas, monospace">192</text>
+<text x="740" y="228" text-anchor="middle" fill="#95a0b2" font-size="11" font-family="Cascadia Code, Consolas, monospace">256</text>
+<text x="420" y="280" fill="#95a0b2" font-size="12.5">one instance per cell, all with the same texture;</text>
+<text x="420" y="298" fill="#95a0b2" font-size="12.5">the dot is the position: the center of the cell</text>
+<path d="M165 46 C 172 -50, 520 -50, 550 126" fill="none" stroke="#f7f5f2" stroke-width="1.5" marker-end="url(#a)"/>
+</svg>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" data-root="../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Drawing in 2D &middot; BuzEngine guides</title>
+<meta name="description" content="Sprites, shapes and text, in the world and on the screen.">
+<meta name="theme-color" content="#1d222d">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="../assets/fonts/nunito-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/montserrat.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/site.css">
+<script>document.documentElement.classList.add('js')</script>
+<script src="../assets/search-index.js" defer></script>
+<script src="../assets/site.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="../index.html"><span class="mark" aria-hidden="true">//</span>Buz<span class="thin">Engine</span></a>
+    <nav class="site-nav" aria-label="Main">
+      <ul>
+        <li><a href="../guides/getting-started.html" aria-current="page">Guides</a></li>
+        <li><a href="../reference/index.html">Reference</a></li>
+        <li><a href="../about.html">About</a></li>
+      </ul>
+    </nav>
+    <div class="tools">
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-controls="search"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.75"/><path d="m10.5 10.5 3.5 3.5"/></svg><span class="label-text">Search</span><kbd>/</kbd></button>
+    </div>
+  </div>
+</header>
+<dialog class="search-dialog" id="search" aria-label="Search the guides and the reference">
+  <div class="search-field">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.75"/><path d="m10.5 10.5 3.5 3.5"/></svg>
+    <label class="visually-hidden" for="search-input">Search the guides and the reference</label>
+    <input id="search-input" type="search" placeholder="Search guides and API" autocomplete="off" spellcheck="false"
+           role="combobox" aria-autocomplete="list" aria-expanded="true" aria-controls="search-results">
+    <span class="esc" aria-hidden="true">Esc</span>
+  </div>
+  <ul class="search-results" id="search-results" role="listbox" aria-label="Results"></ul>
+  <p class="search-hint">Arrow keys to move, Enter to open, Esc to close.</p>
+</dialog>
+<main id="main" tabindex="-1">
+  <article>
+    <header class="wrap page-head">
+      
+      <h1>Drawing in 2D</h1>
+      <p class="lede">Sprites, shapes and text, in the world and on the screen.</p>
+    </header>
+    <div class="doc">
+    <aside class="side" aria-label="All guides">
+      <button class="side-toggle" type="button" aria-expanded="false" aria-controls="side-nav"><span>All guides</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></button>
+      <nav class="side-nav" id="side-nav" aria-label="Guides">
+        <div class="side-group"><p class="side-title">Guides</p><ol><li><a href="getting-started.html">Getting started</a></li><li><a href="drawing.html" aria-current="page">Drawing in 2D</a></li><li><a href="drawing-3d.html">Drawing in 3D</a></li><li><a href="input.html">Input</a></li><li><a href="textures-and-fonts.html">Textures &amp; fonts</a></li><li><a href="audio.html">Audio</a></li><li><a href="utilities.html">Utilities</a></li><li><a href="diagnostics.html">Diagnostics</a></li><li><a href="json.html">JSON files</a></li><li><a href="models.html">Models</a></li><li><a href="under-the-hood.html">Under the hood</a></li></ol></div>
+        <div class="side-group"><p class="side-title">Guided experiences</p><ol><li><a href="guided-experiences.html">Guided experiences</a></li><li><a href="camera-2d.html">A 2D camera</a></li><li><a href="sprite-animation.html">Sprite animation</a></li><li><a href="sprite-batching.html">Sprite batching</a></li><li><a href="animation-player.html">An animation player</a></li><li><a href="collision.html">Collision</a></li><li><a href="asset-cache.html">An asset cache</a></li></ol></div>
+      </nav>
+    </aside>
+    <div class="prose">
+<p>After each call to <code>on_update</code>, the engine clears the window to the <code>clear_color</code> from your engine settings, calls your game&#x27;s <code>on_render_world</code> and <code>on_render_screen</code>, and then shows the finished frame. Inside those two functions you say what to draw, with one call per sprite, shape or line of text.</p>
+<p>They are also the only place where you can draw, because they are the only functions that receive a renderer to draw with. So <code>on_update</code> moves things, and the render functions draw them.</p>
+<h2 id="the-world-and-the-screen">The world and the screen<a class="anchor" href="#the-world-and-the-screen" aria-label="Link to this section">#</a></h2>
+<p>A game draws two kinds of things: the level, with the player, the enemies and the platforms, and the hud, with the score, the lives and the menus. That is why there are two render functions, each with its own renderer:</p>
+<figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">C++</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-key">#include</span> <span class="tok-str">&quot;renderer_2d/screen_renderer.h&quot;</span>
+<span class="tok-key">#include</span> <span class="tok-str">&quot;renderer_2d/world_renderer_2d.h&quot;</span>
+
+<span class="tok-key">void</span> my_game::<span class="tok-fn">on_render_world</span>(<span class="tok-type">buz</span>::engine&amp; engine, <span class="tok-type">buz</span>::world_renderer_2d&amp; world)
+{
+    <span class="tok-com">// the level: everything that moves when the camera moves</span>
+}
+
+<span class="tok-key">void</span> my_game::<span class="tok-fn">on_render_screen</span>(<span class="tok-type">buz</span>::engine&amp; engine, <span class="tok-type">buz</span>::screen_renderer&amp; screen)
+{
+    <span class="tok-com">// the hud: score, lives, menus, drawn on top in window pixels</span>
+}</code></pre></figure>
+<p>Both renderers have the same drawing functions, which they get from their base class <a href="../reference/classbuz_1_1renderer__2d.html"><code><span class="ns">buz::</span>renderer_2d</code></a>, so everything on this page works with either of them. The difference is the camera. <a href="../reference/classbuz_1_1world__renderer__2d.html"><code><span class="ns">buz::</span>world_renderer_2d</code></a> draws through the camera you give it with <a href="../reference/classbuz_1_1world__renderer__2d.html"><code><span class="ns">buz::</span>world_renderer_2d::set_camera</code></a>, and <a href="../reference/classbuz_1_1screen__renderer.html"><code><span class="ns">buz::</span>screen_renderer</code></a> ignores it and always draws in window pixels. Once the level scrolls, drawing each thing in the right function keeps the hud in place while the level moves underneath it. Building a camera is the exercise in <a href="camera-2d.html">A 2D camera</a>.</p>
+<h2 id="positions-and-draw-order">Positions and draw order<a class="anchor" href="#positions-and-draw-order" aria-label="Link to this section">#</a></h2>
+<p>Until you set a camera, both renderers use window pixels, so a sprite lands in the same place in either, which is fine for a game that fits on one screen. <code>(0, 0)</code> is the top-left corner of the window and the y axis points down: a sprite at <code>{ 640.0f, 360.0f }</code> sits in the middle of a 1280 by 720 window.</p>
+<p>There is no depth: things are drawn in the order you submit them, and each one covers what was drawn before it. Draw the background first and the player after the level. Everything you draw in <code>on_render_screen</code> ends up on top of the world, because the engine calls it second.</p>
+<h2 id="sprites">Sprites<a class="anchor" href="#sprites" aria-label="Link to this section">#</a></h2>
+<p><a href="../reference/classbuz_1_1renderer__2d.html"><code><span class="ns">buz::</span>renderer_2d::draw_sprite</code></a> takes a texture, the position of the sprite&#x27;s <strong>center</strong> and the size to draw it at. The texture is stretched to that size, so a 32 by 32 pixel image drawn at <code>{ 64.0f, 64.0f }</code> appears twice as large. Textures are loaded in your game&#x27;s constructor and kept as <code>std::shared_ptr&lt;buz::texture&gt;</code> members (see <a href="textures-and-fonts.html">Textures &amp; fonts</a>), which is why the calls below dereference them with <code>*</code>.</p>
+<figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">C++</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-key">#include</span> <span class="tok-str">&quot;rhi/texture.h&quot;</span>
+
+<span class="tok-com">// texture, center position, size (all in pixels)</span>
+world.<span class="tok-fn">draw_sprite</span>(*m_background, { <span class="tok-num">640.0f</span>, <span class="tok-num">360.0f</span> }, { <span class="tok-num">1280.0f</span>, <span class="tok-num">720.0f</span> });
+
+<span class="tok-com">// optional: rotation (radians, clockwise) and a tint color</span>
+world.<span class="tok-fn">draw_sprite</span>(*m_ship, m_ship_position, { <span class="tok-num">64.0f</span>, <span class="tok-num">64.0f</span> },
+    m_ship_angle, { <span class="tok-num">1.0f</span>, <span class="tok-num">0.3f</span>, <span class="tok-num">0.3f</span>, <span class="tok-num">1.0f</span> }); <span class="tok-com">// tinted red</span></code></pre></figure>
+<p>The rotation turns the sprite around its center. It is clockwise because the y axis points down.</p>
+<p>The tint is a <a href="../reference/structbuz_1_1color.html"><code><span class="ns">buz::</span>color</code></a>: red, green, blue and alpha, each from 0 to 1. It is multiplied with the colors of the texture, so white, the default, leaves the texture as it is, <code>{ 1.0f, 0.3f, 0.3f, 1.0f }</code> keeps the red and darkens the rest, and an alpha below 1 makes the sprite see-through.</p>
+<h2 id="sprite-sheets">Sprite sheets<a class="anchor" href="#sprite-sheets" aria-label="Link to this section">#</a></h2>
+<p>A sprite sheet is one texture holding several images, usually the frames of an animation. The second version of <code>draw_sprite</code> takes a source <a href="../reference/structbuz_1_1rect.html"><code><span class="ns">buz::</span>rect</code></a> in <strong>texture pixels</strong> and draws only that part of the texture. A <a href="../reference/structbuz_1_1rect.html"><code><span class="ns">buz::</span>rect</code></a> is two corners, <code>min</code> at the top-left and <code>max</code> at the bottom-right, not a position and a size.</p>
+<p>Picking the frame from the elapsed time animates the sprite:</p>
+<figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">C++</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-com">// Four 64x64 frames next to each other, 8 frames per second.</span>
+<span class="tok-com">// m_time is a float that on_update increases by delta_seconds.</span>
+<span class="tok-key">const</span> <span class="tok-key">auto</span> frame = <span class="tok-key">static_cast</span>&lt;<span class="tok-type">uint32_t</span>&gt;(m_time * <span class="tok-num">8.0f</span>) % <span class="tok-num">4</span>;
+<span class="tok-key">const</span> <span class="tok-type">buz</span>::rect frame_rect = {
+    { <span class="tok-key">static_cast</span>&lt;<span class="tok-key">float</span>&gt;(frame) * <span class="tok-num">64.0f</span>, <span class="tok-num">0.0f</span> },
+    { <span class="tok-key">static_cast</span>&lt;<span class="tok-key">float</span>&gt;(frame + <span class="tok-num">1</span>) * <span class="tok-num">64.0f</span>, <span class="tok-num">64.0f</span> } };
+
+world.<span class="tok-fn">draw_sprite</span>(*m_circle_sheet, frame_rect, { <span class="tok-num">1030.0f</span>, <span class="tok-num">200.0f</span> }, { <span class="tok-num">100.0f</span>, <span class="tok-num">100.0f</span> });</code></pre></figure>
+<p>Doing the timing inline like this is fine for one looping strip. A character with several animations (idle, run, jump, die) needs its frame counts and speeds in one place instead of at every <code>draw_sprite</code>; building that is the exercise in <a href="sprite-animation.html">Sprite animation</a>.</p>
+<h2 id="shapes">Shapes<a class="anchor" href="#shapes" aria-label="Link to this section">#</a></h2>
+<p>Shapes need no texture. They are useful for health bars, for placeholder graphics before you have art, and for debugging: drawing the outline of a hitbox shows you where the game thinks the player is.</p>
+<figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">C++</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-key">#include</span> <span class="tok-str">&quot;core/rect.h&quot;</span>
+
+<span class="tok-com">// a rect with the same center and size as the ship sprite</span>
+<span class="tok-key">const</span> <span class="tok-type">buz</span>::rect area = <span class="tok-type">buz</span>::<span class="tok-fn">rect_from_center_size</span>(m_ship_position, { <span class="tok-num">64.0f</span>, <span class="tok-num">64.0f</span> });
+
+world.<span class="tok-fn">draw_rect</span>(area, { <span class="tok-num">0.2f</span>, <span class="tok-num">0.6f</span>, <span class="tok-num">1.0f</span>, <span class="tok-num">1.0f</span> });                <span class="tok-com">// filled</span>
+world.<span class="tok-fn">draw_rect_outline</span>(area, <span class="tok-num">2.0f</span>, { <span class="tok-num">1.0f</span>, <span class="tok-num">0.2f</span>, <span class="tok-num">0.2f</span>, <span class="tok-num">1.0f</span> });  <span class="tok-com">// 2px outline, growing inwards</span>
+world.<span class="tok-fn">draw_line</span>(from, to, <span class="tok-num">2.0f</span>, { <span class="tok-num">1.0f</span>, <span class="tok-num">1.0f</span>, <span class="tok-num">0.2f</span>, <span class="tok-num">0.4f</span> });      <span class="tok-com">// 2px line</span>
+world.<span class="tok-fn">draw_circle</span>(center, <span class="tok-num">30.0f</span>, { <span class="tok-num">0.9f</span>, <span class="tok-num">0.9f</span>, <span class="tok-num">0.2f</span>, <span class="tok-num">1.0f</span> });     <span class="tok-com">// radius 30</span>
+world.<span class="tok-fn">draw_triangle</span>(a, b, c, { <span class="tok-num">0.4f</span>, <span class="tok-num">1.0f</span>, <span class="tok-num">0.4f</span>, <span class="tok-num">1.0f</span> });</code></pre></figure>
+<p><code><span class="ns">buz::</span>rect_from_center_size</code> builds a rect from a center and a size, the same way sprites are positioned, so a hitbox outline lines up with its sprite. The outline grows inwards: its outer edge is the rect itself.</p>
+<h2 id="text">Text<a class="anchor" href="#text" aria-label="Link to this section">#</a></h2>
+<p><a href="../reference/classbuz_1_1renderer__2d.html"><code><span class="ns">buz::</span>renderer_2d::draw_text</code></a> draws text with a bitmap font. <code>m_font</code> below is a <a href="../reference/structbuz_1_1font.html"><code><span class="ns">buz::</span>font</code></a> whose atlas texture you load in the constructor; the engine comes with one in <code>content/fonts/font_8x8.png</code>, and <a href="textures-and-fonts.html">Textures &amp; fonts</a> shows how to load it or use your own. Text is usually part of the hud, so it goes in <code>on_render_screen</code>:</p>
+<figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">C++</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-key">#include</span> <span class="tok-str">&quot;renderer_2d/font.h&quot;</span>
+
+<span class="tok-key">#include</span> &lt;format&gt;
+
+screen.<span class="tok-fn">draw_text</span>(m_font, <span class="tok-str">&quot;hello&quot;</span>, { <span class="tok-num">20.0f</span>, <span class="tok-num">20.0f</span> }, <span class="tok-num">16.0f</span>);
+
+<span class="tok-com">// newlines continue on the next line; std::format builds dynamic text</span>
+screen.<span class="tok-fn">draw_text</span>(m_font,
+    <span class="tok-type">std</span>::<span class="tok-fn">format</span>(<span class="tok-str">&quot;lives {}\nscore {}&quot;</span>, m_lives, m_score),
+    { <span class="tok-num">20.0f</span>, <span class="tok-num">48.0f</span> }, <span class="tok-num">16.0f</span>, { <span class="tok-num">0.6f</span>, <span class="tok-num">0.8f</span>, <span class="tok-num">1.0f</span>, <span class="tok-num">1.0f</span> });</code></pre></figure>
+<p>Unlike a sprite, text is positioned by the <strong>top-left</strong> corner of its first character. <code>pixel_height</code> is the height of one character on the screen.</p>
+<h2 id="many-sprites-of-one-texture">Many sprites of one texture<a class="anchor" href="#many-sprites-of-one-texture" aria-label="Link to this section">#</a></h2>
+<p>So far, you have used <code>draw_sprite</code> to draw one sprite at a time. In this renderer, each call produces a separate <strong>draw call</strong>: a command telling the GPU to draw that sprite. Drawing six sprites this way takes six draw calls.</p>
+<p>With <a href="../reference/classbuz_1_1renderer__2d.html"><code><span class="ns">buz::</span>renderer_2d::draw_sprite_instances</code></a>, you can draw those six sprites in one draw call. You give it a texture and a list describing the sprites to draw. Each sprite can have its own position, size, rotation and tint, and can use a different part of that texture.</p>
+<p>The GPU draws the same rectangle, called a <strong>quad</strong>, for every sprite in the list, using that sprite&#x27;s settings. Each copy is an <strong>instance</strong>. Drawing these copies together is called <strong>instancing</strong>.</p>
+<figure class="diagram"><img src="../assets/img/guides/draw_calls.svg" alt="Six separate draw calls on the left; one draw call containing six sprite instances on the right."><figcaption>Both approaches draw six sprites. Instancing draws them with one draw call.</figcaption></figure>
+<p>Preparing draw calls takes CPU time. With a few sprites, this cost is usually small. With thousands, it can become a significant part of the time spent rendering a frame. Instancing reduces the number of draw calls; the GPU still has to draw every sprite. Press F3 while the game runs to see the draw-call count for the last frame.</p>
+<h3 id="drawing-a-tile-map">Drawing a tile map<a class="anchor" href="#drawing-a-tile-map" aria-label="Link to this section">#</a></h3>
+<p>A tile map is a useful example because it can contain hundreds of sprites that all use one texture.</p>
+<p>Many 2D games build their levels from <strong>tiles</strong>: small images of grass, stone, sky and so on, arranged on a grid. A <strong>tileset</strong> is the texture containing those images. The <strong>tile map</strong> stores a tile number for each cell in the grid, telling the game which image belongs there. Changing those numbers changes the layout of the level.</p>
+<p>For example, filling a 1280 by 720 window with 32 by 32 tiles takes 40 columns and 23 rows, with the last row partly outside the window. That is 920 sprites. Using <code>draw_sprite</code> for every tile means 920 draw calls per frame. Three layers of tiles would bring that close to 3,000, before adding particles, bullets or text. Each character drawn by <code>draw_text</code> is a sprite too.</p>
+<p>To draw the map with instancing, create one <a href="../reference/structbuz_1_1sprite__instance.html"><code><span class="ns">buz::</span>sprite_instance</code></a> per cell and pass the list to <code>draw_sprite_instances</code>. All instances in that call share the tileset texture. Each instance uses <code>source_rect</code> to choose which tile to draw, just as you chose an animation frame from a sprite sheet earlier.</p>
+<figure class="diagram"><img src="../assets/img/guides/tileset_instances.svg" alt="A tileset with four tiles on the left and an 8 by 4 tile map on the right. The highlighted stone tile uses source_rect to select its image and position to place it in the map."><figcaption>The stone image is 16 by 16 pixels in the texture. It is drawn at 32 by 32 pixels in the map.</figcaption></figure>
+<p>The highlighted stone tile in the diagram has two separate sets of coordinates:</p>
+<ul>
+<li><code>source_rect</code> selects the image <strong>inside the texture</strong>. Tile 2 starts at x = 32 and is 16 by 16 pixels, so its corners are <code>(32, 0)</code> and <code>(48, 16)</code>.</li>
+<li><code>position</code> places the sprite <strong>in the world</strong>. The highlighted cell is in column 3, row 2, counting from zero. Each cell is 32 by 32 pixels, so its top-left corner is <code>(96, 64)</code> and its center is <code>(112, 80)</code>.</li>
+</ul>
+<p>Setting <code>size</code> to <code>{ 32.0f, 32.0f }</code> draws the 16 by 16 image twice as large. As with <code>draw_sprite</code>, <code>position</code> is the center of the sprite.</p>
+<p>The code below does this for every cell. <code>m_tiles</code> stores the tile numbers row by row. The loop calculates each cell&#x27;s position and selects its image from the tileset, then adds the instance to the list. After the loop, one call draws the whole list.</p>
+<figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">C++</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-key">#include</span> &lt;<span class="tok-type">vector</span>&gt;
+
+<span class="tok-com">// m_tiles is a std::vector&lt;int&gt; with one tile number per cell, row by row,</span>
+<span class="tok-com">// and k_map_width cells per row. m_tileset is the tileset texture: 16x16</span>
+<span class="tok-com">// pixel tiles next to each other, so tile n starts at x = n * 16.</span>
+<span class="tok-type">std</span>::<span class="tok-type">vector</span>&lt;<span class="tok-type">buz</span>::sprite_instance&gt; tiles;
+tiles.<span class="tok-fn">reserve</span>(m_tiles.<span class="tok-fn">size</span>());
+
+<span class="tok-key">for</span> (<span class="tok-type">size_t</span> i = <span class="tok-num">0</span>; i &lt; m_tiles.<span class="tok-fn">size</span>(); ++i)
+{
+    <span class="tok-key">const</span> <span class="tok-key">float</span> column = <span class="tok-key">static_cast</span>&lt;<span class="tok-key">float</span>&gt;(i % k_map_width);
+    <span class="tok-key">const</span> <span class="tok-key">float</span> row = <span class="tok-key">static_cast</span>&lt;<span class="tok-key">float</span>&gt;(i / k_map_width);
+    <span class="tok-key">const</span> <span class="tok-key">float</span> tile_x = <span class="tok-key">static_cast</span>&lt;<span class="tok-key">float</span>&gt;(m_tiles[i]) * <span class="tok-num">16.0f</span>;
+
+    <span class="tok-type">buz</span>::sprite_instance tile;
+    tile.position = { column * <span class="tok-num">32.0f</span> + <span class="tok-num">16.0f</span>, row * <span class="tok-num">32.0f</span> + <span class="tok-num">16.0f</span> }; <span class="tok-com">// center of the cell</span>
+    tile.size = { <span class="tok-num">32.0f</span>, <span class="tok-num">32.0f</span> };                                    <span class="tok-com">// 16x16 art, drawn twice as large</span>
+    tile.source_rect = { { tile_x, <span class="tok-num">0.0f</span> }, { tile_x + <span class="tok-num">16.0f</span>, <span class="tok-num">16.0f</span> } };
+    tiles.<span class="tok-fn">push_back</span>(tile);
+}
+
+world.<span class="tok-fn">draw_sprite_instances</span>(*m_tileset, tiles); <span class="tok-com">// one draw call for the whole map</span></code></pre></figure>
+<h3 id="instance-settings-and-draw-order">Instance settings and draw order<a class="anchor" href="#instance-settings-and-draw-order" aria-label="Link to this section">#</a></h3>
+<p>A <a href="../reference/structbuz_1_1sprite__instance.html"><code><span class="ns">buz::</span>sprite_instance</code></a> holds the settings for one sprite: <code>position</code>, <code>size</code>, <code>rotation_radians</code>, <code>tint</code> and <code>source_rect</code>. The texture is passed separately to <code>draw_sprite_instances</code>.</p>
+<p>Always set <code>size</code>. Its default is zero, so leaving it out produces a sprite with no visible area. The other defaults are no rotation, a white tint and an empty source rectangle, which selects the whole texture. The example sets <code>source_rect</code> because each tile uses only part of the texture.</p>
+<p>The function copies the instance data during the call. The local <code>std::vector</code> in this example can therefore go out of scope afterwards.</p>
+<p>Instances are drawn in list order: later entries cover earlier ones. To draw the player over the map, draw it afterwards. If the player uses another texture, it needs a separate draw call.</p>
+<p>For a whole game, keeping sprites together by texture becomes more involved because you also need to preserve their draw order. A <strong>sprite batcher</strong> handles this grouping. In <a href="sprite-batching.html">Sprite batching</a>, you will build one using <code>draw_sprite_instances</code> and look more closely at the cost of draw calls.</p>
+    </div>
+    <nav class="toc" aria-labelledby="toc-title"><p class="toc-title" id="toc-title">On this page</p><ol><li><a href="#the-world-and-the-screen">The world and the screen</a></li><li><a href="#positions-and-draw-order">Positions and draw order</a></li><li><a href="#sprites">Sprites</a></li><li><a href="#sprite-sheets">Sprite sheets</a></li><li><a href="#shapes">Shapes</a></li><li><a href="#text">Text</a></li><li><a href="#many-sprites-of-one-texture">Many sprites of one texture</a><ol><li><a href="#drawing-a-tile-map">Drawing a tile map</a></li><li><a href="#instance-settings-and-draw-order">Instance settings and draw order</a></li></ol></li></ol></nav>
+    </div>
+    <nav class="wrap pager" aria-label="Previous and next guide"><a href="../index.html#guides" class="back">&larr; All guides</a><a href="getting-started.html" class="p" rel="prev"><span class="meta">&larr; Previous</span>Getting started</a><a href="drawing-3d.html" class="n" rel="next"><span class="meta">Next &rarr;</span>Drawing in 3D</a></nav>
+  </article>
+</main>
+<footer class="site-footer">
+  <div class="wrap row">
+    <a href="../index.html" class="mark" aria-label="BuzEngine home">//</a>
+    <p class="who">BuzEngine &middot; Breda University of Applied Sciences &middot; MIT licensed</p>
+    <ul>
+      <li><a href="../guides/getting-started.html">Guides</a></li>
+      <li><a href="../reference/index.html">Reference</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" data-root="../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JSON files &middot; BuzEngine guides</title>
+<meta name="description" content="Reading and writing json.">
+<meta name="theme-color" content="#1d222d">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="../assets/fonts/nunito-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/montserrat.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/site.css">
+<script>document.documentElement.classList.add('js')</script>
+<script src="../assets/search-index.js" defer></script>
+<script src="../assets/site.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="../index.html"><span class="mark" aria-hidden="true">//</span>Buz<span class="thin">Engine</span></a>
+    <nav class="site-nav" aria-label="Main">
+      <ul>
+        <li><a href="../guides/getting-started.html" aria-current="page">Guides</a></li>
+        <li><a href="../reference/index.html">Reference</a></li>
+        <li><a href="../about.html">About</a></li>
+      </ul>
+    </nav>
+    <div class="tools">
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-controls="search"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.75"/><path d="m10.5 10.5 3.5 3.5"/></svg><span class="label-text">Search</span><kbd>/</kbd></button>
+    </div>
+  </div>
+</header>
+<dialog class="search-dialog" id="search" aria-label="Search the guides and the reference">
+  <div class="search-field">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.75"/><path d="m10.5 10.5 3.5 3.5"/></svg>
+    <label class="visually-hidden" for="search-input">Search the guides and the reference</label>
+    <input id="search-input" type="search" placeholder="Search guides and API" autocomplete="off" spellcheck="false"
+           role="combobox" aria-autocomplete="list" aria-expanded="true" aria-controls="search-results">
+    <span class="esc" aria-hidden="true">Esc</span>
+  </div>
+  <ul class="search-results" id="search-results" role="listbox" aria-label="Results"></ul>
+  <p class="search-hint">Arrow keys to move, Enter to open, Esc to close.</p>
+</dialog>
+<main id="main" tabindex="-1">
+  <article>
+    <header class="wrap page-head">
+      
+      <h1>Json files</h1>
+      <p class="lede">Reading and writing json.</p>
+    </header>
+    <div class="doc">
+    <aside class="side" aria-label="All guides">
+      <button class="side-toggle" type="button" aria-expanded="false" aria-controls="side-nav"><span>All guides</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></button>
+      <nav class="side-nav" id="side-nav" aria-label="Guides">
+        <div class="side-group"><p class="side-title">Guides</p><ol><li><a href="getting-started.html">Getting started</a></li><li><a href="drawing.html">Drawing in 2D</a></li><li><a href="drawing-3d.html">Drawing in 3D</a></li><li><a href="input.html">Input</a></li><li><a href="textures-and-fonts.html">Textures &amp; fonts</a></li><li><a href="audio.html">Audio</a></li><li><a href="utilities.html">Utilities</a></li><li><a href="diagnostics.html">Diagnostics</a></li><li><a href="json.html" aria-current="page">JSON files</a></li><li><a href="models.html">Models</a></li><li><a href="under-the-hood.html">Under the hood</a></li></ol></div>
+        <div class="side-group"><p class="side-title">Guided experiences</p><ol><li><a href="guided-experiences.html">Guided experiences</a></li><li><a href="camera-2d.html">A 2D camera</a></li><li><a href="sprite-animation.html">Sprite animation</a></li><li><a href="sprite-batching.html">Sprite batching</a></li><li><a href="animation-player.html">An animation player</a></li><li><a href="collision.html">Collision</a></li><li><a href="asset-cache.html">An asset cache</a></li></ol></div>
+      </nav>
+    </aside>
+    <div class="prose">
+<p>Use json files for settings, save games and level data. <code><span class="ns">buz::</span>json</code> is <a href="https://json.nlohmann.me" target="_blank" rel="noopener">nlohmann::json</a>, and <code><span class="ns">buz::</span>load_json</code> and <code><span class="ns">buz::</span>save_json</code> read and write the files.</p>
+<h2 id="reading-a-file">Reading a file<a class="anchor" href="#reading-a-file" aria-label="Link to this section">#</a></h2>
+<p><code><span class="ns">buz::</span>load_json</code> parses a whole file. When the file is missing or is not valid json, it logs an error and returns a <em>discarded</em> value, so check <code>is_discarded()</code> before you read from it:</p>
+<figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">C++</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-key">#include</span> <span class="tok-str">&quot;core/json.h&quot;</span>
+
+<span class="tok-type">buz</span>::<span class="tok-type">json</span> settings = <span class="tok-type">buz</span>::<span class="tok-fn">load_json</span>(<span class="tok-str">&quot;my_game/settings.json&quot;</span>); <span class="tok-com">// relative to the content folder</span>
+<span class="tok-key">if</span> (!settings.<span class="tok-fn">is_discarded</span>())
+{
+    m_volume = settings.<span class="tok-fn">value</span>(<span class="tok-str">&quot;volume&quot;</span>, <span class="tok-num">1.0f</span>);           <span class="tok-com">// 1 when the key is missing</span>
+    m_player_name = settings[<span class="tok-str">&quot;player&quot;</span>][<span class="tok-str">&quot;name&quot;</span>];
+}</code></pre></figure>
+<p><code>settings[&quot;volume&quot;]</code> works too, but only for a key that is certainly in the file. For a missing key it gives null, and converting null to a number throws an exception, which ends the game unless you catch it (see <a href="diagnostics.html">Diagnostics</a>). <code>value(key, fallback)</code> returns the fallback instead. Use it for anything a player could have removed from the file by hand, or that an older version of your game did not write yet.</p>
+<h2 id="writing-a-file">Writing a file<a class="anchor" href="#writing-a-file" aria-label="Link to this section">#</a></h2>
+<p>Build a json value and pass it to <code><span class="ns">buz::</span>save_json</code>. A relative path ends up in your game&#x27;s save folder, <code>saved/&lt;game&gt;</code> next to the executable. <code><span class="ns">buz::</span>save_json</code> creates missing directories, and it logs an error and returns <code>false</code> when it cannot write the file:</p>
+<figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">C++</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-type">buz</span>::<span class="tok-type">json</span> save;
+save[<span class="tok-str">&quot;volume&quot;</span>] = m_volume;
+save[<span class="tok-str">&quot;unlocked_levels&quot;</span>] = { <span class="tok-num">1</span>, <span class="tok-num">2</span>, <span class="tok-num">3</span> };
+<span class="tok-type">buz</span>::<span class="tok-fn">save_json</span>(<span class="tok-str">&quot;save/save.json&quot;</span>, save);</code></pre></figure>
+<p>Keep save games out of <code>content/</code>: every build copies your source <code>content</code> folder over the one next to the executable, replacing any file with the same name.</p>
+<p>The <a href="https://json.nlohmann.me" target="_blank" rel="noopener">nlohmann documentation</a> covers the rest of the json api: arrays, iteration and converting your own structs.</p>
+    </div>
+    <nav class="toc" aria-labelledby="toc-title"><p class="toc-title" id="toc-title">On this page</p><ol><li><a href="#reading-a-file">Reading a file</a></li><li><a href="#writing-a-file">Writing a file</a></li></ol></nav>
+    </div>
+    <nav class="wrap pager" aria-label="Previous and next guide"><a href="../index.html#guides" class="back">&larr; All guides</a><a href="diagnostics.html" class="p" rel="prev"><span class="meta">&larr; Previous</span>Diagnostics</a><a href="models.html" class="n" rel="next"><span class="meta">Next &rarr;</span>Models</a></nav>
+  </article>
+</main>
+<footer class="site-footer">
+  <div class="wrap row">
+    <a href="../index.html" class="mark" aria-label="BuzEngine home">//</a>
+    <p class="who">BuzEngine &middot; Breda University of Applied Sciences &middot; MIT licensed</p>
+    <ul>
+      <li><a href="../guides/getting-started.html">Guides</a></li>
+      <li><a href="../reference/index.html">Reference</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>

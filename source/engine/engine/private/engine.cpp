@@ -12,9 +12,6 @@
 #include "input_recorder.h"
 #include "native_window.h"
 #include "renderer_2d/screen_renderer.h"
-#include "renderer_2d/sprite_pass.h"
-#include "renderer_2d/sprite_pipeline.h"
-#include "renderer_2d/world_renderer_2d.h"
 #include "rhi/command_list.h"
 #include "rhi/device.h"
 #include "rhi/graphics_api.h"
@@ -53,17 +50,12 @@ namespace buz
 		std::unique_ptr<rhi::device> device;
 		shader_library shaders;
 		texture_loader loader;
-		sprite_pipeline sprites;
 		render_context context;
-		sprite_pass world_drawing;
-		world_renderer_2d world{ world_drawing };
-		sprite_pass screen_drawing;
-		screen_renderer screen{ screen_drawing };
+		std::unique_ptr<screen_renderer> overlay; // the engine's own, for the stats on top of the game's hud
 		stats_display stats{ stats_overlay::no };
 		screenshot capture;
 		screenshot_saver screenshots{ capture };
 
-		mat4 window_projection = mat4(1.0f);
 		timer frame_timer;
 		int frame = 0;
 		bool exit_requested = false;
@@ -147,12 +139,30 @@ namespace
 	}
 
 	//--------------------------------------------------------------
-	/// @brief Switches the stats overlay, the one debug view every game has.
+	/// @brief Switches the debug views whose key (engine_settings::
+	/// debug_controls) was pressed. It runs before the game's update, with
+	/// the rest of the input; the 3D renderer reads the views when it draws.
 	void handle_debug_keys(buz::engine_systems& parts)
 	{
-		if (parts.recorded_input.was_key_pressed(buz::key::f3))
+		const buz::input_recorder& keys = parts.recorded_input;
+		const buz::debug_keys& controls = parts.settings.debug_controls;
+		buz::debug_views& views = parts.context.views;
+
+		if (keys.was_key_pressed(controls.stats))
 		{
 			parts.stats.toggle();
+		}
+		if (keys.was_key_pressed(controls.wireframe))
+		{
+			views.wireframe = views.wireframe ? buz::wireframe_view::no : buz::wireframe_view::yes;
+		}
+		if (keys.was_key_pressed(controls.lighting))
+		{
+			views.lighting = views.lighting ? buz::lighting_view::no : buz::lighting_view::yes;
+		}
+		if (keys.was_key_pressed(controls.debug_lines))
+		{
+			views.debug_lines = views.debug_lines ? buz::debug_lines_view::no : buz::debug_lines_view::yes;
 		}
 	}
 
@@ -163,18 +173,17 @@ namespace
 	{
 		buz::rhi::command_list& commands = parts.device->begin_frame(parts.settings.clear_color);
 
-		// The 3D renderer draws into the world pass too, through the context
-		parts.world_drawing.begin(commands, parts.sprites, parts.window_projection);
-		parts.context.world_commands = &commands;
-		active_game.render_world(owner, parts.world);
-		parts.context.world_commands = nullptr;
-
-		parts.screen_drawing.begin(commands, parts.sprites, parts.window_projection);
-		active_game.render_screen(owner, parts.screen);
+		// The game's renderers draw into this frame's command list; a new
+		// frame number makes each of them start its pass again
+		++parts.context.frame;
+		parts.context.commands = &commands;
+		active_game.render_world(owner);
+		active_game.render_screen(owner);
 
 		const buz::rhi::frame_stats stats = parts.device->get_frame_stats();
 		const float window_width = static_cast<float>(parts.sdl_window.get_width());
-		parts.stats.draw(parts.screen, stats, measured_seconds, window_width);
+		parts.stats.draw(*parts.overlay, stats, measured_seconds, window_width);
+		parts.context.commands = nullptr;
 
 		// A screenshot copies this frame's finished image before it goes
 		// to the screen
@@ -267,12 +276,8 @@ namespace buz
 		}
 
 		parts.loader.initialize(*parts.device);
-		parts.context = { parts.device.get(), &parts.shaders, &parts.loader };
-
-		if (!parts.sprites.initialize(*parts.device, parts.shaders, parts.loader, settings.sampler_filter))
-		{
-			fatal_error("Could not create the sprite pipeline. The console says why.");
-		}
+		parts.context = { .device = parts.device.get(), .shaders = &parts.shaders, .textures = &parts.loader, .sampler_filter = settings.sampler_filter };
+		parts.overlay = std::make_unique<screen_renderer>(parts.context);
 
 		parts.sound_device.initialize();
 
@@ -298,11 +303,6 @@ namespace buz
 	{
 		engine_systems& parts = *m_systems;
 
-		// Without a camera the world is drawn in window pixels, just like the
-		// screen: (0, 0) is the top-left corner.
-		const float width = static_cast<float>(parts.device->get_width());
-		const float height = static_cast<float>(parts.device->get_height());
-		parts.window_projection = make_orthographic_projection(width, height);
 		parts.frame_timer.reset();
 
 #if defined(__EMSCRIPTEN__)

@@ -1,5 +1,6 @@
 /// @file
-/// @brief glTF models: their nodes, meshes and animations, and loading them.
+/// @brief glTF models: their nodes, meshes and animations. Load one with
+/// buz::load_model from asset_management/model_loading.h.
 
 #pragma once
 
@@ -9,13 +10,11 @@
 
 #include <string_view>
 #include <memory>
-#include <optional>
 #include <string>
 #include <vector>
 
 namespace buz
 {
-	class engine;
 	class mesh;
 
 	//--------------------------------------------------------------
@@ -90,22 +89,4 @@ namespace buz
 		/// @brief Returns every node's pose as placed in the file.
 		std::vector<joint_pose> get_rest_pose() const;
 	};
-
-	//--------------------------------------------------------------
-	/// @brief Loads a glTF model (.gltf or .glb) from the content folder.
-	///
-	/// Every call loads the file again and uploads new meshes: loading a
-	/// model once and reusing it is up to you.
-	/// @param engine Engine instance; its graphics card gets the meshes.
-	/// @param content_relative_path Model file, relative to the content folder.
-	/// @return The model, or nothing when it could not be loaded (the reason is logged).
-	std::optional<model> load_model(engine& engine, std::string_view content_relative_path);
-
-	//--------------------------------------------------------------
-	/// @brief Loads every mesh of a glTF file as one mesh, placed as in the
-	/// file: for props and level geometry that never move apart.
-	/// @param engine Engine instance; its graphics card gets the mesh.
-	/// @param content_relative_path Model file, relative to the content folder.
-	/// @return The mesh, or nullptr when it could not be loaded.
-	std::shared_ptr<mesh> load_mesh(engine& engine, std::string_view content_relative_path);
 }

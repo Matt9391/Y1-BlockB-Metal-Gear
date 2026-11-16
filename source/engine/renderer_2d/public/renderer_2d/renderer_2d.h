@@ -6,12 +6,14 @@
 #include "core/math.h"
 #include "core/rect.h"
 
+#include <memory>
 #include <span>
 #include <string_view>
 
 namespace buz
 {
 	struct font;
+	struct render_context;
 	class sprite_pass;
 	class texture;
 
@@ -139,15 +141,25 @@ namespace buz
 		/// @param tint Color of the text.
 		void draw_text(const font& text_font, std::string_view text, vec2 position, float pixel_height, color tint = color{});
 
+		//----------------------------------------------------------
+		// For engine modules
+	public:
+		//----------------------------------------------------------
+		/// @brief Returns the engine's side of this renderer
+		/// (world_renderer_2d::set_camera changes its camera). A game cannot
+		/// use it: the type lives in the module's internal headers.
+		sprite_pass& get_pass() const;
+
 	protected:
-		// Only world_renderer_2d and screen_renderer are made, by the engine:
-		// games get them every frame.
-		explicit renderer_2d(sprite_pass& pass);
+		// Only world_renderer_2d and screen_renderer are made, by the game
+		// classes, which hand them to the game's render functions.
+		explicit renderer_2d(const render_context& context);
+		~renderer_2d();
 
 		renderer_2d(const renderer_2d&) = delete;
 		renderer_2d& operator=(const renderer_2d&) = delete;
 
 	private:
-		sprite_pass& m_pass; // the engine's side: records the draws into the frame
+		std::unique_ptr<sprite_pass> m_pass; // the engine's side: records the draws into the frame
 	};
 }

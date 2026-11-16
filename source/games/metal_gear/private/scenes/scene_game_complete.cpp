@@ -3,8 +3,8 @@
 #include "engine/input.h"
 #include "renderer_2d/screen_renderer.h"
 
-scene_game_complete::scene_game_complete(scene_type this_scene, scene_type next_scene, buz::world_renderer_3d& world_3d, asset_cache& asset_cache_) :
-    scene(this_scene,next_scene, world_3d, asset_cache_)
+scene_game_complete::scene_game_complete(scene_type this_scene, scene_type next_scene, asset_cache& asset_cache_) :
+    scene(this_scene,next_scene, asset_cache_)
 {
 }
 
@@ -15,11 +15,11 @@ void scene_game_complete::on_update(buz::engine& engine, float)
 	
 }   
 
-void scene_game_complete::on_render_world(buz::engine&, buz::world_renderer_2d&)
+void scene_game_complete::on_render_world(buz::engine&, buz::world_renderer_3d& world_3d)
 {
 	// just for testing
 	const buz::material k_concrete = { { 0.55f, 0.55f, 0.58f, 1.0f } };
-	get_world_3d().draw_box({ 0.0f, 1.0f, 5.f }, { 0.0f, 1.0f, 5.f }, k_concrete);
+	world_3d.draw_box({ 0.0f, 1.0f, 5.f }, { 0.0f, 1.0f, 5.f }, k_concrete);
 }
 
 void scene_game_complete::on_render_screen(buz::engine&, buz::screen_renderer& screen)

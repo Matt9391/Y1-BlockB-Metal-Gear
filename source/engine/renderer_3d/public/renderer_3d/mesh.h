@@ -1,5 +1,6 @@
 /// @file
-/// @brief Meshes: triangles in gpu memory, and making them from code.
+/// @brief Meshes: triangles in gpu memory. Make one with buz::create_mesh
+/// or buz::load_mesh from asset_management/model_loading.h.
 
 #pragma once
 
@@ -7,13 +8,9 @@
 #include "core/math.h"
 
 #include <cstdint>
-#include <memory>
-#include <span>
 
 namespace buz
 {
-	class engine;
-
 	//--------------------------------------------------------------
 	/// @brief One corner of a triangle of a mesh.
 	struct mesh_vertex
@@ -30,8 +27,9 @@ namespace buz
 	/// @brief Triangles in gpu memory, ready to be drawn with draw_mesh.
 	///
 	/// Create one with create_mesh from vertices and indices, or load one
-	/// with load_mesh (renderer_3d/model.h). Like textures, meshes are handed out
-	/// as a std::shared_ptr: the mesh lives as long as anything holds it.
+	/// with load_mesh (both in asset_management/model_loading.h). Like
+	/// textures, meshes are handed out as a std::shared_ptr: the mesh lives
+	/// as long as anything holds it.
 	class mesh
 	{
 	public:
@@ -56,12 +54,4 @@ namespace buz
 		uint32_t m_index_count; // three per triangle
 		aabb m_bounds;          // around every vertex, in the mesh's own space
 	};
-
-	//--------------------------------------------------------------
-	/// @brief Uploads triangles made in code to the gpu.
-	/// @param engine The engine, which owns the graphics card.
-	/// @param vertices The corners.
-	/// @param indices Three per triangle, counter clockwise seen from the front.
-	/// @return The mesh, or nullptr when uploading failed.
-	std::shared_ptr<mesh> create_mesh(engine& engine, std::span<const mesh_vertex> vertices, std::span<const uint32_t> indices);
 }

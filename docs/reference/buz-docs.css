@@ -1,0 +1,238 @@
+/* ------------------------------------------------------------------------- *
+ * The API reference in the front website's design (davedebreuck.com's
+ * language, see docs/site/assets/site.css): navy, one green accent, Montserrat
+ * capitals for section heads with the // mark, Nunito Sans for text and
+ * JetBrains Mono for code. Dark only, like the rest of the site.
+ *
+ * Loaded after doxygen-awesome. Its dark values sit on html.dark-mode and on
+ * html:not(.light-mode) inside a media query, so every variable is set on all
+ * of those selectors here: the page looks the same whatever the theme script
+ * or the system says. Keep the values in step with site.css.
+ * ------------------------------------------------------------------------- */
+
+/* The front website's fonts, one folder up once the site is assembled
+ * (docs/html/assets/fonts). Built on its own, the reference falls back to
+ * the system fonts. */
+@font-face {
+    font-family: "Montserrat";
+    src: url("../assets/fonts/montserrat.woff2") format("woff2");
+    font-weight: 100 900; font-style: normal; font-display: swap;
+}
+@font-face {
+    font-family: "Nunito Sans";
+    src: url("../assets/fonts/nunito-sans.woff2") format("woff2");
+    font-weight: 200 1000; font-style: normal; font-display: swap;
+}
+@font-face {
+    font-family: "Nunito Sans";
+    src: url("../assets/fonts/nunito-sans-italic.woff2") format("woff2");
+    font-weight: 200 1000; font-style: italic; font-display: swap;
+}
+@font-face {
+    font-family: "JetBrains Mono";
+    src: url("../assets/fonts/jetbrains-mono.woff2") format("woff2");
+    font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+    font-family: "JetBrains Mono";
+    src: url("../assets/fonts/jetbrains-mono-bold.woff2") format("woff2");
+    font-weight: 700; font-style: normal; font-display: swap;
+}
+
+html, html.light-mode, html.dark-mode, html:not(.light-mode) {
+    color-scheme: dark;
+
+    --font-family: "Nunito Sans", "Avenir Next", Avenir, "Segoe UI", system-ui, sans-serif;
+    --font-family-monospace: "JetBrains Mono", "Cascadia Code", Consolas, ui-monospace, monospace;
+    --page-font-size: 16px;
+    --navigation-font-size: 15px;
+    --toc-font-size: 14px;
+    --code-font-size: 14px;
+    --content-line-height: 27px;
+
+    --primary-color: #00d646;
+    --primary-dark-color: #00b33a;
+    --primary-light-color: #00d646;
+    --on-primary-color: #04130a;
+    --link-color: #f7f5f2;
+
+    --page-background-color: #1d222d;
+    --page-foreground-color: #bec7d5;
+    --page-secondary-foreground-color: #95a0b2;
+    --separator-color: #2c3344;
+    --side-nav-background: #171b24;
+    --side-nav-foreground: #bec7d5;
+    --header-background: #171b24;
+    --header-foreground: #f7f5f2;
+    --menu-selected-background: rgb(0 214 70 / .12);
+    --menu-focus-foreground: #04130a;
+    --menu-focus-background: #00d646;
+    --odd-color: rgb(255 255 255 / .02);
+    --tablehead-background: #262c3a;
+    --tablehead-foreground: #95a0b2;
+    --blockquote-background: transparent;
+    --blockquote-foreground: #f7f5f2;
+    --searchbar-background: #262c3a;
+    --searchbar-foreground: #f7f5f2;
+
+    --border-radius-small: 2px;
+    --border-radius-medium: 2px;
+    --border-radius-large: 2px;
+    --box-shadow: none;
+    --searchbar-border-radius: 2px;
+
+    --code-background: #262c3a;
+    --code-foreground: #f7f5f2;
+    --fragment-background: #171b24;
+    --fragment-foreground: #f7f5f2;
+    --fragment-keyword: #f47067;
+    --fragment-keywordtype: #f47067;
+    --fragment-keywordflow: #f47067;
+    --fragment-token: #96d0ff;
+    --fragment-comment: #9aa5b1;
+    --fragment-link: #f69d50;
+    --fragment-preprocessor: #f47067;
+    --fragment-linenumber-color: #95a0b2;
+    --fragment-linenumber-background: #171b24;
+    --fragment-linenumber-border: #2c3344;
+    --fragment-lineheight: 21px;
+
+    --note-color: rgb(138 128 224 / .1);
+    --note-color-dark: #8a80e0;
+    --note-color-darker: #f7f5f2;
+    --warning-color: rgb(242 184 75 / .1);
+    --warning-color-dark: #f2b84b;
+    --warning-color-darker: #f7f5f2;
+
+    --webkit-scrollbar-color: #3b4459;
+}
+
+body { -webkit-font-smoothing: antialiased; }
+::selection { background: #00d646; color: #04130a; }
+:focus-visible { outline: 2px solid #00d646; outline-offset: 3px; }
+
+a, a.el, .contents a:visited { color: #f7f5f2; text-decoration-color: #00d646; }
+a:hover, a.el:hover { color: #00d646; }
+
+/* Newer doxygen versions render inline `code` in markdown as <span
+ * class="tt">, which doxygen-awesome (written for older versions) does not
+ * style. Give it the same look as the theme's regular code spans. */
+span.tt {
+    background: var(--code-background);
+    color: var(--code-foreground);
+    font-family: var(--font-family-monospace);
+    font-size: var(--code-font-size);
+    border: 1px solid #2c3344;
+    border-radius: 3px;
+    padding: 1px 5px;
+}
+
+/* --- sidebar header -----------------------------------------------------------
+ * The sidebar-only theme fixes the whole header (#top) to a set height and
+ * clips the overflow; #top holds the injected bar, the title and the search
+ * box, so --top-height has to fit all three or the search box is clipped. */
+html { --top-height: 178px; }
+
+/* The theme pads #doc-content by (--top-height - 80px) to clear a header
+ * that, in the sidebar-only layout, sits beside the content. That left an
+ * empty band over every page; start the content at the top instead. */
+@media screen and (min-width: 768px) {
+    #doc-content { padding-top: 12px; }
+}
+
+/* The bar injected by header.html: the site's // mark and its way back. */
+#buz-topbar {
+    display: flex; align-items: center; gap: 22px;
+    padding: 0 var(--spacing-large); height: 52px;
+    border-bottom: 1px solid #2c3344;
+}
+#buz-topbar a {
+    color: #bec7d5; text-decoration: none;
+    font: 500 11.5px/1 "Montserrat", "Segoe UI", sans-serif; letter-spacing: .14em; text-transform: uppercase;
+}
+#buz-topbar a:hover { color: #f7f5f2; }
+#buz-topbar a.brand { color: #f7f5f2; font-weight: 800; letter-spacing: .2em; display: inline-flex; align-items: center; gap: 8px; margin-right: auto; }
+#buz-topbar a.brand .mark { font: italic 700 19px/1 "Nunito Sans", sans-serif; letter-spacing: -.02em; color: #00d646; text-transform: none; }
+#buz-topbar a.brand:hover { color: #00d646; }
+
+#titlearea { padding-top: 14px !important; padding-bottom: 6px !important; border-bottom: 0 !important; }
+#projectname {
+    font-family: "Montserrat", "Segoe UI", sans-serif; font-weight: 800; font-size: 15px !important;
+    letter-spacing: .2em; text-transform: uppercase; color: #f7f5f2;
+}
+#projectbrief { margin-top: 6px; color: #95a0b2; font-size: 13px; }
+
+#MSearchBox { border: 1px solid #3b4459 !important; box-shadow: none !important; }
+
+#nav-tree { padding-top: var(--spacing-medium); background: #171b24; }
+#nav-tree .label a { color: #bec7d5; }
+#nav-tree .selected { background: transparent !important; box-shadow: inset 2px 0 0 #00d646; }
+#nav-tree .selected .label a, #nav-tree .selected a { color: #00d646 !important; font-weight: 700; }
+
+/* --- page title and section heads ---------------------------------------------- */
+div.header { background: none; border-bottom: 0; }
+div.headertitle { padding-top: 8px; }
+div.headertitle .title {
+    font-family: "Montserrat", "Segoe UI", sans-serif; font-weight: 800; font-size: 2rem; line-height: 1.2;
+    letter-spacing: .02em; color: #f7f5f2;
+}
+div.summary { font-size: 12px; }
+div.summary a { color: #95a0b2; text-decoration: none; font-family: "Montserrat", sans-serif; letter-spacing: .1em; text-transform: uppercase; font-size: 11px; }
+div.summary a:hover { color: #00d646; }
+
+/* "// PUBLIC MEMBER FUNCTIONS", like the guides' h2 */
+h2.groupheader {
+    font-family: "Montserrat", "Segoe UI", sans-serif; font-weight: 800; font-size: 1.15rem;
+    letter-spacing: .16em; text-transform: uppercase; color: #f7f5f2;
+    border-bottom: 0 !important; border-top: 1px solid #2c3344; padding-top: 1rem; margin-top: 2.5rem;
+}
+h2.groupheader { display: flex; flex-wrap: wrap; align-items: baseline; }
+h2.groupheader::before { content: "//"; margin-right: .45em; color: #00d646; letter-spacing: 0; }
+.contents h1, .contents h2:not(.groupheader), .contents h3 { font-family: "Montserrat", "Segoe UI", sans-serif; color: #f7f5f2; }
+
+/* --- member summary tables ------------------------------------------------------
+ * doxygen-awesome draws each declaration as a bordered, shadowed pill; here it
+ * is a step in tone, like the guides' code captions. */
+table.memberdecls tr[class^='memitem'] .memItemLeft,
+table.memberdecls tr[class^='memitem'] .memItemRight,
+table.memberdecls tr[class^='memitem'] .memTemplItemLeft,
+table.memberdecls tr[class^='memitem'] .memTemplItemRight,
+table.memberdecls tr[class^='memitem'] .memTemplParams {
+    background: #262c3a !important;
+    border-color: transparent !important;
+    box-shadow: none;
+    color: #bec7d5;
+}
+table.memberdecls .memItemRight a.el { color: #dcbdfb; font-weight: 700; text-decoration: none; }
+table.memberdecls .memItemLeft a.el, table.memberdecls .memItemRight a.el ~ a.el { color: #f69d50; font-weight: 400; }
+table.memberdecls .mdescRight { color: #bec7d5; }
+
+/* member details */
+.memtitle {
+    background: #262c3a !important; border: 1px solid #2c3344 !important; box-shadow: none;
+    font-family: "JetBrains Mono", monospace; font-weight: 700; color: #f7f5f2;
+}
+.memitem { box-shadow: none !important; border: 1px solid #2c3344 !important; border-radius: 2px; }
+.memproto { background: #171b24 !important; box-shadow: none !important; border-bottom: 1px solid #2c3344 !important; }
+.memdoc { box-shadow: none !important; background: transparent !important; }
+.memname, .memname td { color: #f7f5f2; }
+.paramname em { color: #f69d50; font-style: normal; }
+div.fragment, pre.fragment { border: 1px solid #2c3344; }
+
+dl.note, dl.remark, dl.see, dl.return, dl.pre, dl.post, dl.invariant, dl.warning, dl.attention, dl.todo, dl.deprecated, dl.bug {
+    border-left-width: 2px !important; border-radius: 0 !important;
+}
+
+/* explicit, delete, static, ...: outlined green capitals, not filled badges */
+span.mlabel {
+    background: transparent !important; border: 1px solid rgb(0 214 70 / .5) !important; color: #00d646 !important;
+    font: 600 10px/1.6 "Montserrat", sans-serif !important; letter-spacing: .14em; text-transform: uppercase; border-radius: 2px !important;
+}
+
+#nav-path, #nav-path ul { background: #171b24 !important; border-top: 1px solid #2c3344; }
+#nav-path li.navelem a { color: #bec7d5; }
+#nav-path li.footer { color: #95a0b2; }
+
+@media (max-width: 767px) {
+    #buz-topbar { gap: 14px; }
+}

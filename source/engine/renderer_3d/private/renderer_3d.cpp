@@ -23,11 +23,21 @@ namespace
 	struct mesh_constants
 	{
 		buz::mat4 world_view_projection; // object space to the screen
-		buz::vec4 normal_rows[3];        // w of row 0: lit
-		buz::color base_color;           // the material color
+
+		// Rows of the normal matrix. Shaders read constants in rows of four
+		// floats, so each row shares its four floats with one setting.
+		buz::vec3 normal_row_0;
+		float lit;          // 1 when lit, 0 when not
+		buz::vec3 normal_row_1;
+		float alpha_cutoff; // material::alpha_cutoff
+		buz::vec3 normal_row_2;
+		float padding;      // fills the last row
+
+		buz::color base_color; // the material color
 	};
 
 	static_assert(sizeof(mesh_constants) <= buz::rhi::k_max_constants_size, "mesh constants no longer fit the per-draw constants");
+	static_assert(offsetof(mesh_constants, base_color) == 112, "every normal row and its setting must fill 16 bytes, as the shaders read them");
 
 	//--------------------------------------------------------------
 	/// @brief The camera a world is seen through until the game sets one:
@@ -54,9 +64,6 @@ namespace buz
 	renderer_3d::renderer_3d(const render_context& context)
 		: m_context(context)
 		, m_view_projection(make_default_camera(*context.device))
-		, m_wireframe(false)
-		, m_lighting_off(false)
-		, m_show_debug(true)
 	{
 		shader_library& shaders = *context.shaders;
 		set_mesh_shading(mesh_shading{});
@@ -92,6 +99,13 @@ namespace buz
 	//--------------------------------------------------------------
 	void renderer_3d::set_mesh_shading(const mesh_shading& shading)
 	{
+		// Building pipelines is slow: only when the shading changes
+		if (m_mesh_pipelines[0] != nullptr && shading == m_mesh_shading)
+		{
+			return;
+		}
+		m_mesh_shading = shading;
+
 		// The same shaders and layout in two pipelines: solid, and wireframe
 		// (a debug view that changes fixed state)
 		rhi::pipeline_desc desc;
@@ -122,35 +136,17 @@ namespace buz
 	}
 
 	//--------------------------------------------------------------
-	void renderer_3d::toggle_wireframe()
-	{
-		m_wireframe = !m_wireframe;
-	}
-
-	//--------------------------------------------------------------
-	void renderer_3d::toggle_lighting()
-	{
-		m_lighting_off = !m_lighting_off;
-	}
-
-	//--------------------------------------------------------------
-	void renderer_3d::toggle_debug_lines()
-	{
-		m_show_debug = !m_show_debug;
-	}
-
-	//--------------------------------------------------------------
 	rhi::command_list& renderer_3d::get_commands() const
 	{
 		// The world pass only records while game::on_render_world runs
-		BUZ_ASSERT(m_context.world_commands != nullptr);
-		return *m_context.world_commands;
+		BUZ_ASSERT(m_context.commands != nullptr);
+		return *m_context.commands;
 	}
 
 	//--------------------------------------------------------------
 	const rhi::pipeline& renderer_3d::select_mesh_pipeline() const
 	{
-		return *m_mesh_pipelines[m_wireframe ? 1 : 0];
+		return *m_mesh_pipelines[m_context.views.wireframe ? 1 : 0];
 	}
 
 	//--------------------------------------------------------------
@@ -166,17 +162,19 @@ namespace buz
 
 		// Normals turn with the object, but must not stretch with a non
 		// uniform scale: the inverse transpose of the world matrix does both.
-		// glm stores columns, the shader wants rows.
-		const mat3 normal_matrix = transpose(inverse(mat3(transform)));
-		const bool lit = look.lit && !m_lighting_off;
+		// The rows of that transpose are the columns of the inverse, and glm
+		// stores a matrix as its columns.
+		const mat3 inverse_world = inverse(mat3(transform));
+		const bool lit = look.lit && m_context.views.lighting;
 
 		mesh_constants constants;
 		constants.world_view_projection = m_view_projection * transform;
-		for (int row = 0; row < 3; ++row)
-		{
-			constants.normal_rows[row] = { normal_matrix[0][row], normal_matrix[1][row], normal_matrix[2][row], 0.0f };
-		}
-		constants.normal_rows[0].w = lit ? 1.0f : 0.0f;
+		constants.normal_row_0 = inverse_world[0];
+		constants.lit = lit ? 1.0f : 0.0f;
+		constants.normal_row_1 = inverse_world[1];
+		constants.alpha_cutoff = look.alpha_cutoff;
+		constants.normal_row_2 = inverse_world[2];
+		constants.padding = 0.0f;
 		constants.base_color = look.base_color;
 
 		commands.set_constants(std::as_bytes(std::span(&constants, 1)));
@@ -193,7 +191,7 @@ namespace buz
 	//--------------------------------------------------------------
 	void renderer_3d::draw_lines(std::span<const line_vertex> vertices)
 	{
-		if (!m_show_debug || vertices.empty())
+		if (!m_context.views.debug_lines || vertices.empty())
 		{
 			return;
 		}

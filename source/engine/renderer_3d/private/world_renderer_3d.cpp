@@ -2,8 +2,6 @@
 
 #include "renderer_3d.h"
 
-#include "engine/engine.h"
-
 namespace
 {
 	//--------------------------------------------------------------
@@ -18,8 +16,8 @@ namespace
 namespace buz
 {
 	//--------------------------------------------------------------
-	world_renderer_3d::world_renderer_3d(engine& engine)
-		: m_renderer(std::make_unique<renderer_3d>(engine.get_render_context()))
+	world_renderer_3d::world_renderer_3d(const render_context& context)
+		: m_renderer(std::make_unique<renderer_3d>(context))
 	{
 	}
 
@@ -69,24 +67,6 @@ namespace buz
 	void world_renderer_3d::draw_octahedron(vec3 position, vec3 size, const material& look)
 	{
 		m_renderer->draw(primitive::octahedron, look, place(position, size));
-	}
-
-	//--------------------------------------------------------------
-	void world_renderer_3d::toggle_wireframe()
-	{
-		m_renderer->toggle_wireframe();
-	}
-
-	//--------------------------------------------------------------
-	void world_renderer_3d::toggle_lighting()
-	{
-		m_renderer->toggle_lighting();
-	}
-
-	//--------------------------------------------------------------
-	void world_renderer_3d::toggle_debug_lines()
-	{
-		m_renderer->toggle_debug_lines();
 	}
 
 	//--------------------------------------------------------------

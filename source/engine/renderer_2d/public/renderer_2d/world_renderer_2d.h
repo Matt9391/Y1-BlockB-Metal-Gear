@@ -7,13 +7,12 @@
 
 namespace buz
 {
-	class sprite_pass;
-
 	//--------------------------------------------------------------
 	/// @brief Draws the 2D game world: everything that lives in the level
 	/// and moves when the camera moves.
 	///
-	/// Handed to game::on_render_world every frame. Until you call set_camera,
+	/// Owned by buz::game_2d and handed to on_render_world every frame. Until
+	/// you call set_camera,
 	/// world positions are plain window pixels, with (0, 0) in the top-left
 	/// corner. A camera is two matrices: the view (where the camera is) and
 	/// the projection (how the world maps onto the window). Scrolling a
@@ -32,9 +31,11 @@ namespace buz
 		// Lifetime
 	public:
 		//----------------------------------------------------------
-		/// @brief Draws into the engine's world pass; only the engine has
-		/// one to pass in.
-		explicit world_renderer_2d(sprite_pass& pass);
+		/// @brief Creates the renderer and its pipeline on the engine's
+		/// graphics card; buz::game_2d makes one for your game.
+		/// @param context The engine's render context
+		/// (engine::get_render_context).
+		explicit world_renderer_2d(const render_context& context);
 
 		//----------------------------------------------------------
 		// Camera
@@ -44,8 +45,5 @@ namespace buz
 		/// @param view Moves the world so the camera sits at the origin.
 		/// @param projection Maps what the camera sees onto the window.
 		void set_camera(const mat4& view, const mat4& projection);
-
-	private:
-		sprite_pass& m_pass; // the engine's side: the pass and its camera
 	};
 }

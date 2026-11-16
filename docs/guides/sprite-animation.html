@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en" data-root="../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sprite animation &middot; BuzEngine guides</title>
+<meta name="description" content="Build a sprite-animation helper.">
+<meta name="theme-color" content="#1d222d">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="../assets/fonts/nunito-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/montserrat.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/site.css">
+<script>document.documentElement.classList.add('js')</script>
+<script src="../assets/search-index.js" defer></script>
+<script src="../assets/site.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="../index.html"><span class="mark" aria-hidden="true">//</span>Buz<span class="thin">Engine</span></a>
+    <nav class="site-nav" aria-label="Main">
+      <ul>
+        <li><a href="../guides/getting-started.html" aria-current="page">Guides</a></li>
+        <li><a href="../reference/index.html">Reference</a></li>
+        <li><a href="../about.html">About</a></li>
+      </ul>
+    </nav>
+    <div class="tools">
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-controls="search"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.75"/><path d="m10.5 10.5 3.5 3.5"/></svg><span class="label-text">Search</span><kbd>/</kbd></button>
+    </div>
+  </div>
+</header>
+<dialog class="search-dialog" id="search" aria-label="Search the guides and the reference">
+  <div class="search-field">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.75"/><path d="m10.5 10.5 3.5 3.5"/></svg>
+    <label class="visually-hidden" for="search-input">Search the guides and the reference</label>
+    <input id="search-input" type="search" placeholder="Search guides and API" autocomplete="off" spellcheck="false"
+           role="combobox" aria-autocomplete="list" aria-expanded="true" aria-controls="search-results">
+    <span class="esc" aria-hidden="true">Esc</span>
+  </div>
+  <ul class="search-results" id="search-results" role="listbox" aria-label="Results"></ul>
+  <p class="search-hint">Arrow keys to move, Enter to open, Esc to close.</p>
+</dialog>
+<main id="main" tabindex="-1">
+  <article>
+    <header class="wrap page-head">
+      <span class="label">Guided experience</span>
+      <h1>Sprite animation</h1>
+      <p class="lede">Build a sprite-animation helper.</p>
+    </header>
+    <div class="doc">
+    <aside class="side" aria-label="All guides">
+      <button class="side-toggle" type="button" aria-expanded="false" aria-controls="side-nav"><span>All guides</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></button>
+      <nav class="side-nav" id="side-nav" aria-label="Guides">
+        <div class="side-group"><p class="side-title">Guides</p><ol><li><a href="getting-started.html">Getting started</a></li><li><a href="drawing.html">Drawing in 2D</a></li><li><a href="drawing-3d.html">Drawing in 3D</a></li><li><a href="input.html">Input</a></li><li><a href="textures-and-fonts.html">Textures &amp; fonts</a></li><li><a href="audio.html">Audio</a></li><li><a href="utilities.html">Utilities</a></li><li><a href="diagnostics.html">Diagnostics</a></li><li><a href="json.html">JSON files</a></li><li><a href="models.html">Models</a></li><li><a href="under-the-hood.html">Under the hood</a></li></ol></div>
+        <div class="side-group"><p class="side-title">Guided experiences</p><ol><li><a href="guided-experiences.html">Guided experiences</a></li><li><a href="camera-2d.html">A 2D camera</a></li><li><a href="sprite-animation.html" aria-current="page">Sprite animation</a></li><li><a href="sprite-batching.html">Sprite batching</a></li><li><a href="animation-player.html">An animation player</a></li><li><a href="collision.html">Collision</a></li><li><a href="asset-cache.html">An asset cache</a></li></ol></div>
+      </nav>
+    </aside>
+    <div class="prose">
+<blockquote class="note"><p><strong>Guided exercise:</strong> Write the animation helper yourself (see <a href="guided-experiences.html">Guided experiences</a>). The engine can draw part of a sprite sheet with <a href="../reference/classbuz_1_1renderer__2d.html"><code><span class="ns">buz::</span>renderer_2d::draw_sprite</code></a> and a source <a href="../reference/structbuz_1_1rect.html"><code><span class="ns">buz::</span>rect</code></a>. Your helper will choose which part to draw as the animation plays.</p></blockquote>
+<h2 id="what-you-will-build">What you will build<a class="anchor" href="#what-you-will-build" aria-label="Link to this section">#</a></h2>
+<p>A sprite animation displays a sequence of images over time. A <strong>sprite sheet</strong> stores those images in one texture, and each image in the sequence is a <strong>frame</strong>. To animate the sprite, change the source rectangle passed to <code>draw_sprite</code>.</p>
+<p>The example in <a href="drawing.html">Drawing in 2D</a> does this directly in <code>on_render_world</code>:</p>
+<figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">C++</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-com">// Four 64x64 frames laid out next to each other, 8 frames per second</span>
+<span class="tok-key">const</span> <span class="tok-key">auto</span> frame = <span class="tok-key">static_cast</span>&lt;<span class="tok-type">uint32_t</span>&gt;(m_time * <span class="tok-num">8.0f</span>) % <span class="tok-num">4</span>;
+<span class="tok-key">const</span> <span class="tok-type">buz</span>::rect frame_rect = {
+    { <span class="tok-key">static_cast</span>&lt;<span class="tok-key">float</span>&gt;(frame) * <span class="tok-num">64.0f</span>, <span class="tok-num">0.0f</span> },
+    { <span class="tok-key">static_cast</span>&lt;<span class="tok-key">float</span>&gt;(frame + <span class="tok-num">1</span>) * <span class="tok-num">64.0f</span>, <span class="tok-num">64.0f</span> } };
+world.<span class="tok-fn">draw_sprite</span>(*m_circle_sheet, frame_rect, { <span class="tok-num">1030.0f</span>, <span class="tok-num">200.0f</span> }, { <span class="tok-num">100.0f</span>, <span class="tok-num">100.0f</span> });</code></pre></figure>
+<p>This works for one looping animation. A character with idle, run, jump and death animations needs more information: where each sequence starts, how many frames it contains, how fast it plays and whether it repeats. The game also needs to know when an animation has finished.</p>
+<p>Put that information and the playback logic into two types:</p>
+<div class="tablewrap"><table>
+<thead><tr>
+<th>Type</th>
+<th>What it stores</th>
+<th>When it changes</th>
+</tr></thead><tbody>
+<tr><td><code>sprite_animation</code></td><td>First frame, frame count, playback speed and looping setting.</td><td>When you define or edit the animation.</td></tr>
+<tr><td><code>sprite_animator</code></td><td>The selected animation and elapsed playback time.</td><td>While a character plays an animation.</td></tr>
+</tbody></table></div>
+<p>Each character needs its own animator so its playback can progress independently. The animation definitions can be shared.</p>
+<p>The remaining examples are pseudocode. They assume equally sized cells without gaps, numbered left to right and then row by row. Each animation uses a consecutive range of those cells.</p>
+<h2 id="step-1-select-a-frame-without-playing-the-animation">Step 1: select a frame without playing the animation<a class="anchor" href="#step-1-select-a-frame-without-playing-the-animation" aria-label="Link to this section">#</a></h2>
+<p>First, write a function that converts a frame index into a source rectangle. Store the cell size as <code>frame_size</code> (a <code><span class="ns">buz::</span>vec2</code>) and the number of columns in the sheet as <code>columns</code>.</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">frame_rect(frame_index, frame_size, columns):
+    column = frame_index mod columns
+    row = frame_index div columns       // integer division
+    top_left = { column * frame_size.x, row * frame_size.y }
+    return rect{ top_left, top_left + frame_size }</code></pre></figure>
+<p>For example, frame 5 in a sheet with four columns is in column 1, row 1, counting from zero. With 64 by 64 cells, its source rectangle runs from <code>(64, 64)</code> to <code>(128, 128)</code>.</p>
+<p><a href="../reference/structbuz_1_1rect.html"><code><span class="ns">buz::</span>rect</code></a> stores its minimum and maximum corners, not a position and a size. Use texture pixels for these coordinates, regardless of how large the sprite will be drawn in the game.</p>
+<p><strong>Check:</strong> Draw a few frames by specifying their indices directly. Include the last frame of one row and the first frame of the next row.</p>
+<h2 id="step-2-describe-each-animation">Step 2: describe each animation<a class="anchor" href="#step-2-describe-each-animation" aria-label="Link to this section">#</a></h2>
+<p>A <code>sprite_animation</code> describes the sequence without keeping track of playback. Give it these fields:</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">struct sprite_animation:
+    first_frame    // first cell in this animation
+    frame_count    // number of consecutive cells
+    fps            // animation frames displayed per second
+    loop           // named yes/no setting: repeat or hold the last frame</code></pre></figure>
+<p>For example, one character&#x27;s sheet might contain:</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">idle = { first_frame: 0,  frame_count: 4, fps: 6,  loop: yes }
+run  = { first_frame: 4,  frame_count: 6, fps: 12, loop: yes }
+jump = { first_frame: 10, frame_count: 3, fps: 10, loop: no  }
+die  = { first_frame: 13, frame_count: 5, fps: 8,  loop: no  }</code></pre></figure>
+<p>These values stay the same as the character moves. The animator stores how far the character has progressed through the selected animation.</p>
+<p>Require a positive <code>fps</code>, at least one frame and a range that fits the sheet. Also require a positive column count and frame size before using the rectangle calculation.</p>
+<p><strong>Check:</strong> Select the first and last frame of each definition manually. Make sure its range contains the intended images.</p>
+<h2 id="step-3-calculate-the-current-frame-from-elapsed-time">Step 3: calculate the current frame from elapsed time<a class="anchor" href="#step-3-calculate-the-current-frame-from-elapsed-time" aria-label="Link to this section">#</a></h2>
+<p>The animator records elapsed time in seconds. Update that time once per game update, then calculate which frame should be shown:</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">struct sprite_animator:
+    current                 // selected animation, or none
+    elapsed = 0
+
+    update(delta_seconds):
+        if there is no current animation:
+            return
+        elapsed += delta_seconds
+
+    current_frame_index():  // requires a selected, valid animation
+        step = floor(elapsed * current.fps)
+
+        if current.loop:
+            local_frame = step mod current.frame_count
+        else:
+            local_frame = min(step, current.frame_count - 1)
+
+        return current.first_frame + local_frame
+
+    current_frame_rect(frame_size, columns):
+        return frame_rect(current_frame_index(), frame_size, columns)</code></pre></figure>
+<p><code>elapsed * fps</code> converts playback time into a frame number within the animation. At 8 frames per second, 0.25 seconds selects local frame 2. Adding <code>first_frame</code> converts that local number into the sheet&#x27;s cell index.</p>
+<p>For a loop, modulo wraps back to the first frame. For an animation that plays once, <code>min</code> keeps the index on the last frame after the end. These calculations assume non-negative elapsed time.</p>
+<p>The animation frame rate is separate from the game&#x27;s update or rendering rate. Deriving the frame from elapsed time lets playback keep the same speed even if the game performs a different number of updates per second. At a low update rate, some animation frames may be skipped.</p>
+<p><strong>Check:</strong> Play a loop and a one-shot at different update rates. The loop should repeat at the same speed; the one-shot should hold its final frame.</p>
+<h2 id="step-4-switch-animations-without-restarting-every-update">Step 4: switch animations without restarting every update<a class="anchor" href="#step-4-switch-animations-without-restarting-every-update" aria-label="Link to this section">#</a></h2>
+<p>Add <code>play()</code> to select an animation and reset its elapsed time. If that animation is already selected, leave it playing:</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">play(animation):
+    if animation is the current animation:
+        return
+    current = animation
+    elapsed = 0</code></pre></figure>
+<p>Use a stable animation identity for that comparison, such as an ID or a reference to a definition that stays alive. If the animator stores a reference, the definition must outlive its use by the animator.</p>
+<p>The early return matters because the game may request <code>play(run)</code> every update while a movement key is held. Resetting time on every request would keep restarting the animation instead of letting it progress.</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">// In on_update:
+if player.is_dead:
+    animator.play(die)
+else if player.is_jumping:
+    animator.play(jump)
+else if player.is_moving:
+    animator.play(run)
+else:
+    animator.play(idle)
+
+animator.update(delta_seconds)</code></pre></figure>
+<p>This example gives death priority over jumping, and jumping priority over movement. Add other states according to your game&#x27;s rules. If you need to deliberately replay the same animation, provide a separate restart operation or an explicit restart option.</p>
+<p><strong>Check:</strong> Hold a movement key. The run animation should continue rather than repeatedly show its first frame. Releasing the key should start idle.</p>
+<h2 id="step-5-report-when-an-animation-has-finished">Step 5: report when an animation has finished<a class="anchor" href="#step-5-report-when-an-animation-has-finished" aria-label="Link to this section">#</a></h2>
+<p>A one-shot must give its last frame time to be displayed before reporting completion. With <code>frame_count</code> frames shown for <code>1 / fps</code> seconds each, its duration is <code>frame_count / fps</code> seconds.</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">finished():  // requires a selected, valid animation
+    if current.loop:
+        return false
+    return elapsed &gt;= current.frame_count / current.fps</code></pre></figure>
+<p>For example, four frames at 8 frames per second last 0.5 seconds. The last frame starts at 0.375 seconds; the animation finishes at 0.5 seconds. Afterwards, the animator continues returning that last frame until the game selects another animation.</p>
+<p>The game decides what completion means. A shot might return to idle; a death animation might stay on its last frame while the game shows a game-over screen. Check which animation finished before choosing a response.</p>
+<p><strong>Check:</strong> Confirm that a one-shot reports completion only after the last frame&#x27;s display interval. A loop should never report completion.</p>
+<h2 id="step-6-draw-the-selected-frame">Step 6: draw the selected frame<a class="anchor" href="#step-6-draw-the-selected-frame" aria-label="Link to this section">#</a></h2>
+<p>Keep playback updates in <code>on_update</code>. In <code>on_render_world</code>, ask the animator for its current source rectangle and pass it to the renderer:</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">// Select an animation before drawing.
+src = animator.current_frame_rect(frame_size, columns)
+world.draw_sprite(*hero_sheet, src, player.position, player.size)</code></pre></figure>
+<p>The render function no longer needs frame counts, animation speeds or looping calculations. It uses the result of the animator&#x27;s current state.</p>
+<p>For a character that faces both directions, add horizontal flipping after playback works. A negative width in the size passed to <code>draw_sprite</code> draws the sprite mirrored.</p>
+<p><strong>Check:</strong> Confirm that rendering does not advance playback time. Draw two characters with separate animators and check that changing one character&#x27;s animation does not change the other.</p>
+<h2 id="connect-animation-to-gameplay">Connect animation to gameplay<a class="anchor" href="#connect-animation-to-gameplay" aria-label="Link to this section">#</a></h2>
+<p>An animation finishing and a gameplay action finishing are not always the same event. A jump animation may reach its last frame before the character lands. Use the character&#x27;s gameplay state to decide when to leave that animation.</p>
+<div class="tablewrap"><table>
+<thead><tr>
+<th>Animation</th>
+<th>Repeats?</th>
+<th>Example start condition</th>
+<th>Example end behavior</th>
+</tr></thead><tbody>
+<tr><td>Idle</td><td>Yes</td><td>Character is standing still.</td><td>Switch when the character acts.</td></tr>
+<tr><td>Run</td><td>Yes</td><td>Character is moving on the ground.</td><td>Switch when movement or state changes.</td></tr>
+<tr><td>Jump</td><td>No</td><td>Character jumps.</td><td>Hold the last frame if needed; switch on landing.</td></tr>
+<tr><td>Shoot</td><td>No</td><td>Character fires.</td><td>Return to the appropriate state when the animation finishes.</td></tr>
+<tr><td>Die</td><td>No</td><td>Health reaches zero.</td><td>Hold the last frame; let gameplay handle completion.</td></tr>
+</tbody></table></div>
+<h2 id="levels">Levels<a class="anchor" href="#levels" aria-label="Link to this section">#</a></h2>
+<p>Complete the basic level before adding the intermediate and hard features.</p>
+<p><strong>Basic</strong></p>
+<ul class="tasklist">
+<li class="task"><input type="checkbox" disabled> Test <code>frame_rect(index, ...)</code> separately before adding playback.</li>
+<li class="task"><input type="checkbox" disabled> Keep <code>sprite_animation</code> as fixed definition data, without elapsed time.</li>
+<li class="task"><input type="checkbox" disabled> Store elapsed time in the animator and derive the current frame from it.</li>
+<li class="task"><input type="checkbox" disabled> Play looping animations at their defined speeds.</li>
+</ul>
+<p><strong>Intermediate</strong></p>
+<ul class="tasklist">
+<li class="task"><input type="checkbox" disabled> Wrap looping animations and hold the final frame of one-shots.</li>
+<li class="task"><input type="checkbox" disabled> Keep playing when <code>play()</code> requests the current animation again.</li>
+<li class="task"><input type="checkbox" disabled> Use <code>finished()</code> so gameplay can respond to one-shot completion.</li>
+<li class="task"><input type="checkbox" disabled> Keep timing calculations out of <code>on_render_world</code>; use <code>current_frame_rect()</code>.</li>
+</ul>
+<p><strong>Hard</strong></p>
+<ul class="tasklist">
+<li class="task"><input type="checkbox" disabled> Load animation definitions from data, such as a json file per character.</li>
+<li class="task"><input type="checkbox" disabled> Animate layers independently, such as walking legs and a shooting torso.</li>
+</ul>
+<p>See <a href="drawing.html">Drawing in 2D</a> for <a href="../reference/classbuz_1_1renderer__2d.html"><code><span class="ns">buz::</span>renderer_2d::draw_sprite</code></a> and <a href="utilities.html">Utilities</a> for <a href="../reference/structbuz_1_1rect.html"><code><span class="ns">buz::</span>rect</code></a> and the timing helpers.</p>
+    </div>
+    <nav class="toc" aria-labelledby="toc-title"><p class="toc-title" id="toc-title">On this page</p><ol><li><a href="#what-you-will-build">What you will build</a></li><li><a href="#step-1-select-a-frame-without-playing-the-animation">Step 1: select a frame without playing the animation</a></li><li><a href="#step-2-describe-each-animation">Step 2: describe each animation</a></li><li><a href="#step-3-calculate-the-current-frame-from-elapsed-time">Step 3: calculate the current frame from elapsed time</a></li><li><a href="#step-4-switch-animations-without-restarting-every-update">Step 4: switch animations without restarting every update</a></li><li><a href="#step-5-report-when-an-animation-has-finished">Step 5: report when an animation has finished</a></li><li><a href="#step-6-draw-the-selected-frame">Step 6: draw the selected frame</a></li><li><a href="#connect-animation-to-gameplay">Connect animation to gameplay</a></li><li><a href="#levels">Levels</a></li></ol></nav>
+    </div>
+    <nav class="wrap pager" aria-label="Previous and next guide"><a href="../index.html#guides" class="back">&larr; All guides</a><a href="camera-2d.html" class="p" rel="prev"><span class="meta">&larr; Previous</span>A 2D camera</a><a href="sprite-batching.html" class="n" rel="next"><span class="meta">Next &rarr;</span>Sprite batching</a></nav>
+  </article>
+</main>
+<footer class="site-footer">
+  <div class="wrap row">
+    <a href="../index.html" class="mark" aria-label="BuzEngine home">//</a>
+    <p class="who">BuzEngine &middot; Breda University of Applied Sciences &middot; MIT licensed</p>
+    <ul>
+      <li><a href="../guides/getting-started.html">Guides</a></li>
+      <li><a href="../reference/index.html">Reference</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>

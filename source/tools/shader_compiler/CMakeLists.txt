@@ -1,6 +1,5 @@
 MESSAGE(STATUS "Adding tool - shader_compiler")
 ADD_EXECUTABLE(shader_compiler)
-BUZ_TIER(shader_compiler tmpl_2d)
 
 # Sources
 TARGET_SOURCES(shader_compiler PRIVATE

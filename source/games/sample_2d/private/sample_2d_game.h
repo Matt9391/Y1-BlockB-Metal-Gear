@@ -1,7 +1,7 @@
 #pragma once
 
 #include "core/math.h"
-#include "engine/game.h"
+#include "engine/game_2d.h"
 #include "renderer_2d/font.h"
 #include "rhi/texture.h"
 
@@ -15,7 +15,7 @@
 /// on_render_screen() in sample_2d_game.cpp from top to bottom - that is the whole game.
 ///
 /// This is the simplest game in the repo: a good place to start reading.
-class sample_2d_game : public buz::game
+class sample_2d_game : public buz::game_2d
 {
 public:
 	//----------------------------------------------------------

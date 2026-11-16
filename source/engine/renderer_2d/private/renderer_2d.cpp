@@ -16,16 +16,25 @@ namespace
 namespace buz
 {
 	//--------------------------------------------------------------
-	renderer_2d::renderer_2d(sprite_pass& pass)
-		: m_pass(pass)
+	renderer_2d::renderer_2d(const render_context& context)
+		: m_pass(std::make_unique<sprite_pass>(context))
 	{
+	}
+
+	//--------------------------------------------------------------
+	renderer_2d::~renderer_2d() = default;
+
+	//--------------------------------------------------------------
+	sprite_pass& renderer_2d::get_pass() const
+	{
+		return *m_pass;
 	}
 
 	//--------------------------------------------------------------
 	void renderer_2d::draw_sprite(const texture& sprite_texture, vec2 position, vec2 size, float rotation_radians, color tint)
 	{
 		// No source rect given, so the uv rect covers the whole texture
-		m_pass.submit_quad(sprite_texture, { 0.0f, 0.0f, 1.0f, 1.0f }, position, size, rotation_radians, tint);
+		m_pass->submit_quad(sprite_texture, { 0.0f, 0.0f, 1.0f, 1.0f }, position, size, rotation_radians, tint);
 	}
 
 	//--------------------------------------------------------------
@@ -38,14 +47,14 @@ namespace buz
 		const vec2 uv_offset = source_rect.min / texture_size;
 		const vec2 uv_scale = source_rect.size() / texture_size;
 
-		m_pass.submit_quad(sprite_texture, { uv_offset.x, uv_offset.y, uv_scale.x, uv_scale.y }, position, size, rotation_radians, tint);
+		m_pass->submit_quad(sprite_texture, { uv_offset.x, uv_offset.y, uv_scale.x, uv_scale.y }, position, size, rotation_radians, tint);
 	}
 
 	//--------------------------------------------------------------
 	void renderer_2d::draw_rect(rect area, color fill_color)
 	{
 		// A rectangle is just the white texture stretched and tinted
-		m_pass.submit_quad(m_pass.get_white_texture(), { 0.0f, 0.0f, 1.0f, 1.0f }, area.center(), area.size(), 0.0f, fill_color);
+		m_pass->submit_quad(m_pass->get_white_texture(), { 0.0f, 0.0f, 1.0f, 1.0f }, area.center(), area.size(), 0.0f, fill_color);
 	}
 
 	//--------------------------------------------------------------
@@ -70,7 +79,7 @@ namespace buz
 		const float angle = std::atan2(difference.y, difference.x);
 		const vec2 line_center = (from + to) * 0.5f;
 
-		m_pass.submit_quad(m_pass.get_white_texture(), { 0.0f, 0.0f, 1.0f, 1.0f }, line_center, { line_length, thickness }, angle, line_color);
+		m_pass->submit_quad(m_pass->get_white_texture(), { 0.0f, 0.0f, 1.0f, 1.0f }, line_center, { line_length, thickness }, angle, line_color);
 	}
 
 	//--------------------------------------------------------------
@@ -89,20 +98,20 @@ namespace buz
 			corners[segment * 3 + 2] = center + vec2(std::cos(angle_to), std::sin(angle_to)) * radius;
 		}
 
-		m_pass.submit_triangles(corners, fill_color);
+		m_pass->submit_triangles(corners, fill_color);
 	}
 
 	//--------------------------------------------------------------
 	void renderer_2d::draw_triangle(vec2 a, vec2 b, vec2 c, color fill_color)
 	{
 		const vec2 corners[] = { a, b, c };
-		m_pass.submit_triangles(corners, fill_color);
+		m_pass->submit_triangles(corners, fill_color);
 	}
 
 	//--------------------------------------------------------------
 	void renderer_2d::draw_sprite_instances(const texture& sprite_texture, std::span<const sprite_instance> instances)
 	{
-		m_pass.submit_instances(sprite_texture, instances);
+		m_pass->submit_instances(sprite_texture, instances);
 	}
 
 	//--------------------------------------------------------------

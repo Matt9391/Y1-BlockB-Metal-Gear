@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" data-root="../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A 2D camera &middot; BuzEngine guides</title>
+<meta name="description" content="Build a scrolling 2D camera.">
+<meta name="theme-color" content="#1d222d">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="../assets/fonts/nunito-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/montserrat.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/site.css">
+<script>document.documentElement.classList.add('js')</script>
+<script src="../assets/search-index.js" defer></script>
+<script src="../assets/site.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="../index.html"><span class="mark" aria-hidden="true">//</span>Buz<span class="thin">Engine</span></a>
+    <nav class="site-nav" aria-label="Main">
+      <ul>
+        <li><a href="../guides/getting-started.html" aria-current="page">Guides</a></li>
+        <li><a href="../reference/index.html">Reference</a></li>
+        <li><a href="../about.html">About</a></li>
+      </ul>
+    </nav>
+    <div class="tools">
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-controls="search"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.75"/><path d="m10.5 10.5 3.5 3.5"/></svg><span class="label-text">Search</span><kbd>/</kbd></button>
+    </div>
+  </div>
+</header>
+<dialog class="search-dialog" id="search" aria-label="Search the guides and the reference">
+  <div class="search-field">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.75"/><path d="m10.5 10.5 3.5 3.5"/></svg>
+    <label class="visually-hidden" for="search-input">Search the guides and the reference</label>
+    <input id="search-input" type="search" placeholder="Search guides and API" autocomplete="off" spellcheck="false"
+           role="combobox" aria-autocomplete="list" aria-expanded="true" aria-controls="search-results">
+    <span class="esc" aria-hidden="true">Esc</span>
+  </div>
+  <ul class="search-results" id="search-results" role="listbox" aria-label="Results"></ul>
+  <p class="search-hint">Arrow keys to move, Enter to open, Esc to close.</p>
+</dialog>
+<main id="main" tabindex="-1">
+  <article>
+    <header class="wrap page-head">
+      <span class="label">Guided experience</span>
+      <h1>A 2D camera</h1>
+      <p class="lede">Build a scrolling 2D camera.</p>
+    </header>
+    <div class="doc">
+    <aside class="side" aria-label="All guides">
+      <button class="side-toggle" type="button" aria-expanded="false" aria-controls="side-nav"><span>All guides</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></button>
+      <nav class="side-nav" id="side-nav" aria-label="Guides">
+        <div class="side-group"><p class="side-title">Guides</p><ol><li><a href="getting-started.html">Getting started</a></li><li><a href="drawing.html">Drawing in 2D</a></li><li><a href="drawing-3d.html">Drawing in 3D</a></li><li><a href="input.html">Input</a></li><li><a href="textures-and-fonts.html">Textures &amp; fonts</a></li><li><a href="audio.html">Audio</a></li><li><a href="utilities.html">Utilities</a></li><li><a href="diagnostics.html">Diagnostics</a></li><li><a href="json.html">JSON files</a></li><li><a href="models.html">Models</a></li><li><a href="under-the-hood.html">Under the hood</a></li></ol></div>
+        <div class="side-group"><p class="side-title">Guided experiences</p><ol><li><a href="guided-experiences.html">Guided experiences</a></li><li><a href="camera-2d.html" aria-current="page">A 2D camera</a></li><li><a href="sprite-animation.html">Sprite animation</a></li><li><a href="sprite-batching.html">Sprite batching</a></li><li><a href="animation-player.html">An animation player</a></li><li><a href="collision.html">Collision</a></li><li><a href="asset-cache.html">An asset cache</a></li></ol></div>
+      </nav>
+    </aside>
+    <div class="prose">
+<blockquote class="note"><p><strong>Guided exercise:</strong> Write the camera yourself (see <a href="guided-experiences.html">Guided experiences</a>). The world renderer accepts camera matrices; you will build the camera that supplies them and controls the view.</p></blockquote>
+<h2 id="what-you-will-build">What you will build<a class="anchor" href="#what-you-will-build" aria-label="Link to this section">#</a></h2>
+<p>A side-scrolling level can be much wider than the game window. The camera chooses which part of that level is visible. Moving the camera should change the view without changing the positions of objects in the level.</p>
+<p>You will first build a camera that follows the player, then keep it within the level bounds and use it to convert mouse coordinates.</p>
+<h2 id="world-positions-and-screen-positions">World positions and screen positions<a class="anchor" href="#world-positions-and-screen-positions" aria-label="Link to this section">#</a></h2>
+<p>There are two coordinate spaces to keep separate:</p>
+<div class="tablewrap"><table>
+<thead><tr>
+<th>Space</th>
+<th>What a position means</th>
+<th>Examples</th>
+<th>Render function</th>
+</tr></thead><tbody>
+<tr><td>World</td><td>A position relative to a fixed origin in the level.</td><td>Player, enemies, bullets, terrain.</td><td><code>on_render_world</code></td></tr>
+<tr><td>Screen</td><td>A position in window pixels, measured from the top-left.</td><td>Score, health and menus.</td><td><code>on_render_screen</code></td></tr>
+</tbody></table></div>
+<p>Without a camera, <a href="../reference/classbuz_1_1world__renderer__2d.html"><code><span class="ns">buz::</span>world_renderer_2d</code></a> also draws in window pixels. Once you set a camera, it transforms world positions into the view. <a href="../reference/classbuz_1_1screen__renderer.html"><code><span class="ns">buz::</span>screen_renderer</code></a> ignores the world camera, so the hud stays in place.</p>
+<p>For a camera without zoom or rotation, the conversion is a subtraction. If the view starts at world x = 4800, an enemy at world x = 5000 appears at screen x = 200:</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">screen_pos = world_pos - camera_top_left
+world_pos  = screen_pos + camera_top_left</code></pre></figure>
+<p>Keep the enemy&#x27;s stored position at x = 5000. Apply the camera when drawing rather than changing the enemy&#x27;s position to scroll the level.</p>
+<h2 id="step-1-store-the-camera-s-center-and-viewport-size">Step 1: store the camera&#x27;s center and viewport size<a class="anchor" href="#step-1-store-the-camera-s-center-and-viewport-size" aria-label="Link to this section">#</a></h2>
+<p>In this exercise, <code>position</code> means the world point at the center of the camera&#x27;s view. The <strong>viewport</strong> is the window area you draw into, measured in pixels. Initially, one world unit occupies one pixel.</p>
+<p>Subtract half the viewport size from the center to find the top-left corner of the view. The following examples are pseudocode:</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">struct camera_2d:
+    vec2 position
+    vec2 viewport
+
+    top_left():
+        return position - viewport * 0.5
+
+    world_to_screen(world_pos):
+        return world_pos - top_left()
+
+    screen_to_world(screen_pos):
+        return screen_pos + top_left()</code></pre></figure>
+<p><strong>Check:</strong> With a 1280 by 720 viewport and the camera centered at <code>(640, 360)</code>, <code>top_left()</code> should return <code>(0, 0)</code>. Converting the camera&#x27;s center to screen space should return <code>(640, 360)</code> regardless of where the camera is in the level.</p>
+<h2 id="step-2-give-the-renderer-the-camera-matrices">Step 2: give the renderer the camera matrices<a class="anchor" href="#step-2-give-the-renderer-the-camera-matrices" aria-label="Link to this section">#</a></h2>
+<p><a href="../reference/classbuz_1_1world__renderer__2d.html"><code><span class="ns">buz::</span>world_renderer_2d::set_camera</code></a> takes a view matrix and a projection matrix. They perform two parts of the conversion:</p>
+<ul>
+<li>The <strong>view matrix</strong> shifts world positions relative to the camera. Here, it translates them by <code>-top_left()</code>.</li>
+<li>The <strong>projection matrix</strong> converts the resulting pixel coordinates into the coordinate system used by the gpu. Build it with <code><span class="ns">buz::</span>make_orthographic_projection</code> using the viewport size.</li>
+</ul>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">view():
+    return translate(identity, vec3(-top_left(), 0))  // glm::translate
+
+// In on_render_world, before drawing the level:
+projection = make_orthographic_projection(viewport.x, viewport.y)
+world.set_camera(camera.view(), projection)
+world.draw_sprite(*enemy_texture, enemy.position, enemy.size)</code></pre></figure>
+<p>Continue passing world positions to <code>draw_sprite</code>; the camera matrix applies the offset. Do not also subtract it in the draw call. Update the viewport size and projection when the window size changes.</p>
+<p><strong>Check:</strong> Move only the camera. World objects should move across the window, while the hud drawn in <code>on_render_screen</code> stays in place.</p>
+<h2 id="step-3-follow-the-player">Step 3: follow the player<a class="anchor" href="#step-3-follow-the-player" aria-label="Link to this section">#</a></h2>
+<p>Start by setting the camera&#x27;s center to the player&#x27;s position in <code>on_update</code>:</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">camera.position = player.position</code></pre></figure>
+<p>This keeps the player at the center of the view. Once it works, try smoothing or a dead zone to reduce camera movement.</p>
+<h3 id="smooth-following">Smooth following<a class="anchor" href="#smooth-following" aria-label="Link to this section">#</a></h3>
+<p>Interpolation moves the camera part of the way towards the target:</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">camera.position = lerp(camera.position, player.position, amount)</code></pre></figure>
+<p><code>lerp(a, b, amount)</code> means <code>a + (b - a) * amount</code>; glm calls this operation <code>glm::mix</code>. An amount of 0 keeps the old position, while 1 moves directly to the target.</p>
+<p>Using a fixed amount such as 0.1 every update makes the response depend on the frame rate. For the intermediate level, make the amount depend on <code>delta_seconds</code>. One option is:</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">amount = 1 - exp(-follow_speed * delta_seconds)
+camera.position = lerp(camera.position, player.position, amount)</code></pre></figure>
+<p>Use a positive <code>follow_speed</code>; larger values make the camera catch up more quickly. Compare the response at different frame rates.</p>
+<h3 id="a-dead-zone">A dead zone<a class="anchor" href="#a-dead-zone" aria-label="Link to this section">#</a></h3>
+<p>A <strong>dead zone</strong> is a rectangle inside which the player can move without moving the camera. If the player leaves it, move the camera just enough to bring the player back to its edge. Adjust x and y independently.</p>
+<p>You can build the rectangle with <code><span class="ns">buz::</span>rect_from_center_size</code>. Choose one coordinate space for the test: for example, make the rectangle in screen space and convert the player&#x27;s position with <code>world_to_screen</code>.</p>
+<p><strong>Check:</strong> With direct following, the player stays centered. With smoothing, the camera catches up. With a dead zone, small movements inside the rectangle leave the camera still.</p>
+<h2 id="step-4-keep-the-view-within-the-level">Step 4: keep the view within the level<a class="anchor" href="#step-4-keep-the-view-within-the-level" aria-label="Link to this section">#</a></h2>
+<p>Following the player near the edge can reveal space outside the level. After updating the camera position, clamp its center so half the view fits on either side:</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">// level_bounds is a rectangle in world space
+for each axis in x, y:
+    half_view = viewport[axis] * 0.5
+    min_center = level_bounds.min[axis] + half_view
+    max_center = level_bounds.max[axis] - half_view
+
+    if min_center &lt;= max_center:
+        camera.position[axis] = clamp(camera.position[axis], min_center, max_center)
+    else:
+        camera.position[axis] = (level_bounds.min[axis] + level_bounds.max[axis]) * 0.5</code></pre></figure>
+<p>Use <code><span class="ns">buz::</span>clamp</code> for the valid range. If the level is smaller than the viewport on an axis, there is no position that keeps the whole view inside it. Center the level on that axis instead of passing an inverted range to <code>clamp</code>.</p>
+<p><strong>Check:</strong> Visit all edges and corners. Also test a level smaller than the viewport and resize the window.</p>
+<h2 id="step-5-convert-the-mouse-position">Step 5: convert the mouse position<a class="anchor" href="#step-5-convert-the-mouse-position" aria-label="Link to this section">#</a></h2>
+<p><a href="../reference/classbuz_1_1input.html"><code><span class="ns">buz::</span>input</code></a> reports the mouse position in window pixels. Convert it with <code>screen_to_world</code> before comparing it with world objects:</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">mouse_world = camera.screen_to_world(mouse_screen)</code></pre></figure>
+<p>Use the camera settings that correspond to the displayed view. Mouse tests against screen-space UI should continue using screen coordinates.</p>
+<p><strong>Check:</strong> Click the same world object with the camera in several positions. The hit test should keep matching what is drawn.</p>
+<h2 id="extensions">Extensions<a class="anchor" href="#extensions" aria-label="Link to this section">#</a></h2>
+<h3 id="zoom">Zoom<a class="anchor" href="#zoom" aria-label="Link to this section">#</a></h3>
+<p>Zoom changes how much of the world fits in the viewport. If <code>zoom = 2</code> means drawing objects twice as large, the visible world size becomes <code>viewport / zoom</code>.</p>
+<p>For a positive zoom and no camera rotation, derive the view&#x27;s top-left from that visible size. Translate the world by the negative top-left, then scale by zoom. Update both coordinate conversions too:</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">screen_pos = (world_pos - top_left) * zoom
+world_pos  = screen_pos / zoom + top_left</code></pre></figure>
+<p>Use the visible world size for level clamping. Test zoom, edge clamping and mouse picking together.</p>
+<h3 id="parallax-backgrounds">Parallax backgrounds<a class="anchor" href="#parallax-backgrounds" aria-label="Link to this section">#</a></h3>
+<p>Parallax makes distant layers scroll more slowly than the gameplay layer. Without zoom, scale the camera offset for each background:</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">view_parallax(factor):
+    return translate(identity, vec3(-top_left() * factor, 0))
+
+world.set_camera(camera.view_parallax(0.3), projection)
+world.draw_sprite(...)  // distant hills
+
+world.set_camera(camera.view(), projection)
+world.draw_sprite(...)  // gameplay layer</code></pre></figure>
+<p>A factor of 1 uses the normal world offset, 0.5 scrolls at half that speed and 0 leaves the layer fixed relative to the window. Set the appropriate camera before drawing each layer.</p>
+<h3 id="pixel-snapping">Pixel snapping<a class="anchor" href="#pixel-snapping" aria-label="Link to this section">#</a></h3>
+<p>For pixel art, try rounding or flooring the camera&#x27;s drawing offset to whole pixels. Fractional offsets can make the image shimmer as it moves. Keep mouse conversion consistent with the offset actually used to draw. If you add zoom, check alignment in screen pixels rather than assuming whole world coordinates will still align with them.</p>
+<h2 id="levels">Levels<a class="anchor" href="#levels" aria-label="Link to this section">#</a></h2>
+<p>Complete the basic level before adding the intermediate and hard features.</p>
+<p><strong>Basic</strong></p>
+<ul class="tasklist">
+<li class="task"><input type="checkbox" disabled> Draw world objects through the camera in <code>on_render_world</code> and the hud in <code>on_render_screen</code>.</li>
+<li class="task"><input type="checkbox" disabled> Make the camera follow the player; direct following is sufficient.</li>
+<li class="task"><input type="checkbox" disabled> Keep the view within the level bounds when the level is large enough.</li>
+</ul>
+<p><strong>Intermediate</strong></p>
+<ul class="tasklist">
+<li class="task"><input type="checkbox" disabled> Add frame-rate-independent smoothing or a dead zone.</li>
+<li class="task"><input type="checkbox" disabled> Handle levels smaller than the viewport.</li>
+<li class="task"><input type="checkbox" disabled> Convert mouse positions with <code>screen_to_world</code> before testing world objects.</li>
+</ul>
+<p><strong>Hard</strong></p>
+<ul class="tasklist">
+<li class="task"><input type="checkbox" disabled> Add zoom while keeping clamping and mouse conversion correct.</li>
+<li class="task"><input type="checkbox" disabled> Add parallax background layers.</li>
+<li class="task"><input type="checkbox" disabled> Snap the drawing offset to pixels for crisp pixel art.</li>
+</ul>
+<p>See <a href="drawing.html">Drawing in 2D</a> for drawing sprites and <a href="utilities.html">Utilities</a> for <code><span class="ns">buz::</span>clamp</code> and <a href="../reference/structbuz_1_1rect.html"><code><span class="ns">buz::</span>rect</code></a>.</p>
+    </div>
+    <nav class="toc" aria-labelledby="toc-title"><p class="toc-title" id="toc-title">On this page</p><ol><li><a href="#what-you-will-build">What you will build</a></li><li><a href="#world-positions-and-screen-positions">World positions and screen positions</a></li><li><a href="#step-1-store-the-camera-s-center-and-viewport-size">Step 1: store the camera&#x27;s center and viewport size</a></li><li><a href="#step-2-give-the-renderer-the-camera-matrices">Step 2: give the renderer the camera matrices</a></li><li><a href="#step-3-follow-the-player">Step 3: follow the player</a><ol><li><a href="#smooth-following">Smooth following</a></li><li><a href="#a-dead-zone">A dead zone</a></li></ol></li><li><a href="#step-4-keep-the-view-within-the-level">Step 4: keep the view within the level</a></li><li><a href="#step-5-convert-the-mouse-position">Step 5: convert the mouse position</a></li><li><a href="#extensions">Extensions</a><ol><li><a href="#zoom">Zoom</a></li><li><a href="#parallax-backgrounds">Parallax backgrounds</a></li><li><a href="#pixel-snapping">Pixel snapping</a></li></ol></li><li><a href="#levels">Levels</a></li></ol></nav>
+    </div>
+    <nav class="wrap pager" aria-label="Previous and next guide"><a href="../index.html#guides" class="back">&larr; All guides</a><a href="guided-experiences.html" class="p" rel="prev"><span class="meta">&larr; Previous</span>Guided experiences</a><a href="sprite-animation.html" class="n" rel="next"><span class="meta">Next &rarr;</span>Sprite animation</a></nav>
+  </article>
+</main>
+<footer class="site-footer">
+  <div class="wrap row">
+    <a href="../index.html" class="mark" aria-label="BuzEngine home">//</a>
+    <p class="who">BuzEngine &middot; Breda University of Applied Sciences &middot; MIT licensed</p>
+    <ul>
+      <li><a href="../guides/getting-started.html">Guides</a></li>
+      <li><a href="../reference/index.html">Reference</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>

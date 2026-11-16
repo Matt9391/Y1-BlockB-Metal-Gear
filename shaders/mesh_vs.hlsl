@@ -26,9 +26,14 @@ struct mesh_constants
     float4x4 world_view_projection;
 
     // Rows of the matrix that turns object space normals into world space
-    // (the inverse transpose of the world matrix). normal_rows[0].w is 1
-    // when the mesh is lit.
-    float4 normal_rows[3];
+    // (the inverse transpose of the world matrix). Constants are read in
+    // rows of four floats, so each float3 shares its row with one setting.
+    float3 normal_row_0;
+    float lit;          // 1 when the scene's light shades the mesh, 0 when not
+    float3 normal_row_1;
+    float alpha_cutoff; // pixels with less alpha are not drawn (material::alpha_cutoff)
+    float3 normal_row_2;
+    float padding;      // fills the last row
 
     float4 base_color;
 };
@@ -37,7 +42,7 @@ struct mesh_constants
 
 pixel_input main(vertex_input input)
 {
-    const float3x3 normal_matrix = float3x3(constants.normal_rows[0].xyz, constants.normal_rows[1].xyz, constants.normal_rows[2].xyz);
+    const float3x3 normal_matrix = float3x3(constants.normal_row_0, constants.normal_row_1, constants.normal_row_2);
 
     pixel_input output;
     output.position = mul(constants.world_view_projection, float4(input.position, 1.0f));

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" data-root="../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sprite batching &middot; BuzEngine guides</title>
+<meta name="description" content="Draw thousands of sprites with a handful of draw calls.">
+<meta name="theme-color" content="#1d222d">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="../assets/fonts/nunito-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/montserrat.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/site.css">
+<script>document.documentElement.classList.add('js')</script>
+<script src="../assets/search-index.js" defer></script>
+<script src="../assets/site.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="../index.html"><span class="mark" aria-hidden="true">//</span>Buz<span class="thin">Engine</span></a>
+    <nav class="site-nav" aria-label="Main">
+      <ul>
+        <li><a href="../guides/getting-started.html" aria-current="page">Guides</a></li>
+        <li><a href="../reference/index.html">Reference</a></li>
+        <li><a href="../about.html">About</a></li>
+      </ul>
+    </nav>
+    <div class="tools">
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-controls="search"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.75"/><path d="m10.5 10.5 3.5 3.5"/></svg><span class="label-text">Search</span><kbd>/</kbd></button>
+    </div>
+  </div>
+</header>
+<dialog class="search-dialog" id="search" aria-label="Search the guides and the reference">
+  <div class="search-field">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.75"/><path d="m10.5 10.5 3.5 3.5"/></svg>
+    <label class="visually-hidden" for="search-input">Search the guides and the reference</label>
+    <input id="search-input" type="search" placeholder="Search guides and API" autocomplete="off" spellcheck="false"
+           role="combobox" aria-autocomplete="list" aria-expanded="true" aria-controls="search-results">
+    <span class="esc" aria-hidden="true">Esc</span>
+  </div>
+  <ul class="search-results" id="search-results" role="listbox" aria-label="Results"></ul>
+  <p class="search-hint">Arrow keys to move, Enter to open, Esc to close.</p>
+</dialog>
+<main id="main" tabindex="-1">
+  <article>
+    <header class="wrap page-head">
+      <span class="label">Guided experience</span>
+      <h1>Sprite batching</h1>
+      <p class="lede">Draw thousands of sprites with a handful of draw calls.</p>
+    </header>
+    <div class="doc">
+    <aside class="side" aria-label="All guides">
+      <button class="side-toggle" type="button" aria-expanded="false" aria-controls="side-nav"><span>All guides</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></button>
+      <nav class="side-nav" id="side-nav" aria-label="Guides">
+        <div class="side-group"><p class="side-title">Guides</p><ol><li><a href="getting-started.html">Getting started</a></li><li><a href="drawing.html">Drawing in 2D</a></li><li><a href="drawing-3d.html">Drawing in 3D</a></li><li><a href="input.html">Input</a></li><li><a href="textures-and-fonts.html">Textures &amp; fonts</a></li><li><a href="audio.html">Audio</a></li><li><a href="utilities.html">Utilities</a></li><li><a href="diagnostics.html">Diagnostics</a></li><li><a href="json.html">JSON files</a></li><li><a href="models.html">Models</a></li><li><a href="under-the-hood.html">Under the hood</a></li></ol></div>
+        <div class="side-group"><p class="side-title">Guided experiences</p><ol><li><a href="guided-experiences.html">Guided experiences</a></li><li><a href="camera-2d.html">A 2D camera</a></li><li><a href="sprite-animation.html">Sprite animation</a></li><li><a href="sprite-batching.html" aria-current="page">Sprite batching</a></li><li><a href="animation-player.html">An animation player</a></li><li><a href="collision.html">Collision</a></li><li><a href="asset-cache.html">An asset cache</a></li></ol></div>
+      </nav>
+    </aside>
+    <div class="prose">
+<blockquote class="note"><p><strong>Guided exercise:</strong> Write the sprite batcher yourself (see <a href="guided-experiences.html">Guided experiences</a>). The engine provides <a href="../reference/classbuz_1_1renderer__2d.html"><code><span class="ns">buz::</span>renderer_2d::draw_sprite_instances</code></a> to draw several sprites in one call. Your batcher will collect sprites and decide which can be drawn together.</p></blockquote>
+<h2 id="what-you-will-build">What you will build<a class="anchor" href="#what-you-will-build" aria-label="Link to this section">#</a></h2>
+<p>In this renderer, each <a href="../reference/classbuz_1_1renderer__2d.html"><code><span class="ns">buz::</span>renderer_2d::draw_sprite</code></a> call produces a draw call. A tile map drawn one tile at a time can therefore produce hundreds or thousands of calls per frame. Preparing those calls takes cpu time, even when each sprite is small.</p>
+<p>In <a href="drawing.html">Drawing in 2D</a>, you used instancing to draw a list of sprites in one call. All sprites in that list share a texture, but each can have its own position, size, tint and source rectangle.</p>
+<p>A <strong>sprite batcher</strong> builds these lists for the game. Instead of drawing each sprite immediately, it queues the sprite. When you <strong>flush</strong> the batcher, it submits the queued sprites using <code>draw_sprite_instances</code>. Each submitted group is a <strong>batch</strong>.</p>
+<p>The main constraint is draw order. Later sprites cover earlier sprites, so grouping them must not change which objects appear in front.</p>
+<h2 id="step-1-measure-the-current-draw-calls">Step 1: measure the current draw calls<a class="anchor" href="#step-1-measure-the-current-draw-calls" aria-label="Link to this section">#</a></h2>
+<p>Press F3 while the game runs to open the stats overlay. Record the draw call count before changing the renderer.</p>
+<div class="tablewrap"><table>
+<thead><tr>
+<th>Counter</th>
+<th>What it tells you</th>
+</tr></thead><tbody>
+<tr><td>Draw calls</td><td>How many drawing commands were submitted this frame.</td></tr>
+<tr><td>Instances</td><td>How many instances those commands drew in total.</td></tr>
+</tbody></table></div>
+<p>After batching, the same scene should need fewer draw calls while drawing the same sprites. A lower draw-call count may improve performance, but it does not guarantee a higher frame rate if something else limits the game.</p>
+<h2 id="step-2-group-consecutive-sprites-that-share-a-texture">Step 2: group consecutive sprites that share a texture<a class="anchor" href="#step-2-group-consecutive-sprites-that-share-a-texture" aria-label="Link to this section">#</a></h2>
+<p>Start with a batcher that preserves the exact order in which sprites are queued. Add each sprite to the current batch if its texture matches. Otherwise, start a new batch. This groups a consecutive <strong>run</strong> of sprites using the same texture.</p>
+<p>For example, suppose the queue is:</p>
+<div class="tablewrap"><table>
+<thead><tr>
+<th>Queue order</th>
+<th>Texture</th>
+<th>Batch</th>
+</tr></thead><tbody>
+<tr><td>Ground tile</td><td>Tileset</td><td>1</td></tr>
+<tr><td>Another ground tile</td><td>Tileset</td><td>1</td></tr>
+<tr><td>Player</td><td>Character sheet</td><td>2</td></tr>
+<tr><td>Crate in front of the player</td><td>Tileset</td><td>3</td></tr>
+</tbody></table></div>
+<p>The two ground tiles can share a draw call. The crate needs another batch, even though it uses the tileset too: it must be drawn after the player. Combining it with the ground tiles would put it behind the player.</p>
+<p>Use this structure as a starting point. The example is pseudocode:</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">batch:
+    texture
+    sprites
+
+batcher:
+    batches
+
+    draw(texture, sprite):
+        if batches is empty or the last batch uses another texture:
+            start a new batch with this texture
+        add sprite to the last batch
+
+    flush(renderer):
+        for each batch, in queue order:
+            renderer.draw_sprite_instances(batch.texture, batch.sprites)
+        reset the queue for the next frame</code></pre></figure>
+<p>There is one draw call per run: the first run plus a new one each time the texture changes. A whole tile layer queued together can use one call if all its tiles use the same texture.</p>
+<p><strong>Check:</strong> Queue the four sprites above. You should get three batches, and the crate should still cover the player where they overlap.</p>
+<h2 id="step-3-choose-storage-and-ownership">Step 3: choose storage and ownership<a class="anchor" href="#step-3-choose-storage-and-ownership" aria-label="Link to this section">#</a></h2>
+<p>Decide how to store the sprites and their batches:</p>
+<ul>
+<li>One <code>std::vector</code> of sprites per batch is the simplest, but those vectors must survive between frames if you want to reuse their storage.</li>
+<li>One <code>std::vector</code> for all sprites, plus batches recording a texture and a <code>(first, count)</code> range, lets you reuse two containers.</li>
+</ul>
+<p>Calling <code>clear()</code> on a vector keeps that vector&#x27;s capacity. However, clearing a vector of batches destroys its batch objects, including any sprite vectors inside them. Clearing the outer vector will not preserve those inner allocations.</p>
+<p>Also decide how textures stay alive. A texture has to exist when the flush passes it to <code>draw_sprite_instances</code>; after that call you may release it, even in the same frame, because the engine keeps the gpu&#x27;s copy until the gpu has finished drawing with it. If the batcher stores references or raw pointers, another object must keep the textures alive until the flush. Textures your game keeps for the whole level already are. Storing shared pointers in the queue keeps them alive without relying on that.</p>
+<p>Your <code>draw()</code> interface can accept a <a href="../reference/structbuz_1_1sprite__instance.html"><code><span class="ns">buz::</span>sprite_instance</code></a> or parameters similar to <code>draw_sprite</code>. Choose the form that makes calls from the game easy to read.</p>
+<p><strong>Check:</strong> Fill and flush the queue repeatedly. Once enough capacity has been reserved, drawing within that capacity should not allocate each frame.</p>
+<h2 id="step-4-use-the-batcher-in-the-game">Step 4: use the batcher in the game<a class="anchor" href="#step-4-use-the-batcher-in-the-game" aria-label="Link to this section">#</a></h2>
+<p>Queue visible tiles in the order they should be drawn, then queue the characters and other sprites in their required order. Flush at the end of the render pass, while its renderer and camera settings are still active.</p>
+<p>For the initial version, keep everything in one world render pass with one camera. Flush before changing cameras, before the screen pass, and before any direct <code>draw_sprite</code> call (one that skips the batcher) that must appear on top of the queued sprites. Otherwise, delaying the queued draws can change the result.</p>
+<p>Only queue tiles that intersect the camera&#x27;s visible area. Skipping objects outside the view is called <strong>culling</strong>. It avoids storing and submitting sprites that cannot contribute to the image.</p>
+<p><strong>Check:</strong> Scroll through the level. A tile at the edge should be drawn as soon as any part of it is inside the window, so no gaps appear, and tiles fully outside the view should not be queued. Check foreground objects and any immediate drawing for ordering mistakes.</p>
+<h2 id="step-5-compare-the-result">Step 5: compare the result<a class="anchor" href="#step-5-compare-the-result" aria-label="Link to this section">#</a></h2>
+<p>Return to the same scene and camera position used for the first measurement. Open the stats overlay and compare the draw-call counts. Save before and after screenshots showing both the scene and the counters.</p>
+<p>A contiguous layer using one texture now needs one call instead of one per tile. The total depends on how often textures change in the queue; it is not necessarily one call per texture or per layer. Adjacent layers using the same texture may even share a batch.</p>
+<p><strong>Check:</strong> Confirm that the image still looks the same. Reducing draw calls is only useful if the batcher preserves the intended drawing.</p>
+<h2 id="going-further-layers-and-text">Going further: layers and text<a class="anchor" href="#going-further-layers-and-text" aria-label="Link to this section">#</a></h2>
+<p>For layers, give sprites an explicit layer number. A stable sort by <strong>layer only</strong> preserves queue order among sprites with the same layer. You can then batch consecutive runs within the sorted queue.</p>
+<p>Sorting by both layer and texture can reduce draw calls further, but it reorders sprites of different textures within a layer. <code>std::stable_sort</code> only preserves order for entries that compare equal under the comparator; it does not undo this texture reordering. Use it only where reordering is safe, such as non-overlapping sprites. Keep queue order where overlap matters.</p>
+<p>For text, each character is a sprite using a region of the font atlas. Build a text routine that queues those character sprites through the batcher, including their positions, source rectangles and colors.</p>
+<h2 id="levels">Levels<a class="anchor" href="#levels" aria-label="Link to this section">#</a></h2>
+<p>Complete the basic level before adding the intermediate and hard features.</p>
+<p><strong>Basic</strong></p>
+<ul class="tasklist">
+<li class="task"><input type="checkbox" disabled> Draw tiles with <code>draw_sprite_instances</code>, grouping each contiguous layer that uses one texture into a single call.</li>
+<li class="task"><input type="checkbox" disabled> Measure draw calls before and after the change.</li>
+</ul>
+<p><strong>Intermediate</strong></p>
+<ul class="tasklist">
+<li class="task"><input type="checkbox" disabled> Build a batcher that groups consecutive sprites by texture and flushes at the end of the render pass.</li>
+<li class="task"><input type="checkbox" disabled> Reuse container capacity so drawing within the reserved capacity does not allocate each frame.</li>
+<li class="task"><input type="checkbox" disabled> Queue only tiles that intersect the camera&#x27;s view.</li>
+</ul>
+<p><strong>Hard</strong></p>
+<ul class="tasklist">
+<li class="task"><input type="checkbox" disabled> Support layers, preserving queue order where required and grouping by texture only where reordering is safe.</li>
+<li class="task"><input type="checkbox" disabled> Draw text through the batcher too.</li>
+</ul>
+    </div>
+    <nav class="toc" aria-labelledby="toc-title"><p class="toc-title" id="toc-title">On this page</p><ol><li><a href="#what-you-will-build">What you will build</a></li><li><a href="#step-1-measure-the-current-draw-calls">Step 1: measure the current draw calls</a></li><li><a href="#step-2-group-consecutive-sprites-that-share-a-texture">Step 2: group consecutive sprites that share a texture</a></li><li><a href="#step-3-choose-storage-and-ownership">Step 3: choose storage and ownership</a></li><li><a href="#step-4-use-the-batcher-in-the-game">Step 4: use the batcher in the game</a></li><li><a href="#step-5-compare-the-result">Step 5: compare the result</a></li><li><a href="#going-further-layers-and-text">Going further: layers and text</a></li><li><a href="#levels">Levels</a></li></ol></nav>
+    </div>
+    <nav class="wrap pager" aria-label="Previous and next guide"><a href="../index.html#guides" class="back">&larr; All guides</a><a href="sprite-animation.html" class="p" rel="prev"><span class="meta">&larr; Previous</span>Sprite animation</a><a href="animation-player.html" class="n" rel="next"><span class="meta">Next &rarr;</span>An animation player</a></nav>
+  </article>
+</main>
+<footer class="site-footer">
+  <div class="wrap row">
+    <a href="../index.html" class="mark" aria-label="BuzEngine home">//</a>
+    <p class="who">BuzEngine &middot; Breda University of Applied Sciences &middot; MIT licensed</p>
+    <ul>
+      <li><a href="../guides/getting-started.html">Guides</a></li>
+      <li><a href="../reference/index.html">Reference</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>

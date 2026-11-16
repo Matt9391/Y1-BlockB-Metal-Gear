@@ -90,7 +90,6 @@ SET(CMAKE_DEBUG_POSTFIX _d)
 SET(SOURCE_ENGINE_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/source/engine)
 SET(SOURCE_TOOLS_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/source/tools)
 SET(SOURCE_GAMES_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/source/games)
-SET(SOURCE_TESTS_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/source/tests)
 SET(SOURCE_THIRDPARTY_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/source/third_party)
 SET(SOURCE_SHADER_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/shaders)
 
@@ -101,7 +100,7 @@ INCLUDE(group_sources)       # GROUPSOURCES: mirror a folder tree as IDE filters
 INCLUDE(compile_shaders)     # BUZ_COMPILE_SHADERS: compile the /shaders hlsl files
 INCLUDE(copy_content)        # copy-content: copy /content next to the executable
 INCLUDE(check_stray_sources) # warn about source files accidentally created in build/
-INCLUDE(buz_tiers)          # BUZ_TIER: which student template a target ships in
+INCLUDE(buz_checks)         # BUZ_CHECK_INTERNAL_LINKS: games use public headers only
 INCLUDE(buz_compile_options) # BUZ_COMPILE_OPTIONS: the settings of buz's own targets
 INCLUDE(buz_module)         # BUZ_MODULE: one engine module, one static library
 INCLUDE(buz_game)           # BUZ_GAME: one game, one executable
@@ -119,16 +118,9 @@ IF(NOT EMSCRIPTEN)
 ENDIF()
 ADD_SUBDIRECTORY(${SOURCE_GAMES_DIRECTORY})
 
-# The unit tests (staff only, so templates have no tests folder): run them
-# with ctest --test-dir build -C Debug
-IF(EXISTS ${SOURCE_TESTS_DIRECTORY} AND NOT EMSCRIPTEN)
-    ENABLE_TESTING()
-    ADD_SUBDIRECTORY(${SOURCE_TESTS_DIRECTORY})
-ENDIF()
 
-# Refuse to configure when a target has no tier, or links a target of a
-# higher tier (see cmake/buz_tiers.cmake).
-BUZ_CHECK_TIERS()
+# Refuse to configure when a game links an engine module's internal headers
+BUZ_CHECK_INTERNAL_LINKS()
 
 # Make the simple starter game the startup project when opening the solution in
 # Visual Studio; right-click a different game and "Set as Startup Project" to

@@ -2,7 +2,8 @@
 // Mesh pixel shader
 //
 // A texture (white when the material has none) times the material color,
-// lit by one directional light.
+// lit by one directional light. Pixels with less alpha than the material's
+// cutoff are not drawn.
 //--------------------------------------------------------------
 
 struct pixel_input
@@ -16,7 +17,12 @@ struct pixel_input
 struct mesh_constants
 {
     float4x4 world_view_projection;
-    float4 normal_rows[3];
+    float3 normal_row_0;
+    float lit;
+    float3 normal_row_1;
+    float alpha_cutoff;
+    float3 normal_row_2;
+    float padding;
     float4 base_color;
 };
 
@@ -32,9 +38,16 @@ static const float k_ambient = 0.35f;
 
 float4 main(pixel_input input) : SV_TARGET
 {
-    const bool lit = constants.normal_rows[0].w > 0.5f;
+    const bool lit = constants.lit > 0.5f;
 
     float4 color = mesh_texture.Sample(mesh_sampler, input.uv) * constants.base_color;
+
+    // A see-through part of the texture, like the gaps in a railing: skip
+    // the pixel, so whatever is behind it stays visible
+    if (color.a < constants.alpha_cutoff)
+    {
+        discard;
+    }
 
     if (lit)
     {

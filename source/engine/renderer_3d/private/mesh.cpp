@@ -1,8 +1,8 @@
 #include "gpu_mesh.h"
 
 #include "core/log.h"
-#include "engine/engine.h"
 #include "renderer_3d.h"
+#include "renderer_3d/model_loading.h"
 #include "rhi/buffer.h"
 #include "rhi/device.h"
 #include "rhi/render_context.h"
@@ -71,9 +71,9 @@ namespace buz
 	}
 
 	//--------------------------------------------------------------
-	std::shared_ptr<mesh> create_mesh(engine& engine, std::span<const mesh_vertex> vertices, std::span<const uint32_t> indices)
+	std::shared_ptr<mesh> create_mesh(const render_context& context, std::span<const mesh_vertex> vertices, std::span<const uint32_t> indices)
 	{
-		return upload_mesh(engine.get_render_context(), vertices, indices);
+		return upload_mesh(context, vertices, indices);
 	}
 
 	//--------------------------------------------------------------

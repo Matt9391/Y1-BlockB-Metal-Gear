@@ -4,6 +4,6 @@
 # import: meshes, whole models with their node hierarchy (levels, and
 # characters made of rigid parts) and their animations, sampled into poses.
 # Playing those poses back is the students' job.
-BUZ_MODULE(renderer_3d TIER tmpl_3d
+BUZ_MODULE(renderer_3d
            PUBLIC_DEPS buz_core buz_rhi yesno
-           PRIVATE_DEPS buz_core_internal buz_engine buz_rhi_internal cgltf)
+           PRIVATE_DEPS buz_core_internal buz_rhi_internal cgltf)
