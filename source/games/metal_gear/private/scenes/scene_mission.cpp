@@ -8,37 +8,28 @@
 
 std::vector<buz::mat4> mats4;
 
-scene_mission::scene_mission(scene_type this_scene, scene_type next_scene, asset_cache& asset_cache_) :
-    scene(this_scene,next_scene, asset_cache_),
-	m_camera(60.f, {0.f, 5.f, 10.f}),
-	m_model(get_asset_cache().get_model("models/soldier.glb"))
+scene_mission::scene_mission(scene_type this_scene, scene_type next_scene, asset_cache& asset_cache_)
+	: scene(this_scene, next_scene, asset_cache_)
+	, m_camera(60.f, { 0.f, 5.f, 10.f })
+	, m_c(get_asset_cache().get_model("models/soldier.glb"), { 0.f, 0.f, 2.f })
 {
-
-	for(const buz::joint_pose& j : m_model.get_rest_pose()){
-		buz::mat4 move = glm::translate(glm::mat4(1.0f), j.translation);
-		buz::mat4 turn = glm::mat4_cast(j.rotation);
-		buz::mat4 grow = glm::scale(glm::mat4(1.0f), j.scale);
-		buz::mat4 result = move * turn * grow;
-		mats4.push_back(result);
-	}
-	
+	// m_c.set_pose(m_c.get_model().find_clip("walk")->frames[4]);
 }
-buz::vec3 root{0, 0, 2};
-buz::vec3 target{0.f, 0.f, 0.f};
+buz::vec3 root{ 0, 0, 2 };
+buz::vec3 target{ 0.f, 0.f, 0.f };
 
 void scene_mission::on_update(buz::engine& engine, float)
 {
 	const buz::input& input = engine.get_input();
 	if (input.was_key_pressed(buz::key::space)) { set_invoke_next_scene(true); }
-	if (input.is_key_down(buz::key::w)) { root.z+= 0.05f; }
-	if (input.is_key_down(buz::key::s)) { root.z-= 0.05f; }
-	if (input.is_key_down(buz::key::a)) { root.x-= 0.05f; }
-	if (input.is_key_down(buz::key::d)) { root.x+= 0.05f; }
-	m_camera.set_target(root);
+	if (input.is_key_down(buz::key::w)) { root.z += 0.05f; }
+	if (input.is_key_down(buz::key::s)) { root.z -= 0.05f; }
+	if (input.is_key_down(buz::key::a)) { m_c.set_yaw(m_c.get_yaw() - 0.05f); }
+	if (input.is_key_down(buz::key::d)) { m_c.set_yaw(m_c.get_yaw() + 0.05f); }
+	m_camera.set_target(m_c.get_pos());
+}
 
-}   
-
-void scene_mission::on_render_world(buz::engine& engine,buz::world_renderer_3d& world_3d)
+void scene_mission::on_render_world(buz::engine& engine, buz::world_renderer_3d& world_3d)
 {
 	world_3d.set_camera(m_camera.get_view_matrix(), m_camera.get_projx_matrix(engine.get_window().get_size()));
 	// just for testing
@@ -48,27 +39,7 @@ void scene_mission::on_render_world(buz::engine& engine,buz::world_renderer_3d& 
 
 	buz::debug_draw::box(world_3d, buz::aabb_from_center_size({ 0.0f, 1.0f, 2.f }, { 5.0f, 1.0f, 5.f }), collider_color);
 
-	std::vector<buz::mat4> model_mats;
-	buz::mat4 root_m4 = glm::translate(glm::mat4(1.0f), root);
-
-
-	for(std::size_t i = 0; i < m_model.nodes.size(); i++)
-	{
-		int indx = m_model.nodes[i].parent;
-		if(indx == -1){
-			model_mats.push_back(root_m4 * mats4[i]);
-		}else{
-			buz::mat4 mm = model_mats[indx] * mats4[i];
-			
-			model_mats.push_back(mm);
-		}
-
-		if(m_model.nodes[i].shape != nullptr){
-			world_3d.draw(*m_model.nodes[i].shape, k_concrete, model_mats[i]);
-			
-		}
-	}
-
+	m_c.draw_3d(world_3d);
 }
 
 void scene_mission::on_render_screen(buz::engine&, buz::screen_renderer& screen)

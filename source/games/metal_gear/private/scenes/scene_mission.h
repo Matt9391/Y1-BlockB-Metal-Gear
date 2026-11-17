@@ -1,6 +1,7 @@
 #pragma once
 #include "scene.h"
 #include "camera/camera.h"
+#include "characters/character.h"
 
 class scene_mission : public scene
 {
@@ -19,5 +20,5 @@ public:
 
 private:
 	camera m_camera;
-	const buz::model& m_model;
+	character m_c;
 };
