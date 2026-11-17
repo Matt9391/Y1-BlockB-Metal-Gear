@@ -1,7 +1,7 @@
 #pragma once
 #include "scene.h"
 #include "camera/camera.h"
-#include "characters/character.h"
+#include "characters/snake.h"
 
 class scene_mission : public scene
 {
@@ -20,5 +20,5 @@ public:
 
 private:
 	camera m_camera;
-	character m_c;
+	snake m_snake;
 };

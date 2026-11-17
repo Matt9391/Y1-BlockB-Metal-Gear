@@ -9,7 +9,10 @@ public:
 
     buz::mat4 get_view_matrix() const;
     buz::mat4 get_projx_matrix(buz::vec2 window_size) const;
-    
+
+    buz::vec3 get_forward() const;
+    buz::vec3 get_right() const;
+
     void set_target(const buz::vec3& target);
 
 private:

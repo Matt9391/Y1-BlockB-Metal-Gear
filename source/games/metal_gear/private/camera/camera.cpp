@@ -26,6 +26,22 @@ buz::mat4 camera::get_projx_matrix(buz::vec2 window_size) const{
     return projx_matrix;
 }
 
+
+buz::vec3 camera::get_forward() const{
+
+    buz::vec3 negate_offset = -m_offset;
+    negate_offset.y = 0.f;
+    negate_offset = buz::normalize(negate_offset);
+    return negate_offset;
+
+}
+
+buz::vec3 camera::get_right() const{
+    return buz::cross(get_forward(), buz::vec3{0.f, 1.f, 0.f});
+}
+
+
+
 void camera::set_offset(const buz::vec3& offset){
     m_offset = offset;
 }

@@ -11,7 +11,7 @@ std::vector<buz::mat4> mats4;
 scene_mission::scene_mission(scene_type this_scene, scene_type next_scene, asset_cache& asset_cache_)
 	: scene(this_scene, next_scene, asset_cache_)
 	, m_camera(60.f, { 0.f, 5.f, 10.f })
-	, m_c(get_asset_cache().get_model("models/soldier.glb"), { 0.f, 0.f, 2.f })
+	, m_snake(get_asset_cache().get_model("models/soldier.glb"), { 0.f, 0.f, 2.f })
 {
 	// m_c.set_pose(m_c.get_model().find_clip("walk")->frames[4]);
 }
@@ -22,11 +22,10 @@ void scene_mission::on_update(buz::engine& engine, float)
 {
 	const buz::input& input = engine.get_input();
 	if (input.was_key_pressed(buz::key::space)) { set_invoke_next_scene(true); }
-	if (input.is_key_down(buz::key::w)) { root.z += 0.05f; }
-	if (input.is_key_down(buz::key::s)) { root.z -= 0.05f; }
-	if (input.is_key_down(buz::key::a)) { m_c.set_yaw(m_c.get_yaw() - 0.05f); }
-	if (input.is_key_down(buz::key::d)) { m_c.set_yaw(m_c.get_yaw() + 0.05f); }
-	m_camera.set_target(m_c.get_pos());
+
+	m_snake.on_update(input, m_camera.get_forward(), m_camera.get_right());
+
+	m_camera.set_target(m_snake.get_character().get_pos());
 }
 
 void scene_mission::on_render_world(buz::engine& engine, buz::world_renderer_3d& world_3d)
@@ -39,7 +38,7 @@ void scene_mission::on_render_world(buz::engine& engine, buz::world_renderer_3d&
 
 	buz::debug_draw::box(world_3d, buz::aabb_from_center_size({ 0.0f, 1.0f, 2.f }, { 5.0f, 1.0f, 5.f }), collider_color);
 
-	m_c.draw_3d(world_3d);
+	m_snake.get_character().draw_3d(world_3d);
 }
 
 void scene_mission::on_render_screen(buz::engine&, buz::screen_renderer& screen)
