@@ -16,6 +16,7 @@ public:
     character(const buz::model& model, buz::vec3 pos);
     ~character() = default;
 
+    void turn_toward(buz::vec3 intent, float dt);
 
     void set_yaw(float yaw);
     void set_pose(const std::vector<buz::joint_pose>& new_pose);
@@ -31,7 +32,8 @@ public:
 
 private:
 
-    float m_yaw{0};
+    float m_yaw_degrees{0};
+    float m_yaw_turning_speed_degrees{1.f};
     buz::vec3 m_pos;
 
     const buz::model& m_model;

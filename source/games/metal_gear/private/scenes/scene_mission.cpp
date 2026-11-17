@@ -6,7 +6,6 @@
 #include "renderer_2d/screen_renderer.h"
 #include "renderer_3d/debug_draw.h"
 
-std::vector<buz::mat4> mats4;
 
 scene_mission::scene_mission(scene_type this_scene, scene_type next_scene, asset_cache& asset_cache_)
 	: scene(this_scene, next_scene, asset_cache_)
@@ -15,15 +14,13 @@ scene_mission::scene_mission(scene_type this_scene, scene_type next_scene, asset
 {
 	// m_c.set_pose(m_c.get_model().find_clip("walk")->frames[4]);
 }
-buz::vec3 root{ 0, 0, 2 };
-buz::vec3 target{ 0.f, 0.f, 0.f };
 
-void scene_mission::on_update(buz::engine& engine, float)
+void scene_mission::on_update(buz::engine& engine, float delta_seconds)
 {
 	const buz::input& input = engine.get_input();
 	if (input.was_key_pressed(buz::key::space)) { set_invoke_next_scene(true); }
 
-	m_snake.on_update(input, m_camera.get_forward(), m_camera.get_right());
+	m_snake.on_update(delta_seconds, input, m_camera.get_forward(), m_camera.get_right());
 
 	m_camera.set_target(m_snake.get_character().get_pos());
 }
