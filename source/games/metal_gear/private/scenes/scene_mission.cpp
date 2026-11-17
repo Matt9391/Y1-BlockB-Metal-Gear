@@ -13,6 +13,7 @@ scene_mission::scene_mission(scene_type this_scene, scene_type next_scene, asset
 	, m_snake(get_asset_cache().get_model("models/soldier.glb"), { 0.f, 0.f, 2.f })
 {
 	// m_c.set_pose(m_c.get_model().find_clip("walk")->frames[4]);
+	m_dock = get_asset_cache().get_model("models/dock_v1.glb");
 }
 
 void scene_mission::on_update(buz::engine& engine, float delta_seconds)
@@ -34,6 +35,15 @@ void scene_mission::on_render_world(buz::engine& engine, buz::world_renderer_3d&
 	const buz::color collider_color = { 0.2f, 1.0f, 0.2f, 1.0f };
 
 	buz::debug_draw::box(world_3d, buz::aabb_from_center_size({ 0.0f, 1.0f, 2.f }, { 5.0f, 1.0f, 5.f }), collider_color);
+
+	for (const auto& node : m_dock.nodes)
+	{
+		buz::mat4 move = glm::translate(glm::mat4(1.0f), node.local_pose.translation);
+		buz::mat4 turn = glm::mat4_cast(node.local_pose.rotation);
+		buz::mat4 grow = glm::scale(glm::mat4(1.0f), node.local_pose.scale);
+		buz::mat4 local_m4 = move * turn * grow;
+		world_3d.draw(*node.shape, node.look, local_m4); // see fix 2
+	}
 
 	m_snake.get_character().draw_3d(world_3d);
 }
