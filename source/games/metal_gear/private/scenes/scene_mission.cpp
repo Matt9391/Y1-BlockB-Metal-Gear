@@ -6,7 +6,7 @@
 #include "renderer_2d/screen_renderer.h"
 #include "renderer_3d/debug_draw.h"
 #include "collision/collision.h"
-
+#include "characters/control.h"
 
 buz::vec3 a_centre{0.f, 0.f, 0.f};
 buz::vec3 b_centre{10.f, 0.f, 0.f};
@@ -18,7 +18,7 @@ scene_mission::scene_mission(scene_type this_scene, scene_type next_scene, asset
 	, m_camera(60.f, { 0.f, 5.f, 10.f })
 	, m_snake(get_asset_cache().get_model("models/soldier.glb"), { 0.f, 0.f, 2.f })
 {
-	// m_c.set_pose(m_c.get_model().find_clip("walk")->frames[4]);
+	// m_snake.get_character().set_pose(m_snake.get_character().get_model().find_clip("walk")->frames[4]);
 	m_dock = get_asset_cache().get_model("models/dock_v1.glb");
 	boxes.emplace_back(collider::box{a_centre, a_size});
 	boxes.emplace_back(collider::box{b_centre, b_size});
@@ -35,7 +35,8 @@ void scene_mission::on_update(buz::engine& engine, float delta_seconds)
 	if (input.was_key_pressed(buz::key::shift)) { a_centre.y += 0.5f; }
 	if (input.was_key_pressed(buz::key::control)) { a_centre.y -= 0.5f; }
 
-	m_snake.on_update(delta_seconds, input, m_camera.get_forward(), m_camera.get_right(), boxes);
+	const buz::vec3 player_direction = player_control::compute_direction(input, m_camera.get_forward(), m_camera.get_right());
+	m_snake.on_update(delta_seconds, player_direction, boxes);
 
 	m_camera.set_target(m_snake.get_character().get_pos());
 }

@@ -13,7 +13,7 @@ public:
 	snake(const buz::model& model, buz::vec3 pos);
 	~snake() = default;
 
-	void on_update(float dt, const buz::input& input, const buz::vec3 forward, const buz::vec3 right, const std::vector<collider::box>& boxes);
+	void on_update(float dt, const buz::vec3& dir,  const std::vector<collider::box>& boxes);
 
 	const character& get_character() const;
 

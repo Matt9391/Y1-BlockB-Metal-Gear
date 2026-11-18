@@ -9,27 +9,14 @@ snake::snake(const buz::model& model, buz::vec3 pos)
 {
 }
 
-void snake::on_update(float dt, const buz::input& input, const buz::vec3 forward, const buz::vec3 right, const std::vector<collider::box>& boxes)
+void snake::on_update(float dt, const buz::vec3& dir, const std::vector<collider::box>& boxes)
 {
-	int w = input.is_key_down(buz::key::w);
-	int s = input.is_key_down(buz::key::s);
-	int a = input.is_key_down(buz::key::a);
-	int d = input.is_key_down(buz::key::d);
-
-	float vertical = static_cast<float>(w - s);
-	float horizontal = static_cast<float>(d - a);
-	buz::vec3 intent = forward * vertical + right * horizontal;
-
-    if(buz::length(intent) != 0){
-        intent = buz::normalize(intent);
-    }
-
-	buz::vec3 displacement = intent * dt * m_movement_speed;
+	buz::vec3 displacement = dir * dt * m_movement_speed;
 
 	buz::vec3 next_pos = collision::resolve_boxes(m_character.get_pos(), m_character.get_size(), displacement, boxes);
 
-	// buz::log::info("x: {}, y: {}, z: {}", intent.x, intent.y, intent.z);
-	m_character.turn_toward(intent, dt);
+	// buz::log::info("x: {}, y: {}, z: {}", dir.x, dir.y, dir.z);
+	m_character.turn_toward(dir, dt);
 	m_character.set_pos(next_pos);
 }
 

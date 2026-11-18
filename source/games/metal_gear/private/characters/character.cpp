@@ -104,8 +104,8 @@ void character::draw_3d(buz::world_renderer_3d& world_3d) const
 	{
 		buz::mat4 move = glm::translate(glm::mat4(1.0f), m_current_pose[i].translation);
 		buz::mat4 turn = glm::mat4_cast(m_current_pose[i].rotation);
-		buz::mat4 grow = glm::scale(glm::mat4(1.0f), m_current_pose[i].scale);
-		buz::mat4 local_m4 = move * turn * grow;
+		buz::mat4 scale = glm::scale(glm::mat4(1.0f), m_current_pose[i].scale);
+		buz::mat4 local_m4 = move * turn * scale;
 
 		int indx = m_model.nodes[i].parent;
 		if (indx == -1)
