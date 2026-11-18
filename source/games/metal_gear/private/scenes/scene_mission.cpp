@@ -8,32 +8,31 @@
 #include "collision/collision.h"
 #include "characters/control.h"
 
-buz::vec3 a_centre{0.f, 0.f, 0.f};
-buz::vec3 b_centre{10.f, 0.f, 0.f};
-buz::vec3 a_size{5.f, 5.f, 5.f};
-buz::vec3 b_size{3.f, 2.f, 8.f};
+
 std::vector<collider::box> boxes;
 scene_mission::scene_mission(scene_type this_scene, scene_type next_scene, asset_cache& asset_cache_)
 	: scene(this_scene, next_scene, asset_cache_)
 	, m_camera(60.f, { 0.f, 5.f, 10.f })
-	, m_snake(get_asset_cache().get_model("models/soldier.glb"), { 0.f, 0.f, 2.f })
+	, m_snake(get_asset_cache().get_model("models/soldier.glb"), { 0.f, 1.f, 0.f })
 {
 	// m_snake.get_character().set_pose(m_snake.get_character().get_model().find_clip("walk")->frames[4]);
-	m_dock = get_asset_cache().get_model("models/dock_v1.glb");
-	boxes.emplace_back(collider::box{a_centre, a_size});
-	boxes.emplace_back(collider::box{b_centre, b_size});
+	m_dock = get_asset_cache().get_model("models/box_v3.glb");
+
+	for (const auto& node : m_dock.nodes)
+	{
+		buz::mat4 move = glm::translate(glm::mat4(1.0f), node.local_pose.translation);
+		buz::mat4 turn = glm::mat4_cast(node.local_pose.rotation);
+		buz::mat4 grow = glm::scale(glm::mat4(1.0f), node.local_pose.scale);
+		buz::mat4 local_m4 = move * turn * grow;
+		boxes.emplace_back(collider::box{node.local_pose.translation, node.shape->get_bounds().size() * node.local_pose.scale});
+	}
+	// boxes.emplace_back(collider::box{b_centre, b_size});
 }
 
 void scene_mission::on_update(buz::engine& engine, float delta_seconds)
 {
 	const buz::input& input = engine.get_input();
 	if (input.was_key_pressed(buz::key::space)) { set_invoke_next_scene(true); }
-	if (input.was_key_pressed(buz::key::right)) { a_centre.x += 0.5f; }
-	if (input.was_key_pressed(buz::key::left)) { a_centre.x -= 0.5f; }
-	if (input.was_key_pressed(buz::key::up)) { a_centre.z += 0.5f; }
-	if (input.was_key_pressed(buz::key::down)) { a_centre.z -= 0.5f; }
-	if (input.was_key_pressed(buz::key::shift)) { a_centre.y += 0.5f; }
-	if (input.was_key_pressed(buz::key::control)) { a_centre.y -= 0.5f; }
 
 	const buz::vec3 player_direction = player_control::compute_direction(input, m_camera.get_forward(), m_camera.get_right());
 	m_snake.on_update(delta_seconds, player_direction, boxes);
@@ -50,24 +49,18 @@ void scene_mission::on_render_world(buz::engine& engine, buz::world_renderer_3d&
 	// world_3d.draw_box({ 0.0f, 1.0f, 2.f }, { 5.0f, 1.0f, 5.f }, k_concrete);
 	const buz::color collider_color = { 0.2f, 1.0f, 0.2f, 1.0f };
 
-	buz::debug_draw::box(world_3d, buz::aabb_from_center_size({ 0.0f, 1.0f, 2.f }, { 5.0f, 1.0f, 5.f }), collider_color);
-	
-	// for (const auto& node : m_dock.nodes)
-	// {
-	// 	buz::mat4 move = glm::translate(glm::mat4(1.0f), node.local_pose.translation);
-	// 	buz::mat4 turn = glm::mat4_cast(node.local_pose.rotation);
-	// 	buz::mat4 grow = glm::scale(glm::mat4(1.0f), node.local_pose.scale);
-	// 	buz::mat4 local_m4 = move * turn * grow;
-	// 	world_3d.draw(*node.shape, node.look, local_m4); 
-	// }
 
-	world_3d.draw_box(a_centre,a_size, k_concrete);
-	world_3d.draw_box(b_centre,b_size, k_concrete);
-
-	auto overlap = collision::aabb_overlap(a_centre, a_size, b_centre, b_size);
-	if(collision::aabb_is_overlapping(overlap)){
-		buz::log::info("Box are overlapping {},{},{}", overlap.x, overlap.y, overlap.z);
+	for (const auto& node : m_dock.nodes)
+	{
+		buz::mat4 move = glm::translate(glm::mat4(1.0f), node.local_pose.translation);
+		buz::mat4 turn = glm::mat4_cast(node.local_pose.rotation);
+		buz::mat4 grow = glm::scale(glm::mat4(1.0f), node.local_pose.scale);
+		buz::mat4 local_m4 = move * turn * grow;
+		world_3d.draw(*node.shape, node.look, local_m4); 
+		buz::debug_draw::box(world_3d,buz::aabb_from_center_size(node.local_pose.translation, node.shape->get_bounds().size() * node.local_pose.scale), {0.f, 1.f, 0.f});
 	}
+
+
 	
 
 	m_snake.get_character().draw_3d(world_3d);
