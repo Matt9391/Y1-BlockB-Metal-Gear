@@ -21,10 +21,12 @@ public:
     void set_yaw(float yaw);
     void set_pose(const std::vector<buz::joint_pose>& new_pose);
     void set_pos(buz::vec3 new_pos);
+    void set_size(buz::vec3 new_size);
 
     buz::vec3 get_forward() const;
     float get_yaw() const;
     buz::vec3 get_pos() const;
+    buz::vec3 get_size() const;
     const buz::model& get_model() const;
     const std::vector<buz::joint_pose>& get_current_pose() const;
 
@@ -35,6 +37,7 @@ private:
     float m_yaw_degrees{0};
     float m_yaw_turning_speed_degrees{1.f};
     buz::vec3 m_pos;
+    buz::vec3 m_size;
 
     const buz::model& m_model;
     std::vector<buz::joint_pose> m_current_pose;

@@ -21,4 +21,43 @@ namespace collision{
         return (overlap.x > 0.f && overlap.y > 0.f && overlap.z > 0.f);
     }
 
+    buz::vec3 resolve_boxes(buz::vec3 centre, const buz::vec3 size, buz::vec3 displacement, const std::vector<collider::box>& boxes){
+        buz::vec3 half_size = size / 2.f;
+        
+        int sign_x = displacement.x < 0 ? -1 : 1;
+        
+        for(const collider::box& b : boxes){
+            buz::vec3 centre_x_moved = centre + buz::vec3{displacement.x, 0.f, 0.f}; 
+            buz::vec3 overlap = aabb_overlap(centre_x_moved, size, b.centre, b.size);
+            buz::vec3 b_half_size = b.size / 2.f;
+            if(aabb_is_overlapping(overlap)){
+                
+                displacement.x = 0;
+                centre.x = b.centre.x - ((b_half_size.x + half_size.x) * sign_x);               
+                
+            }
+        }
+        
+        int sign_z = displacement.z < 0 ? -1 : 1;
+        
+        centre.x += displacement.x;
+
+        for(const collider::box& b : boxes){
+            buz::vec3 centre_z_moved = centre + buz::vec3{0.f, 0.f, displacement.z}; 
+            buz::vec3 overlap = aabb_overlap(centre_z_moved, size, b.centre, b.size);
+            buz::vec3 b_half_size = b.size / 2.f;
+            if(aabb_is_overlapping(overlap)){
+                
+                displacement.z = 0;
+                centre.z = b.centre.z - ((b_half_size.z + half_size.z) * sign_z);               
+
+            }
+        }
+
+        centre.z += displacement.z;
+        
+        return centre; //new position 
+
+    }
+
 }

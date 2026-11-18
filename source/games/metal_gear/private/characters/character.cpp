@@ -1,5 +1,6 @@
 #include "character.h"
 #include "renderer_3d/world_renderer_3d.h"
+#include "renderer_3d/debug_draw.h"
 #include "core/math.h"
 #include <cmath>
 
@@ -20,6 +21,7 @@ character::character(const buz::model& model, buz::vec3 pos)
 	: m_yaw_degrees{ 0 }
 	, m_yaw_turning_speed_degrees{ k_turning_speed }
 	, m_pos(pos)
+	, m_size({1.f, 2.f, 1.f})
 	, m_model(model)
 {
 	m_current_pose = m_model.get_rest_pose();
@@ -57,6 +59,11 @@ void character::set_pos(buz::vec3 new_pos)
 	m_pos = new_pos;
 }
 
+void character::set_size(buz::vec3 new_size)
+{
+	m_size = new_size;
+}
+
 buz::vec3 character::get_forward() const
 {
 	return { std::sin(buz::radians(m_yaw_degrees)), 0.f, std::cos(buz::radians(m_yaw_degrees)) };
@@ -70,6 +77,11 @@ float character::get_yaw() const
 buz::vec3 character::get_pos() const
 {
 	return m_pos;
+}
+
+buz::vec3 character::get_size() const
+{
+	return m_size;
 }
 
 const buz::model& character::get_model() const
@@ -110,4 +122,7 @@ void character::draw_3d(buz::world_renderer_3d& world_3d) const
 			world_3d.draw(*m_model.nodes[i].shape, m_model.nodes[i].look, model_m4s[i]);
 		}
 	}
+
+	buz::debug_draw::box(world_3d, buz::aabb_from_center_size(m_pos, m_size), {0.f, 1.f, 0.f});
+	
 }
