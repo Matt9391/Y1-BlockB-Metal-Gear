@@ -1,7 +1,10 @@
 #include "collision.h"
 #include <cmath>
+#include "core/log.h"
 
-namespace collision{
+
+namespace collision{   
+    bool collision_disabled = false;
 
     buz::vec3 aabb_overlap(buz::vec3 a_centre, buz::vec3 a_size, buz::vec3 b_centre, buz::vec3 b_size){
 
@@ -22,6 +25,10 @@ namespace collision{
     }
 
     buz::vec3 resolve_boxes(buz::vec3 centre, const buz::vec3 size, buz::vec3 displacement, const std::vector<collider::box>& boxes){
+        if(collision::collision_disabled) {
+            buz::log::info("collision disabled");
+            return {centre + displacement};
+        }
         buz::vec3 half_size = size / 2.f;
         
         int sign_x = displacement.x < 0 ? -1 : 1;

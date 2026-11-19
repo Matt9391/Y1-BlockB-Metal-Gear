@@ -12,11 +12,11 @@
 std::vector<collider::box> boxes;
 scene_mission::scene_mission(scene_type this_scene, scene_type next_scene, asset_cache& asset_cache_)
 	: scene(this_scene, next_scene, asset_cache_)
-	, m_camera(60.f, { 0.f, 5.f, 10.f })
-	, m_snake(get_asset_cache().get_model("models/soldier.glb"), { 0.f, 1.f, 0.f })
+	, m_camera(60.f, { 0.f, 8.f, 10.f })
+	, m_snake(get_asset_cache().get_model("models/soldier.glb"), { 0.f, 2.f, 9.f })
 {
 	// m_snake.get_character().set_pose(m_snake.get_character().get_model().find_clip("walk")->frames[4]);
-	m_dock = get_asset_cache().get_model("models/box_v3.glb");
+	m_dock = get_asset_cache().get_model("models/dock_v6.glb");
 
 	for (const auto& node : m_dock.nodes)
 	{
@@ -24,7 +24,9 @@ scene_mission::scene_mission(scene_type this_scene, scene_type next_scene, asset
 		buz::mat4 turn = glm::mat4_cast(node.local_pose.rotation);
 		buz::mat4 grow = glm::scale(glm::mat4(1.0f), node.local_pose.scale);
 		buz::mat4 local_m4 = move * turn * grow;
-		boxes.emplace_back(collider::box{node.local_pose.translation, node.shape->get_bounds().size() * node.local_pose.scale});
+		if(node.name.starts_with("col_")){
+			boxes.emplace_back(collider::box{node.shape->get_bounds().center() + node.local_pose.translation, node.shape->get_bounds().size() * node.local_pose.scale});
+		}
 	}
 	// boxes.emplace_back(collider::box{b_centre, b_size});
 }
@@ -33,6 +35,7 @@ void scene_mission::on_update(buz::engine& engine, float delta_seconds)
 {
 	const buz::input& input = engine.get_input();
 	if (input.was_key_pressed(buz::key::space)) { set_invoke_next_scene(true); }
+	if (input.was_key_pressed(buz::key::b)) { collision::collision_disabled = !collision::collision_disabled; buz::log::info("coll {}", collision::collision_disabled); }
 
 	const buz::vec3 player_direction = player_control::compute_direction(input, m_camera.get_forward(), m_camera.get_right());
 	m_snake.on_update(delta_seconds, player_direction, boxes);
@@ -57,7 +60,9 @@ void scene_mission::on_render_world(buz::engine& engine, buz::world_renderer_3d&
 		buz::mat4 grow = glm::scale(glm::mat4(1.0f), node.local_pose.scale);
 		buz::mat4 local_m4 = move * turn * grow;
 		world_3d.draw(*node.shape, node.look, local_m4); 
-		buz::debug_draw::box(world_3d,buz::aabb_from_center_size(node.local_pose.translation, node.shape->get_bounds().size() * node.local_pose.scale), {0.f, 1.f, 0.f});
+		if(node.name.starts_with("col_")){
+			buz::debug_draw::box(world_3d,buz::aabb_from_center_size(node.shape->get_bounds().center() + node.local_pose.translation, node.shape->get_bounds().size() * node.local_pose.scale), {0.f, 1.f, 0.f});
+		}
 	}
 
 
