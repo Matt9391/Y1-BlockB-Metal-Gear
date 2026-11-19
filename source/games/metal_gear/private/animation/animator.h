@@ -14,7 +14,7 @@ public:
     void set_animation(const buz::keyframe_clip* clip);
 	const std::vector<buz::joint_pose>& get_pose() const;
 
-	void play_animation();
+	void play_animation(float dt_s);
 private:
 
 	void set_pose(const std::vector<buz::joint_pose>& new_pose);
@@ -23,6 +23,6 @@ private:
 	const buz::keyframe_clip* m_clip;
 	std::vector<buz::joint_pose> m_pose;
 
-    const float k_frame_duration{0.03f};
-	buz::timer m_timer;
+    float m_clip_duration{0.03f};
+	float m_elapsed_time;
 };
