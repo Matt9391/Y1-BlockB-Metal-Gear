@@ -18,6 +18,8 @@ void snake::on_update(float dt, const buz::vec3& dir, const std::vector<collider
 	// buz::log::info("x: {}, y: {}, z: {}", dir.x, dir.y, dir.z);
 	m_character.turn_toward(dir, dt);
 	m_character.set_pos(next_pos);
+
+	m_character.get_animator().play_animation();
 }
 
 const character& snake::get_character() const

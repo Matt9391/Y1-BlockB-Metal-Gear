@@ -2,6 +2,7 @@
 
 #include "core/math.h"
 #include "renderer_3d/model.h"
+#include "animation/animator.h"
 
 #include <vector>
 
@@ -19,7 +20,6 @@ public:
     void turn_toward(buz::vec3 intent, float dt);
 
     void set_yaw(float yaw);
-    void set_pose(const std::vector<buz::joint_pose>& new_pose);
     void set_pos(buz::vec3 new_pos);
     void set_size(buz::vec3 new_size);
 
@@ -28,7 +28,7 @@ public:
     buz::vec3 get_pos() const;
     buz::vec3 get_size() const;
     const buz::model& get_model() const;
-    const std::vector<buz::joint_pose>& get_current_pose() const;
+    animator& get_animator();
 
     void draw_3d(buz::world_renderer_3d& world_3d) const;
 
@@ -40,7 +40,7 @@ private:
     buz::vec3 m_size;
 
     const buz::model& m_model;
-    std::vector<buz::joint_pose> m_current_pose;
-
+    
+    animator m_animator;
 
 };

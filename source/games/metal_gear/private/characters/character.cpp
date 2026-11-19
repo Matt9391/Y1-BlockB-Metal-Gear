@@ -4,27 +4,27 @@
 #include "core/math.h"
 #include <cmath>
 
-
-namespace{
+namespace
+{
 	const float k_turning_speed = 500.f;
-	const float k_full_angle = 360.f; 
-	const float k_epsilon = 0.0001f; 
+	const float k_full_angle = 360.f;
+	const float k_epsilon = 0.0001f;
 
-	float wrap_angle(float angle){
+	float wrap_angle(float angle)
+	{
 		return angle - k_full_angle * std::floor((angle + k_full_angle / 2) / k_full_angle);
 	}
 }
-
-
 
 character::character(const buz::model& model, buz::vec3 pos)
 	: m_yaw_degrees{ 0 }
 	, m_yaw_turning_speed_degrees{ k_turning_speed }
 	, m_pos(pos)
-	, m_size({1.f, 2.f, 1.f})
+	, m_size({ 1.f, 2.f, 1.f })
 	, m_model(model)
+	, m_animator(m_model.get_rest_pose())
 {
-	m_current_pose = m_model.get_rest_pose();
+	m_animator.set_animation(m_model.find_clip("walk"));
 }
 
 void character::turn_toward(buz::vec3 intent, float dt)
@@ -49,10 +49,7 @@ void character::set_yaw(float yaw)
 	m_yaw_degrees = wrap_angle(yaw);
 }
 
-void character::set_pose(const std::vector<buz::joint_pose>& new_pose)
-{
-	m_current_pose = new_pose;
-}
+
 
 void character::set_pos(buz::vec3 new_pos)
 {
@@ -89,10 +86,10 @@ const buz::model& character::get_model() const
 	return m_model;
 }
 
-const std::vector<buz::joint_pose>& character::get_current_pose() const
-{
-	return m_current_pose;
+animator& character::get_animator(){
+	return m_animator;
 }
+
 
 void character::draw_3d(buz::world_renderer_3d& world_3d) const
 {
@@ -102,9 +99,11 @@ void character::draw_3d(buz::world_renderer_3d& world_3d) const
 
 	for (std::size_t i = 0; i < m_model.nodes.size(); i++)
 	{
-		buz::mat4 move = glm::translate(glm::mat4(1.0f), m_current_pose[i].translation);
-		buz::mat4 turn = glm::mat4_cast(m_current_pose[i].rotation);
-		buz::mat4 scale = glm::scale(glm::mat4(1.0f), m_current_pose[i].scale);
+		const std::vector<buz::joint_pose>& current_pose = m_animator.get_pose();
+
+		buz::mat4 move = glm::translate(glm::mat4(1.0f), current_pose[i].translation);
+		buz::mat4 turn = glm::mat4_cast(current_pose[i].rotation);
+		buz::mat4 scale = glm::scale(glm::mat4(1.0f), current_pose[i].scale);
 		buz::mat4 local_m4 = move * turn * scale;
 
 		int indx = m_model.nodes[i].parent;
@@ -123,6 +122,5 @@ void character::draw_3d(buz::world_renderer_3d& world_3d) const
 		}
 	}
 
-	buz::debug_draw::box(world_3d, buz::aabb_from_center_size(m_pos, m_size), {0.f, 1.f, 0.f});
-	
+	buz::debug_draw::box(world_3d, buz::aabb_from_center_size(m_pos, m_size), { 0.f, 1.f, 0.f });
 }
