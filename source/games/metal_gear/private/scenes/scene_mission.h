@@ -2,6 +2,7 @@
 #include "scene.h"
 #include "camera/camera.h"
 #include "characters/snake.h"
+#include "world/level.h"
 
 class scene_mission : public scene
 {
@@ -21,5 +22,5 @@ public:
 private:
 	camera m_camera;
 	snake m_snake;
-	const buz::model& m_dock;
+	level m_level;
 };
