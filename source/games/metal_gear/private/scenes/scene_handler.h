@@ -7,7 +7,7 @@
 class scene_handler {
     public:
     scene_handler(scene_type startup_scene, asset_cache& asset_cache_);
-    scene_handler() = default;
+    scene_handler() = delete;
     scene_handler(const scene_handler& other) = delete;
 
     ~scene_handler() = default;

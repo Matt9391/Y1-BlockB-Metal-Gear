@@ -21,5 +21,5 @@ public:
 private:
 	camera m_camera;
 	snake m_snake;
-	buz::model m_dock;
+	const buz::model& m_dock;
 };
