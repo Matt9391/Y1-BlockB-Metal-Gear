@@ -16,7 +16,7 @@ public:
 
 	void play_animation(float dt_s);
 private:
-
+	std::vector<buz::joint_pose> blend_pose(std::vector<buz::joint_pose> start_pose, const std::vector<buz::joint_pose>& end_pose, float t);
 	void set_pose(const std::vector<buz::joint_pose>& new_pose);
 
 	const buz::keyframe_clip* m_clip;
