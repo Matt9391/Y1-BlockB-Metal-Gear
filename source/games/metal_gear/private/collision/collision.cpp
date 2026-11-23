@@ -32,7 +32,7 @@ namespace collision{
         buz::vec3 half_size = size / 2.f;
         
         int sign_x = displacement.x < 0 ? -1 : 1;
-        
+        //TODO: make a function that takes a vector and work only on 1 axe (ITS FOR THE ILO)
         for(const collider::box& b : boxes){
             buz::vec3 centre_x_moved = centre + buz::vec3{displacement.x, 0.f, 0.f}; 
             buz::vec3 overlap = aabb_overlap(centre_x_moved, size, b.centre, b.size);
@@ -62,8 +62,8 @@ namespace collision{
         }
 
         centre.z += displacement.z;
-        
-        return centre; //new position 
+                        //return the feet position so it remove the offset of the centre
+        return centre - buz::vec3{0.f, size.y / 2.f, 0.f}; //new position 
 
     }
 

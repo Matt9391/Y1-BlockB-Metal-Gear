@@ -3,6 +3,7 @@
 #include "renderer_3d/debug_draw.h"
 #include "core/math.h"
 #include <cmath>
+#include <iostream>
 
 namespace
 {
@@ -76,6 +77,11 @@ buz::vec3 character::get_pos() const
 	return m_pos;
 }
 
+buz::vec3 character::get_centre() const
+{
+	return m_pos + buz::vec3{0.f, m_size.y / 2.f , 0.f};
+}
+
 buz::vec3 character::get_size() const
 {
 	return m_size;
@@ -122,5 +128,5 @@ void character::draw_3d(buz::world_renderer_3d& world_3d) const
 		}
 	}
 
-	buz::debug_draw::box(world_3d, buz::aabb_from_center_size(m_pos, m_size), { 0.f, 1.f, 0.f });
+	buz::debug_draw::box(world_3d, buz::aabb_from_center_size(get_centre(), m_size), { 0.f, 1.f, 0.f });
 }

@@ -26,6 +26,7 @@ public:
     buz::vec3 get_forward() const;
     float get_yaw() const;
     buz::vec3 get_pos() const;
+    buz::vec3 get_centre() const;
     buz::vec3 get_size() const;
     const buz::model& get_model() const;
     animator& get_animator();
