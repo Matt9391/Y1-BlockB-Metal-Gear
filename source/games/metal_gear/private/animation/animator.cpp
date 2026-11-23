@@ -2,9 +2,10 @@
 #include <cmath>
 
 animator::animator(const std::vector<buz::joint_pose>& rest_pose)
-	: m_pose(rest_pose)
-    , m_clip{nullptr}
+    : m_clip{nullptr}
+	, m_pose(rest_pose)
     , m_current_frame{0}
+    , m_clip_duration{0.0f}
     , m_elapsed_time{0.0f}
 {
 }

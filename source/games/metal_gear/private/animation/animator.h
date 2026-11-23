@@ -19,10 +19,11 @@ private:
 
 	void set_pose(const std::vector<buz::joint_pose>& new_pose);
 
-	int m_current_frame;
 	const buz::keyframe_clip* m_clip;
 	std::vector<buz::joint_pose> m_pose;
+	
+	int m_current_frame;
 
-    float m_clip_duration{0.03f};
+    float m_clip_duration;
 	float m_elapsed_time;
 };
