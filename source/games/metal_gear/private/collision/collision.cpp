@@ -27,7 +27,7 @@ namespace collision{
     buz::vec3 resolve_boxes(buz::vec3 centre, const buz::vec3 size, buz::vec3 displacement, const std::vector<collider::box>& boxes){
         if(collision::collision_disabled) {
             buz::log::info("collision disabled");
-            return {centre + displacement};
+            return {centre + displacement - buz::vec3{0.f, size.y / 2.f, 0.f}};
         }
         buz::vec3 half_size = size / 2.f;
         
