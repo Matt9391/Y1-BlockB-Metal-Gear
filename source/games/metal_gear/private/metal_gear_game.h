@@ -7,6 +7,7 @@
 #include "renderer_3d/world_renderer_3d.h"
 #include "scenes/scene_handler.h"
 #include "assets/asset_cache.h"
+#include "settings/game_settings.h"
 
 #include <memory>
 #include <vector>
@@ -55,5 +56,6 @@ private:
 
 
 	asset_cache m_asset_cache;
+	game_settings m_game_settings;
 	scene_handler m_scene_handler;
 };
