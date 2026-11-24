@@ -21,7 +21,12 @@ void snake::on_update(float dt, const buz::vec3& dir, const std::vector<collider
 		m_character.get_animator().set_animation(m_character.get_model().find_clip("idle"));
 	}
 
-	buz::vec3 next_pos = collision::resolve_boxes(m_character.get_centre(), m_character.get_size(), displacement, boxes);
+	buz::vec3 next_pos = collision::resolve_boxes(m_character.get_centre(), 
+												  m_character.get_size(), 
+												  displacement, 
+												  boxes);
+
+	next_pos -= buz::vec3{0.f, m_character.get_size().y / 2.f, 0.f};
 
 	m_character.turn_toward(dir, dt);
 	m_character.set_pos(next_pos);
