@@ -16,8 +16,7 @@ enum class scene_type
 	menu,
 	mission,
 	game_over,
-	game_complete,
-	game_over
+	game_complete
 };
 
 class scene
