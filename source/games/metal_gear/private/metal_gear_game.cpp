@@ -32,8 +32,8 @@ metal_gear_game::metal_gear_game(buz::engine& engine)
 	: buz::game_3d(engine)
 	, m_soldier_position{ 0.0f, 0.0f, 2.0f }
 	, m_asset_cache(engine)
-	, m_game_settings("/settings/game_settings.json")
-	, m_scene_handler(scene_type::menu, m_asset_cache)
+	, m_game_settings("settings/game_settings.json")
+	, m_scene_handler(scene_type::menu, m_asset_cache, m_game_settings)
 {
 
 	// load_mesh gives the triangles only; the texture is loaded separately

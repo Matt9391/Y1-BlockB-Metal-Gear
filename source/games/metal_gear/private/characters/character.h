@@ -14,7 +14,7 @@ namespace buz{
 class character{
 public:
 
-    character(const buz::model& model, buz::vec3 pos);
+    character(const buz::model& model, buz::vec3 pos, float turn_speed_deg_per_s);
     ~character() = default;
 
     void turn_toward(buz::vec3 intent, float dt);

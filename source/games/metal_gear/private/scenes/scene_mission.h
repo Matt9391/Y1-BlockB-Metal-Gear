@@ -4,10 +4,12 @@
 #include "characters/snake.h"
 #include "world/level.h"
 
+class game_settings;
+
 class scene_mission : public scene
 {
 public:
-	scene_mission(scene_type this_scene, scene_type next_scene, asset_cache& asset_cache_);
+	scene_mission(scene_type this_scene, scene_type next_scene, asset_cache& asset_cache_, game_settings& game_settings_);
 	~scene_mission() = default;
 	//----------------------------------------------------------
 	/// update logic

@@ -2,10 +2,12 @@
 #include "engine/input.h"
 #include "core/log.h"
 #include "collision/collision.h"
+#include "settings/setting_types.h"
+#include <glm/gtc/type_ptr.hpp>
 
-snake::snake(const buz::model& model, buz::vec3 pos)
-	: m_character(model, pos)
-	, m_movement_speed{ 10.f }
+snake::snake(const buz::model& model, const snake_settings& settings)
+	: m_character(model, glm::make_vec3(settings.spawn_position.data()), settings.turn_speed_deg_per_s)
+	, m_movement_speed{ settings.walk_speed_m_per_s }
 {
 }
 

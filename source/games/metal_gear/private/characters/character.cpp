@@ -7,7 +7,6 @@
 
 namespace
 {
-	const float k_turning_speed = 500.f;
 	const float k_full_angle = 360.f;
 	const float k_epsilon = 0.0001f;
 
@@ -17,9 +16,9 @@ namespace
 	}
 }
 
-character::character(const buz::model& model, buz::vec3 pos)
+character::character(const buz::model& model, buz::vec3 pos, float turn_speed_deg_per_s)
 	: m_yaw_degrees{ 0 }
-	, m_yaw_turning_speed_degrees{ k_turning_speed }
+	, m_yaw_turning_speed_degrees{ turn_speed_deg_per_s }
 	, m_pos(pos)
 	, m_size({ 1.f, 2.f, 1.f })
 	, m_model(model)
@@ -108,9 +107,9 @@ void character::draw_3d(buz::world_renderer_3d& world_3d) const
 		const std::vector<buz::joint_pose>& current_pose = m_animator.get_pose();
 
 		buz::mat4 move = glm::translate(glm::mat4(1.0f), current_pose[i].translation);
-		buz::mat4 turn = glm::mat4_cast(current_pose[i].rotation);
-		buz::mat4 scale = glm::scale(glm::mat4(1.0f), current_pose[i].scale);
-		buz::mat4 local_m4 = move * turn * scale;
+		buz::mat4 rotate = glm::mat4_cast(current_pose[i].rotation);
+		buz::mat4 scale = glm::scale(glm::mat4(1.0f), current_pose[i].scale) ;
+		buz::mat4 local_m4 = move * rotate * scale;
 
 		int indx = m_model.nodes[i].parent;
 		if (indx == -1)

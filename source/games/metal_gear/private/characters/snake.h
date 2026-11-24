@@ -7,10 +7,13 @@
 namespace buz{
     class input;
 };
+
+struct snake_settings;
+
 class snake
 {
 public:
-	snake(const buz::model& model, buz::vec3 pos);
+	snake(const buz::model& model, const snake_settings& settings);
 	~snake() = default;
 
 	void on_update(float dt, const buz::vec3& dir,  const std::vector<collider::box>& boxes);
