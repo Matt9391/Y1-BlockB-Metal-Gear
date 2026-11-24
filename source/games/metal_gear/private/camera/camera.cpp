@@ -37,8 +37,9 @@ buz::vec3 camera::get_forward() const{
 }
 
 buz::vec3 camera::get_right() const{
-    //TODO: listen to eloy and dont do this maybe
-    return buz::cross(get_forward(), buz::vec3{0.f, 1.f, 0.f});
+    //DONE: listen to eloy and dont do this maybe (avoid cross product)
+    buz::vec3 fwd = get_forward();
+    return buz::vec3{-fwd.z, 0.f, fwd.x};
 }
 
 
