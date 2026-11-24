@@ -27,44 +27,41 @@ namespace collision{
     buz::vec3 resolve_boxes(buz::vec3 centre, const buz::vec3 size, buz::vec3 displacement, const std::vector<collider::box>& boxes){
         if(collision::collision_disabled) {
             buz::log::info("collision disabled");
-            return {centre + displacement - buz::vec3{0.f, size.y / 2.f, 0.f}};
+            return {centre + displacement};
         }
+        
+        //TODO: replace 0,2 with axe::z, axe::z
+        centre = resolve_single_axe_over_boxes(0, centre, size, displacement,boxes); //new x moved centre
+        centre = resolve_single_axe_over_boxes(2, centre, size, displacement,boxes); //new z moved centre
+
+        return centre; //new centre 
+
+    }
+
+    buz::vec3 resolve_single_axe_over_boxes(int axis_index, buz::vec3 centre, buz::vec3 size, buz::vec3 displacement, const std::vector<collider::box>& boxes){
+        assert((axis_index > - 1 && axis_index < 3) && "[collision.cpp] wrong axis indexed for collision resolution");
+
+        if(displacement[axis_index] == 0) return centre;
+
         buz::vec3 half_size = size / 2.f;
+
         
-        int sign_x = displacement.x < 0 ? -1 : 1;
-        //TODO: make a function that takes a vector and work only on 1 axe (ITS FOR THE ILO)
+        int sign = displacement[axis_index] < 0 ? -1 : 1;
         for(const collider::box& b : boxes){
-            buz::vec3 centre_x_moved = centre + buz::vec3{displacement.x, 0.f, 0.f}; 
-            buz::vec3 overlap = aabb_overlap(centre_x_moved, size, b.centre, b.size);
+            buz::vec3 centre_moved = centre;
+            centre_moved[axis_index] += displacement[axis_index]; 
+            buz::vec3 overlap = aabb_overlap(centre_moved, size, b.centre, b.size);
             buz::vec3 b_half_size = b.size / 2.f;
             if(aabb_is_overlapping(overlap)){
                 
-                displacement.x = 0;
-                centre.x = b.centre.x - ((b_half_size.x + half_size.x) * sign_x);               
+                displacement[axis_index] = 0;
+                centre[axis_index] = b.centre[axis_index] - ((b_half_size[axis_index] + half_size[axis_index]) * sign);               
                 
             }
         }
-        
-        int sign_z = displacement.z < 0 ? -1 : 1;
-        
-        centre.x += displacement.x;
+        centre[axis_index] += displacement[axis_index];
 
-        for(const collider::box& b : boxes){
-            buz::vec3 centre_z_moved = centre + buz::vec3{0.f, 0.f, displacement.z}; 
-            buz::vec3 overlap = aabb_overlap(centre_z_moved, size, b.centre, b.size);
-            buz::vec3 b_half_size = b.size / 2.f;
-            if(aabb_is_overlapping(overlap)){
-                
-                displacement.z = 0;
-                centre.z = b.centre.z - ((b_half_size.z + half_size.z) * sign_z);               
-
-            }
-        }
-
-        centre.z += displacement.z;
-                        //return the feet position so it remove the offset of the centre
-        return centre - buz::vec3{0.f, size.y / 2.f, 0.f}; //new position 
-
+        return centre;
     }
 
 }
