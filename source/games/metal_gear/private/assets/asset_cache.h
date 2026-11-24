@@ -21,7 +21,7 @@ public:
 
 	const buz::model& get_model(const std::string& key);
 	const buz::font& get_font(const std::string& key);
-	std::shared_ptr<buz::texture> get_texture(const std::string& key);
+	std::shared_ptr<buz::texture>& get_texture(const std::string& key);
 
 
 private:
