@@ -17,8 +17,11 @@ void animator::set_pose(const std::vector<buz::joint_pose>& new_pose)
 
 void animator::set_animation(const buz::keyframe_clip* clip)
 {
+	if(m_clip == clip) return;
+
 	m_clip = clip;
 	m_current_frame = 0;
+	m_elapsed_time = 0.f;
 	m_clip_duration = (m_clip->frames.size() - 1) / m_clip->frames_per_second;
 	set_pose(m_clip->frames[m_current_frame]);
 }
