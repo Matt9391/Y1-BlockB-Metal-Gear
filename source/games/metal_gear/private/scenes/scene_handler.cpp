@@ -2,6 +2,7 @@
 #include "scene_menu.h"
 #include "scene_mission.h"
 #include "scene_game_complete.h"
+#include "scene_game_over.h"
 
 scene_handler::scene_handler(scene_type startup_scene, asset_cache& asset_cache_, game_settings& game_settings_)
 	: m_asset_cache(asset_cache_)
@@ -43,6 +44,12 @@ void scene_handler::set_scene(scene_type scene_t)
 		break;
 	case scene_type::game_complete:
 		m_current_scene = std::make_unique<scene_game_complete>(scene_type::game_complete,
+													  scene_type::menu,
+													  m_asset_cache
+													  );
+		break;
+	case scene_type::game_over:
+		m_current_scene = std::make_unique<scene_game_over>(scene_type::game_over,
 													  scene_type::menu,
 													  m_asset_cache
 													  );
