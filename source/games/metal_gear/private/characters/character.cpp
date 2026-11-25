@@ -61,6 +61,12 @@ void character::set_size(buz::vec3 new_size)
 	m_size = new_size;
 }
 
+void character::set_animation(const animations& animation){
+	const std::string animation_name = m_animation_names[static_cast<std::size_t>(animation)];
+	const buz::keyframe_clip* clip = m_model.find_clip(animation_name);
+	m_animator.set_animation(clip);
+}
+
 buz::vec3 character::get_forward() const
 {
 	return { std::sin(buz::radians(m_yaw_degrees)), 0.f, std::cos(buz::radians(m_yaw_degrees)) };

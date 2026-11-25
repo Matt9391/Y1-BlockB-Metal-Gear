@@ -5,11 +5,19 @@
 #include "animation/animator.h"
 
 #include <vector>
+#include <string>
 
 namespace buz{
 
     class world_renderer_3d;
 }
+
+enum class animations{
+	idle,
+	walk,
+	count
+};
+
 
 class character{
 public:
@@ -22,6 +30,8 @@ public:
     void set_yaw(float yaw);
     void set_pos(buz::vec3 new_pos);
     void set_size(buz::vec3 new_size);
+
+    void set_animation(const animations& animation);
 
     buz::vec3 get_forward() const;
     float get_yaw() const;
@@ -42,6 +52,8 @@ private:
 
     const buz::model& m_model;
     
+	std::array<std::string, static_cast<std::size_t>(animations::count)> m_animation_names{"idle", "walk"};
+
     animator m_animator;
 
 };
