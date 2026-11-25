@@ -9,7 +9,7 @@ scene::scene(scene_type this_scene, scene_type next_scene, asset_cache& asset_ca
 	, m_next_scene_type{ next_scene }
 	, m_invoke_next_scene{ false }
 	, m_asset_cache{ asset_cache_ }
-	, m_font(m_asset_cache.get_font("fonts/font_8x8.png"))
+	, m_font(m_asset_cache.get_font("shared/fonts/font_8x8.png"))
 {
 }
 

@@ -28,8 +28,9 @@ namespace buz
 	//--------------------------------------------------------------
 	void audio_device::initialize()
 	{
-		// Not through the unique_ptr yet: its deleter uninitializes, which
-		// only a device that initialized may do
+		// The device goes into m_device only after ma_engine_init succeeds,
+		// because device_ptr's deleter calls ma_engine_uninit, which is only
+		// valid on an initialized device
 		auto device = std::make_unique<ma_engine>();
 		if (ma_engine_init(nullptr, device.get()) != MA_SUCCESS)
 		{
@@ -99,9 +100,9 @@ namespace buz
 
 		const fs::path path = paths::get_content_path(content_relative_path);
 
-		// MA_SOUND_FLAG_DECODE decodes the whole file up front. miniaudio's
-		// resource manager keeps decoded files around, so playing the same
-		// sound again does not load it from disk a second time.
+		// MA_SOUND_FLAG_DECODE decodes the whole file up front. Copies of a
+		// sound that play at the same time share the decoded data; once every
+		// copy has finished and been freed, the next play loads the file again.
 		auto sound = std::make_unique<ma_sound>();
 		if (ma_sound_init_from_file(m_device.get(), path.string().c_str(), MA_SOUND_FLAG_DECODE, nullptr, nullptr, sound.get()) != MA_SUCCESS)
 		{

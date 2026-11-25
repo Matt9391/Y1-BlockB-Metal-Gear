@@ -19,7 +19,7 @@ namespace buz::d3d12
 	{
 	public:
 		//----------------------------------------------------------
-		/// @brief Creates an empty heap; initialize creates it.
+		/// @brief Creates an empty wrapper; initialize creates the heap.
 		descriptor_heap();
 
 		//----------------------------------------------------------
@@ -33,7 +33,8 @@ namespace buz::d3d12
 
 		//----------------------------------------------------------
 		/// @brief Reserves a free descriptor slot.
-		/// @return Index of the reserved slot.
+		/// @return Index of the reserved slot. A full heap is a fatal error:
+		/// every slot is in use, and reusing one would replace a texture.
 		uint32_t allocate();
 
 		//----------------------------------------------------------
@@ -52,7 +53,7 @@ namespace buz::d3d12
 		D3D12_GPU_DESCRIPTOR_HANDLE get_gpu_handle(uint32_t index) const;
 
 		//----------------------------------------------------------
-		/// @brief Returns the underlying directx 12 descriptor heap.
+		/// @brief Returns the underlying DirectX 12 descriptor heap.
 		ID3D12DescriptorHeap* get_d3d_heap() const;
 
 	private:

@@ -96,8 +96,8 @@ rem Preferred: a CMake the student installed themselves, on the PATH. Fallback:
 rem the copy Visual Studio installs as part of the "Desktop development with
 rem C++" workload. That copy is not on the PATH outside the Developer Command
 rem Prompt, but vswhere (always installed alongside Visual Studio, at a fixed
-rem location) can point us straight at it - so a machine that can build the
-rem engine at all never needs a separate CMake install.
+rem location) finds it, so a machine with that workload installed needs no
+rem separate CMake install.
 rem ---------------------------------------------------------------------------
 :find_cmake
 set "CMAKE_EXE="

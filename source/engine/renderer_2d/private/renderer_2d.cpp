@@ -1,8 +1,8 @@
 #include "renderer_2d/renderer_2d.h"
 
+#include "render_core/texture.h"
 #include "renderer_2d/font.h"
 #include "renderer_2d/sprite_pass.h"
-#include "rhi/texture.h"
 
 #include <cmath>
 
@@ -16,8 +16,8 @@ namespace
 namespace buz
 {
 	//--------------------------------------------------------------
-	renderer_2d::renderer_2d(const render_context& context)
-		: m_pass(std::make_unique<sprite_pass>(context))
+	renderer_2d::renderer_2d(const render_context& context, texture_filter sampler_filter)
+		: m_pass(std::make_unique<sprite_pass>(context, sampler_filter))
 	{
 	}
 
@@ -40,7 +40,7 @@ namespace buz
 	//--------------------------------------------------------------
 	void renderer_2d::draw_sprite(const texture& sprite_texture, rect source_rect, vec2 position, vec2 size, float rotation_radians, color tint)
 	{
-		// The source rect is in texture pixels; the shader wants it in
+		// The source rect is in texture pixels; the shader reads it in
 		// 0..1 texture space.
 		const vec2 texture_size = sprite_texture.get_size();
 
@@ -53,7 +53,7 @@ namespace buz
 	//--------------------------------------------------------------
 	void renderer_2d::draw_rect(rect area, color fill_color)
 	{
-		// A rectangle is just the white texture stretched and tinted
+		// A rectangle is the white texture, stretched and tinted
 		m_pass->submit_quad(m_pass->get_white_texture(), { 0.0f, 0.0f, 1.0f, 1.0f }, area.center(), area.size(), 0.0f, fill_color);
 	}
 

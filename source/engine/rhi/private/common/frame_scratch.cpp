@@ -1,6 +1,7 @@
 #include "common/frame_scratch.h"
 
 #include "common/constants.h"
+#include "core/assert.h"
 #include "core/log.h"
 
 namespace buz::rhi
@@ -20,9 +21,10 @@ namespace buz::rhi
 	}
 
 	//--------------------------------------------------------------
-	std::optional<uint32_t> frame_scratch::allocate(uint32_t size)
+	std::optional<uint32_t> frame_scratch::allocate(uint32_t size, uint32_t alignment)
 	{
-		const uint32_t aligned_offset = (m_offset + k_frame_scratch_alignment - 1) & ~(k_frame_scratch_alignment - 1);
+		BUZ_ASSERT(alignment >= k_frame_scratch_alignment && (alignment & (alignment - 1)) == 0);
+		const uint32_t aligned_offset = (m_offset + alignment - 1) & ~(alignment - 1);
 		if (aligned_offset + size > k_frame_scratch_size)
 		{
 			if (!m_reported_full)

@@ -166,8 +166,8 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('structbuz_1_1m
 Public Attributes</h2></td></tr>
 <tr class="memitem:a19eb4db6b3bbd136cdabb9d77708385a" id="r_a19eb4db6b3bbd136cdabb9d77708385a"><td class="memItemLeft"><a class="el" href="structbuz_1_1color.html">color</a>&#160;</td><td class="memItemRight"><a class="el" href="#a19eb4db6b3bbd136cdabb9d77708385a">base_color</a></td></tr>
 <tr class="memdesc:a19eb4db6b3bbd136cdabb9d77708385a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The color, multiplied with the texture.  <br /></td></tr>
-<tr class="memitem:a8ef360e41caeac60005807fe9a7b5dfd" id="r_a8ef360e41caeac60005807fe9a7b5dfd"><td class="memItemLeft">std::shared_ptr&lt; <a class="el" href="classbuz_1_1texture.html">texture</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a8ef360e41caeac60005807fe9a7b5dfd">base_texture</a></td></tr>
-<tr class="memdesc:a8ef360e41caeac60005807fe9a7b5dfd"><td class="mdescLeft">&#160;</td><td class="mdescRight">The texture; none means the plain color.  <br /></td></tr>
+<tr class="memitem:a4aa160c72b41cdb9711dbc6924c56a60" id="r_a4aa160c72b41cdb9711dbc6924c56a60"><td class="memItemLeft"><a class="el" href="classbuz_1_1texture__id.html">texture_id</a>&#160;</td><td class="memItemRight"><a class="el" href="#a4aa160c72b41cdb9711dbc6924c56a60">base_texture</a></td></tr>
+<tr class="memdesc:a4aa160c72b41cdb9711dbc6924c56a60"><td class="mdescLeft">&#160;</td><td class="mdescRight">The image the texture shows; none means the plain color. A model's materials name the image in the file: load it with buz::load_texture(engine, id) and hand the texture to <a class="el" href="classbuz_1_1world__renderer__3d.html#a1f6ff6e0032592a44ab4f851f074295e" title="Draws a mesh in its material&#39;s plain color, untextured.">world_renderer_3d::draw</a>, which draws with the texture it is given.  <br /></td></tr>
 <tr class="memitem:a51fd71c77a1faa219584d4e9bb94089d" id="r_a51fd71c77a1faa219584d4e9bb94089d"><td class="memItemLeft"><a class="el" href="namespacebuz.html#a8072cf99183e4afad505316f89bdbf7e">lighting</a>&#160;</td><td class="memItemRight"><a class="el" href="#a51fd71c77a1faa219584d4e9bb94089d">lit</a> = lighting::yes</td></tr>
 <tr class="memdesc:a51fd71c77a1faa219584d4e9bb94089d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the scene's light shades the surface.  <br /></td></tr>
 <tr class="memitem:a5552d8ca7b8e5e3af0bc11262a1bb3cd" id="r_a5552d8ca7b8e5e3af0bc11262a1bb3cd"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="#a5552d8ca7b8e5e3af0bc11262a1bb3cd">alpha_cutoff</a> = 0.0f</td></tr>
@@ -175,9 +175,9 @@ Public Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>How a mesh looks: a color, optionally times a texture, lit or not, optionally with see-through holes. </p>
-<p>That is all on purpose: the Block B project is about the game, not about shaders. </p>
+<p>These are the only options the engine's shaders read; a surface that needs anything else needs shaders of its own. </p>
 
-<p class="definition">Definition at line <a class="el" href="material_8h_source.html#l00027">27</a> of file <a class="el" href="material_8h_source.html">material.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="material_8h_source.html#l00024">24</a> of file <a class="el" href="material_8h_source.html">material.h</a>.</p>
 </div><a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
 <a id="a19eb4db6b3bbd136cdabb9d77708385a" name="a19eb4db6b3bbd136cdabb9d77708385a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a19eb4db6b3bbd136cdabb9d77708385a">&#9670;&#160;</a></span>base_color</h2>
@@ -193,23 +193,23 @@ Public Attributes</h2></td></tr>
 
 <p>The color, multiplied with the texture. </p>
 
-<p class="definition">Definition at line <a class="el" href="material_8h_source.html#l00030">30</a> of file <a class="el" href="material_8h_source.html">material.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="material_8h_source.html#l00027">27</a> of file <a class="el" href="material_8h_source.html">material.h</a>.</p>
 
 </div>
 </div>
-<a id="a8ef360e41caeac60005807fe9a7b5dfd" name="a8ef360e41caeac60005807fe9a7b5dfd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8ef360e41caeac60005807fe9a7b5dfd">&#9670;&#160;</a></span>base_texture</h2>
+<a id="a4aa160c72b41cdb9711dbc6924c56a60" name="a4aa160c72b41cdb9711dbc6924c56a60"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4aa160c72b41cdb9711dbc6924c56a60">&#9670;&#160;</a></span>base_texture</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt;<a class="el" href="classbuz_1_1texture.html">texture</a>&gt; buz::material::base_texture</td>
+          <td class="memname"><a class="el" href="classbuz_1_1texture__id.html">texture_id</a> buz::material::base_texture</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>The texture; none means the plain color. </p>
+<p>The image the texture shows; none means the plain color. A model's materials name the image in the file: load it with buz::load_texture(engine, id) and hand the texture to <a class="el" href="classbuz_1_1world__renderer__3d.html#a1f6ff6e0032592a44ab4f851f074295e" title="Draws a mesh in its material&#39;s plain color, untextured.">world_renderer_3d::draw</a>, which draws with the texture it is given. </p>
 
 <p class="definition">Definition at line <a class="el" href="material_8h_source.html#l00032">32</a> of file <a class="el" href="material_8h_source.html">material.h</a>.</p>
 

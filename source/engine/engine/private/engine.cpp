@@ -6,18 +6,19 @@
 #include "core/log.h"
 #include "core/paths.h"
 #include "core/timer.h"
-#include "engine/game.h"
+#include "engine/playable.h"
 #include "engine/screenshot_saver.h"
 #include "engine/window.h"
 #include "input_recorder.h"
 #include "native_window.h"
+#include "render_core/render_context.h"
+#include "render_core/shader_library.h"
+#include "render_core/texture_loader.h"
 #include "renderer_2d/screen_renderer.h"
+#include "renderer_2d/sprite_pass.h"
 #include "rhi/command_list.h"
 #include "rhi/device.h"
 #include "rhi/graphics_api.h"
-#include "rhi/render_context.h"
-#include "rhi/shader_library.h"
-#include "rhi/texture_loader.h"
 #include "screenshot.h"
 #include "stats_display.h"
 
@@ -43,7 +44,7 @@ namespace buz
 		native_window sdl_window;
 		window main_window{ sdl_window };
 		input_recorder recorded_input;
-		input user_input{ recorded_input };
+		input user_input{ recorded_input, sdl_window };
 		audio_device sound_device;
 		audio sound{ sound_device };
 
@@ -82,6 +83,19 @@ namespace
 	}
 
 	//--------------------------------------------------------------
+	/// @brief The rhi's word for the graphics card the game asked for.
+	buz::rhi::adapter_preference to_rhi(buz::adapter_preference preference)
+	{
+		switch (preference)
+		{
+		case buz::adapter_preference::highest_score: return buz::rhi::adapter_preference::highest_score;
+		case buz::adapter_preference::lowest_score: return buz::rhi::adapter_preference::lowest_score;
+		case buz::adapter_preference::software: return buz::rhi::adapter_preference::software;
+		}
+		return buz::rhi::adapter_preference::highest_score;
+	}
+
+	//--------------------------------------------------------------
 	/// @brief The name of the graphics api, for messages.
 	const char* get_api_name(buz::rhi::graphics_api api)
 	{
@@ -99,9 +113,9 @@ namespace
 	/// quits.
 	///
 	/// A screenshot run steps time by exactly 1/60 s and ignores the
-	/// keyboard and mouse, so the captured frame depends on neither how fast
-	/// the machine is nor a key pressed or where the cursor happens to be
-	/// while the window has focus.
+	/// keyboard and mouse, so the captured frame does not depend on how fast
+	/// the machine is, or on a key pressed or the cursor's position while
+	/// the window has focus.
 	bool is_capture_run(const buz::engine_systems& parts)
 	{
 		return !parts.settings.screenshot_path.empty();
@@ -139,51 +153,33 @@ namespace
 	}
 
 	//--------------------------------------------------------------
-	/// @brief Switches the debug views whose key (engine_settings::
-	/// debug_controls) was pressed. It runs before the game's update, with
-	/// the rest of the input; the 3D renderer reads the views when it draws.
+	/// @brief Shows or hides the stats when their key (engine_settings::
+	/// debug_controls) was pressed. game_3d handles the 3D debug keys.
 	void handle_debug_keys(buz::engine_systems& parts)
 	{
-		const buz::input_recorder& keys = parts.recorded_input;
-		const buz::debug_keys& controls = parts.settings.debug_controls;
-		buz::debug_views& views = parts.context.views;
-
-		if (keys.was_key_pressed(controls.stats))
+		if (parts.recorded_input.was_key_pressed(parts.settings.debug_controls.stats))
 		{
 			parts.stats.toggle();
-		}
-		if (keys.was_key_pressed(controls.wireframe))
-		{
-			views.wireframe = views.wireframe ? buz::wireframe_view::no : buz::wireframe_view::yes;
-		}
-		if (keys.was_key_pressed(controls.lighting))
-		{
-			views.lighting = views.lighting ? buz::lighting_view::no : buz::lighting_view::yes;
-		}
-		if (keys.was_key_pressed(controls.debug_lines))
-		{
-			views.debug_lines = views.debug_lines ? buz::debug_lines_view::no : buz::debug_lines_view::yes;
 		}
 	}
 
 	//--------------------------------------------------------------
 	/// @brief Draws the frame: the world, the screen on top, the stats,
 	/// and saves it when a screenshot was asked for.
-	void draw_frame(buz::engine_systems& parts, buz::engine& owner, buz::game& active_game, float measured_seconds)
+	void draw_frame(buz::engine_systems& parts, buz::engine& owner, buz::playable& active_game, float measured_seconds)
 	{
 		buz::rhi::command_list& commands = parts.device->begin_frame(parts.settings.clear_color);
 
-		// The game's renderers draw into this frame's command list; a new
-		// frame number makes each of them start its pass again
-		++parts.context.frame;
-		parts.context.commands = &commands;
-		active_game.render_world(owner);
-		active_game.render_screen(owner);
+		// The game's renderers draw into this frame's command list
+		active_game.render_world(owner, commands);
+		active_game.render_screen(owner, commands);
 
 		const buz::rhi::frame_stats stats = parts.device->get_frame_stats();
 		const float window_width = static_cast<float>(parts.sdl_window.get_width());
+		buz::sprite_pass& overlay_pass = parts.overlay->get_pass();
+		overlay_pass.begin_frame(commands);
 		parts.stats.draw(*parts.overlay, stats, measured_seconds, window_width);
-		parts.context.commands = nullptr;
+		overlay_pass.end_frame();
 
 		// A screenshot copies this frame's finished image before it goes
 		// to the screen
@@ -204,7 +200,7 @@ namespace
 	//--------------------------------------------------------------
 	/// @brief One pass of the main loop: handle the window's events, update
 	/// the game, draw a frame.
-	void tick(buz::engine_systems& parts, buz::engine& owner, buz::game& active_game)
+	void tick(buz::engine_systems& parts, buz::engine& owner, buz::playable& active_game)
 	{
 		handle_events(parts);
 		if (parts.exit_requested)
@@ -259,8 +255,8 @@ namespace buz
 		device_desc.window = parts.sdl_window.get_sdl_window();
 		device_desc.width = settings.window_width;
 		device_desc.height = settings.window_height;
-		device_desc.gpu_preference = settings.gpu_preference;
-		device_desc.use_vsync = settings.use_vsync;
+		device_desc.gpu_preference = to_rhi(settings.gpu_preference);
+		device_desc.use_vsync = settings.use_vsync ? rhi::vsync::yes : rhi::vsync::no;
 		device_desc.cache_directory = paths::get_executable_directory() / "cache";
 
 		parts.device = rhi::device::create(device_desc);
@@ -276,8 +272,8 @@ namespace buz
 		}
 
 		parts.loader.initialize(*parts.device);
-		parts.context = { .device = parts.device.get(), .shaders = &parts.shaders, .textures = &parts.loader, .sampler_filter = settings.sampler_filter };
-		parts.overlay = std::make_unique<screen_renderer>(parts.context);
+		parts.context = { .device = parts.device.get(), .shaders = &parts.shaders, .textures = &parts.loader };
+		parts.overlay = std::make_unique<screen_renderer>(parts.context, settings.sampler_filter);
 
 		parts.sound_device.initialize();
 
@@ -285,7 +281,7 @@ namespace buz
 		// never shows it
 		const bool show_stats = settings.show_stats && !is_capture_run(parts);
 		parts.stats = stats_display(show_stats ? stats_overlay::yes : stats_overlay::no);
-		parts.stats.set_font(parts.loader.load_from_file(paths::get_content_path("fonts/font_8x8.png")));
+		parts.stats.set_font(parts.loader.load_from_file(paths::get_content_path("shared/fonts/font_8x8.png")));
 
 		log::info("Engine initialized ({}x{})", settings.window_width, settings.window_height);
 	}
@@ -299,7 +295,7 @@ namespace buz
 	}
 
 	//--------------------------------------------------------------
-	int engine::run(game& active_game)
+	int engine::run(playable& active_game)
 	{
 		engine_systems& parts = *m_systems;
 
@@ -313,7 +309,7 @@ namespace buz
 		struct frame_call
 		{
 			engine* owner;
-			game* active_game;
+			playable* active_game;
 		};
 		frame_call call{ this, &active_game };
 
@@ -340,7 +336,7 @@ namespace buz
 	}
 
 	//--------------------------------------------------------------
-	const input& engine::get_input() const
+	input& engine::get_input()
 	{
 		return m_systems->user_input;
 	}
@@ -361,6 +357,12 @@ namespace buz
 	screenshot_saver& engine::get_screenshots()
 	{
 		return m_systems->screenshots;
+	}
+
+	//--------------------------------------------------------------
+	const engine_settings& engine::get_settings() const
+	{
+		return m_systems->settings;
 	}
 
 	//--------------------------------------------------------------

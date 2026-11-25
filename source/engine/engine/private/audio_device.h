@@ -51,8 +51,8 @@ namespace buz
 
 	private:
 		// miniaudio's types are only declared here; these free them in
-		// audio_device.cpp, where the full types are known. unique_ptr then
-		// makes every sound and the device clean themselves up.
+		// audio_device.cpp, where the full types are known. With these
+		// deleters, unique_ptr frees every sound and the device automatically.
 		struct device_deleter
 		{
 			void operator()(ma_engine* device) const;
@@ -68,8 +68,8 @@ namespace buz
 		/// @brief Loads a sound file; returns nullptr (and logs) on failure.
 		sound_ptr load(std::string_view content_relative_path, float volume);
 
-		// The device first: members are destroyed bottom to top, so every
-		// sound is gone before the device it plays on
+		// m_device is declared first: members are destroyed bottom to top,
+		// so every sound is destroyed before the device it plays on
 		device_ptr m_device;                     // nullptr without an audio device
 		sound_ptr m_music;                       // the background music, or nullptr
 		std::vector<sound_ptr> m_playing_sounds; // sound effects still playing

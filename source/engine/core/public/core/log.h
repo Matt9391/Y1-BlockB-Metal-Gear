@@ -9,11 +9,12 @@
 
 // Logging is compiled in for Debug and Development builds. In Release, the
 // shipping build (NDEBUG without BUZ_DEVELOPMENT), every log call collapses
-// to nothing, so no formatting cost is paid and no log file is created. The format string is still validated at compile time in both
-// builds: std::format_string checks the placeholders against the argument
-// types while compiling, so a typo like log::info("{} {}", one_value) is a
-// compile error, not a runtime surprise. If you ever need a format string
-// that is only known at runtime, that is what std::vformat is for.
+// to nothing, so no formatting cost is paid and no log file is created. The
+// format string is still checked at compile time in both builds:
+// std::format_string checks the placeholders against the argument types
+// while compiling, so a typo like log::info("{} {}", one_value) is a compile
+// error. A format string that is only known at runtime needs std::vformat
+// instead.
 #if !defined(NDEBUG) || defined(BUZ_DEVELOPMENT)
 	#define BUZ_LOG_ENABLED
 #endif
@@ -31,7 +32,8 @@ namespace buz
 		namespace internal
 		{
 			//------------------------------------------------------------------
-			/// @brief Fans a formatted line out to every registered sink.
+			/// @brief Writes a formatted line to the console, the debugger
+			/// output (on Windows) and the log file.
 			void trace(const char* name, const char* color, std::string_view text);
 		}
 

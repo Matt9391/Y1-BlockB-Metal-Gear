@@ -94,13 +94,13 @@ SET(SOURCE_THIRDPARTY_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/source/third_party)
 SET(SOURCE_SHADER_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/shaders)
 
 # The heavier build logic lives in its own script per topic inside the /cmake
-# folder; every script is commented if you are curious how it works.
+# folder; the comments in each script explain how it works.
 LIST(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 INCLUDE(group_sources)       # GROUPSOURCES: mirror a folder tree as IDE filters
 INCLUDE(compile_shaders)     # BUZ_COMPILE_SHADERS: compile the /shaders hlsl files
 INCLUDE(copy_content)        # copy-content: copy /content next to the executable
 INCLUDE(check_stray_sources) # warn about source files accidentally created in build/
-INCLUDE(buz_checks)         # BUZ_CHECK_INTERNAL_LINKS: games use public headers only
+INCLUDE(buz_checks)         # BUZ_CHECK_*: games use public headers only, never the rhi
 INCLUDE(buz_compile_options) # BUZ_COMPILE_OPTIONS: the settings of buz's own targets
 INCLUDE(buz_module)         # BUZ_MODULE: one engine module, one static library
 INCLUDE(buz_game)           # BUZ_GAME: one game, one executable
@@ -119,8 +119,10 @@ ENDIF()
 ADD_SUBDIRECTORY(${SOURCE_GAMES_DIRECTORY})
 
 
-# Refuse to configure when a game links an engine module's internal headers
+# Refuse to configure when a game links an engine module's internal headers,
+# or can include the headers of a module that is for the engine only
 BUZ_CHECK_INTERNAL_LINKS()
+BUZ_CHECK_ENGINE_ONLY()
 
 # Make the simple starter game the startup project when opening the solution in
 # Visual Studio; right-click a different game and "Set as Startup Project" to

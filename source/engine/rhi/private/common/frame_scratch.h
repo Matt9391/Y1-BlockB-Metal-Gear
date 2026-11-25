@@ -1,5 +1,7 @@
 #pragma once
 
+#include "common/constants.h"
+
 #include <cstdint>
 #include <optional>
 
@@ -10,10 +12,12 @@ namespace buz::rhi
 	///
 	/// Every frame in flight owns a buffer of k_frame_scratch_size bytes
 	/// that the cpu writes and the gpu reads (an upload heap in DirectX 12,
-	/// a host visible buffer in Vulkan). Allocating is just moving an offset
-	/// forward; begin_frame starts over at zero once the gpu is done with
-	/// the frame's previous use. This class is only that bookkeeping, the
-	/// same in both backends; the buffer itself belongs to the backend.
+	/// a host visible buffer in Vulkan, a buffer object OpenGL hands back to
+	/// the driver every frame). Allocating moves an offset forward;
+	/// reset starts over at zero (each backend calls it in its begin_frame)
+	/// once the gpu is done with the frame's previous use. This class is
+	/// only that bookkeeping, the same in every backend; the buffer itself
+	/// belongs to the backend.
 	class frame_scratch
 	{
 	public:
@@ -27,9 +31,11 @@ namespace buz::rhi
 
 		//----------------------------------------------------------
 		/// @brief Reserves size bytes.
+		/// @param alignment The offset is a multiple of this: a power of
+		/// two, at least k_frame_scratch_alignment.
 		/// @return The offset of the reserved bytes in the scratch buffer,
 		/// or nothing when the frame's scratch memory is full.
-		std::optional<uint32_t> allocate(uint32_t size);
+		std::optional<uint32_t> allocate(uint32_t size, uint32_t alignment = k_frame_scratch_alignment);
 
 	private:
 		uint32_t m_offset;    // where the next allocation may start

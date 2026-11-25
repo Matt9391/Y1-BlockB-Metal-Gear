@@ -167,48 +167,50 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('world__rendere
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="comment">    /// and moves when the camera moves.</span></div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="comment">    ///</span></div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="comment">    /// Owned by buz::game_2d and handed to on_render_world every frame. Until</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="comment">    /// you call set_camera,</span></div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="comment">    /// world positions are plain window pixels, with (0, 0) in the top-left</span></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment">    /// corner. A camera is two matrices: the view (where the camera is) and</span></div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="comment">    /// the projection (how the world maps onto the window). Scrolling a</span></div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment">    /// level to follow the player is a view that moves:</span></div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment">    /// @code{.cpp}</span></div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment">    /// const buz::mat4 view = glm::translate(buz::mat4(1.0f), buz::vec3(-scroll_x, 0.0f, 0.0f));</span></div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment">    /// const buz::mat4 projection = buz::make_orthographic_projection(1280.0f, 720.0f);</span></div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment">    /// world.set_camera(view, projection);</span></div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment">    /// @endcode</span></div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment">    ///</span></div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment">    /// A 3D game draws its world with a buz::world_renderer_3d instead</span></div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="comment">    /// (renderer_3d/world_renderer_3d.h).</span></div>
-<div class="foldopen" id="foldopen00028" data-start="{" data-end="};">
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="classbuz_1_1world__renderer__2d.html">   28</a></span>    <span class="keyword">class </span><a class="code hl_function" href="classbuz_1_1world__renderer__2d.html#a39a098efc0178115158d116ad63eebfe">world_renderer_2d</a> : <span class="keyword">public</span> <a class="code hl_function" href="classbuz_1_1renderer__2d.html#ab31e5136e0b26a7f5257ea074a591965">renderer_2d</a></div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    {</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        <span class="comment">//----------------------------------------------------------</span></div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        <span class="comment">// Lifetime</span></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>        <span class="comment">//----------------------------------------------------------</span><span class="comment"></span></div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="comment">        /// @brief Creates the renderer and its pipeline on the engine&#39;s</span></div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="comment">        /// graphics card; buz::game_2d makes one for your game.</span></div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="comment">        /// @param context The engine&#39;s render context</span></div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="comment">        /// (engine::get_render_context).</span></div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno"><a class="line" href="classbuz_1_1world__renderer__2d.html#a39a098efc0178115158d116ad63eebfe">   38</a></span>        <span class="keyword">explicit</span> <a class="code hl_function" href="classbuz_1_1world__renderer__2d.html#a39a098efc0178115158d116ad63eebfe">world_renderer_2d</a>(<span class="keyword">const</span> render_context&amp; context);</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        <span class="comment">//----------------------------------------------------------</span></div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        <span class="comment">// Camera</span></div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        <span class="comment">//----------------------------------------------------------</span><span class="comment"></span></div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="comment">        /// @brief Sets the camera for the rest of this frame.</span></div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="comment">        /// @param view Moves the world so the camera sits at the origin.</span></div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="comment">        /// @param projection Maps what the camera sees onto the window.</span></div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="classbuz_1_1world__renderer__2d.html#a810d2ed9eda5a29f48ddeb2408ee3598">   47</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classbuz_1_1world__renderer__2d.html#a810d2ed9eda5a29f48ddeb2408ee3598">set_camera</a>(<span class="keyword">const</span> <a class="code hl_typedef" href="namespacebuz.html#acdb2c70a0426fc209337d5bcdf33333c">mat4</a>&amp; view, <span class="keyword">const</span> <a class="code hl_typedef" href="namespacebuz.html#acdb2c70a0426fc209337d5bcdf33333c">mat4</a>&amp; projection);</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    };</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="comment">    /// you call set_camera, world positions are plain window pixels, with</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="comment">    /// (0, 0) in the top-left corner. A camera is two matrices: the view (where the camera is) and</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment">    /// the projection (how the world maps onto the window). Scrolling a</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="comment">    /// level to follow the player is a view that moves:</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment">    /// @code{.cpp}</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment">    /// const buz::mat4 view = glm::translate(buz::mat4(1.0f), buz::vec3(-scroll_x, 0.0f, 0.0f));</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment">    /// const buz::mat4 projection = buz::make_orthographic_projection(1280.0f, 720.0f);</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment">    /// world.set_camera(view, projection);</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment">    /// @endcode</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment">    ///</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment">    /// A 3D game draws its world with a buz::world_renderer_3d instead</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment">    /// (renderer_3d/world_renderer_3d.h).</span></div>
+<div class="foldopen" id="foldopen00027" data-start="{" data-end="};">
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="classbuz_1_1world__renderer__2d.html">   27</a></span>    <span class="keyword">class </span><a class="code hl_function" href="classbuz_1_1world__renderer__2d.html#a752484e1894deda0c639499201114505">world_renderer_2d</a> : <span class="keyword">public</span> <a class="code hl_function" href="classbuz_1_1renderer__2d.html#ac6064d84c693a49d6bbeadcbe781d93d">renderer_2d</a></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    {</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        <span class="comment">//----------------------------------------------------------</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        <span class="comment">// Lifetime</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>        <span class="comment">//----------------------------------------------------------</span><span class="comment"></span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="comment">        /// @brief Creates the renderer and its pipeline on the engine&#39;s</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="comment">        /// graphics card; buz::game_2d makes one for your game.</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="comment">        /// @param context The engine&#39;s render context</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="comment">        /// (engine::get_render_context).</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="comment">        /// @param sampler_filter How its textures are filtered when scaled</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="comment">        /// on screen (engine_settings::sampler_filter).</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="classbuz_1_1world__renderer__2d.html#a752484e1894deda0c639499201114505">   39</a></span>        <a class="code hl_function" href="classbuz_1_1world__renderer__2d.html#a752484e1894deda0c639499201114505">world_renderer_2d</a>(<span class="keyword">const</span> render_context&amp; context, <a class="code hl_enumeration" href="namespacebuz.html#a5e0429f08408e32e673a381a6e82a96c">texture_filter</a> sampler_filter);</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        <span class="comment">//----------------------------------------------------------</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        <span class="comment">// Camera</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>        <span class="comment">//----------------------------------------------------------</span><span class="comment"></span></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="comment">        /// @brief Sets the camera for the rest of this frame.</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="comment">        /// @param view Moves the world so the camera sits at the origin.</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="comment">        /// @param projection Maps what the camera sees onto the window.</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno"><a class="line" href="classbuz_1_1world__renderer__2d.html#a810d2ed9eda5a29f48ddeb2408ee3598">   48</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classbuz_1_1world__renderer__2d.html#a810d2ed9eda5a29f48ddeb2408ee3598">set_camera</a>(<span class="keyword">const</span> <a class="code hl_typedef" href="namespacebuz.html#acdb2c70a0426fc209337d5bcdf33333c">mat4</a>&amp; view, <span class="keyword">const</span> <a class="code hl_typedef" href="namespacebuz.html#acdb2c70a0426fc209337d5bcdf33333c">mat4</a>&amp; projection);</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    };</div>
 </div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>}</div>
-<div class="ttc" id="aclassbuz_1_1renderer__2d_html_ab31e5136e0b26a7f5257ea074a591965"><div class="ttname"><a href="classbuz_1_1renderer__2d.html#ab31e5136e0b26a7f5257ea074a591965">buz::renderer_2d::renderer_2d</a></div><div class="ttdeci">renderer_2d(const render_context &amp;context)</div></div>
-<div class="ttc" id="aclassbuz_1_1world__renderer__2d_html_a39a098efc0178115158d116ad63eebfe"><div class="ttname"><a href="classbuz_1_1world__renderer__2d.html#a39a098efc0178115158d116ad63eebfe">buz::world_renderer_2d::world_renderer_2d</a></div><div class="ttdeci">world_renderer_2d(const render_context &amp;context)</div><div class="ttdoc">Creates the renderer and its pipeline on the engine&#39;s graphics card; buz::game_2d makes one for your ...</div></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>}</div>
+<div class="ttc" id="aclassbuz_1_1renderer__2d_html_ac6064d84c693a49d6bbeadcbe781d93d"><div class="ttname"><a href="classbuz_1_1renderer__2d.html#ac6064d84c693a49d6bbeadcbe781d93d">buz::renderer_2d::renderer_2d</a></div><div class="ttdeci">renderer_2d(const render_context &amp;context, texture_filter sampler_filter)</div></div>
+<div class="ttc" id="aclassbuz_1_1world__renderer__2d_html_a752484e1894deda0c639499201114505"><div class="ttname"><a href="classbuz_1_1world__renderer__2d.html#a752484e1894deda0c639499201114505">buz::world_renderer_2d::world_renderer_2d</a></div><div class="ttdeci">world_renderer_2d(const render_context &amp;context, texture_filter sampler_filter)</div><div class="ttdoc">Creates the renderer and its pipeline on the engine&#39;s graphics card; buz::game_2d makes one for your ...</div></div>
 <div class="ttc" id="aclassbuz_1_1world__renderer__2d_html_a810d2ed9eda5a29f48ddeb2408ee3598"><div class="ttname"><a href="classbuz_1_1world__renderer__2d.html#a810d2ed9eda5a29f48ddeb2408ee3598">buz::world_renderer_2d::set_camera</a></div><div class="ttdeci">void set_camera(const mat4 &amp;view, const mat4 &amp;projection)</div><div class="ttdoc">Sets the camera for the rest of this frame.</div></div>
 <div class="ttc" id="anamespacebuz_html"><div class="ttname"><a href="namespacebuz.html">buz</a></div><div class="ttdef"><b>Definition</b> <a href="aabb_8h_source.html#l00008">aabb.h:9</a></div></div>
-<div class="ttc" id="anamespacebuz_html_acdb2c70a0426fc209337d5bcdf33333c"><div class="ttname"><a href="namespacebuz.html#acdb2c70a0426fc209337d5bcdf33333c">buz::mat4</a></div><div class="ttdeci">glm::mat4 mat4</div><div class="ttdef"><b>Definition</b> <a href="math_8h_source.html#l00028">math.h:28</a></div></div>
+<div class="ttc" id="anamespacebuz_html_a5e0429f08408e32e673a381a6e82a96c"><div class="ttname"><a href="namespacebuz.html#a5e0429f08408e32e673a381a6e82a96c">buz::texture_filter</a></div><div class="ttdeci">texture_filter</div><div class="ttdoc">How sampled textures are filtered when scaled on screen.</div><div class="ttdef"><b>Definition</b> <a href="texture__filter_8h_source.html#l00010">texture_filter.h:11</a></div></div>
+<div class="ttc" id="anamespacebuz_html_acdb2c70a0426fc209337d5bcdf33333c"><div class="ttname"><a href="namespacebuz.html#acdb2c70a0426fc209337d5bcdf33333c">buz::mat4</a></div><div class="ttdeci">glm::mat4 mat4</div><div class="ttdef"><b>Definition</b> <a href="math_8h_source.html#l00029">math.h:29</a></div></div>
 <div class="ttc" id="arenderer__2d_8h_html"><div class="ttname"><a href="renderer__2d_8h.html">renderer_2d.h</a></div><div class="ttdoc">The drawing functions the world and screen renderers share: sprites, shapes and text.</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
@@ -216,7 +218,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('world__rendere
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a href="dir_6f9ba63c1e6703776d3763c2ff46adb4.html">renderer_2d</a></li><li class="navelem"><a href="world__renderer__2d_8h.html">world_renderer_2d.h</a></li>
+    <li class="navelem"><a href="dir_4eb240cf58aabfdc4f5151186b6d1658.html">renderer_2d</a></li><li class="navelem"><a href="world__renderer__2d_8h.html">world_renderer_2d.h</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
   </ul>
 </div>

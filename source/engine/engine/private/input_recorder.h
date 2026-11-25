@@ -12,8 +12,8 @@ namespace buz
 {
 	//--------------------------------------------------------------
 	/// @brief The engine's side of input: it records every keyboard and
-	/// mouse event and starts a new frame. Games ask their questions through
-	/// buz::input, which reads them from here.
+	/// mouse event and starts a new frame. Games query the input through
+	/// buz::input, which reads the recorded state from here.
 	class input_recorder
 	{
 	public:
@@ -25,8 +25,9 @@ namespace buz
 		void new_frame();
 
 		//----------------------------------------------------------
-		/// @brief Records a keyboard or mouse event coming from SDL_PollEvent;
-		/// events that are neither are ignored.
+		/// @brief Records a keyboard or mouse event coming from SDL_PollEvent,
+		/// and releases every key and button when the window loses focus.
+		/// Other events are ignored.
 		void process_event(const SDL_Event& event);
 
 		//----------------------------------------------------------
@@ -62,6 +63,10 @@ namespace buz
 		/// @brief Returns how far the mouse wheel turned this frame.
 		float get_mouse_wheel_delta() const;
 
+		//----------------------------------------------------------
+		/// @brief Returns how far the mouse moved this frame, in pixels.
+		vec2 get_mouse_movement() const;
+
 	private:
 		static constexpr size_t k_key_count = static_cast<size_t>(key::count); // every key, the size of the key arrays
 		static constexpr uint32_t k_button_count = 3;                          // left, right and middle
@@ -83,5 +88,6 @@ namespace buz
 
 		vec2 m_mouse_position; // in pixels, from the top-left of the drawable area
 		float m_wheel_delta;   // wheel clicks this frame
+		vec2 m_mouse_movement; // in pixels this frame, also while the cursor is locked
 	};
 }

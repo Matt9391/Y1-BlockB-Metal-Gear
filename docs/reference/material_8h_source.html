@@ -159,33 +159,33 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('material_8h_so
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &quot;<a class="code" href="math_8h.html">core/math.h</a>&quot;</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;yes_no.h&gt;</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;memory&gt;</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacebuz.html">buz</a></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>{</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    <span class="keyword">class </span><a class="code hl_class" href="classbuz_1_1texture.html">texture</a>;</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    <span class="comment">//--------------------------------------------------------------</span><span class="comment"></span></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment">    /// @brief Whether a surface is lit by the scene&#39;s light, or shows its</span></div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="comment">    /// color as is.</span></div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="namespacebuz.html#a8072cf99183e4afad505316f89bdbf7e">   19</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="namespacebuz.html#a8072cf99183e4afad505316f89bdbf7e">lighting</a> = utl::yes_no_t&lt;struct lighting_tag&gt;;</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    <span class="comment">//--------------------------------------------------------------</span><span class="comment"></span></div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment">    /// @brief How a mesh looks: a color, optionally times a texture, lit or</span></div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment">    /// not, optionally with see-through holes.</span></div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment">    ///</span></div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment">    /// That is all on purpose: the Block B project is about the game, not</span></div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment">    /// about shaders.</span></div>
-<div class="foldopen" id="foldopen00027" data-start="{" data-end="};">
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="structbuz_1_1material.html">   27</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="structbuz_1_1material.html">material</a></div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    {<span class="comment"></span></div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="comment">        /// @brief The color, multiplied with the texture.</span></div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="structbuz_1_1material.html#a19eb4db6b3bbd136cdabb9d77708385a">   30</a></span>        <a class="code hl_struct" href="structbuz_1_1color.html">color</a> <a class="code hl_variable" href="structbuz_1_1material.html#a19eb4db6b3bbd136cdabb9d77708385a">base_color</a>;<span class="comment"></span></div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment">        /// @brief The texture; none means the plain color.</span></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="structbuz_1_1material.html#a8ef360e41caeac60005807fe9a7b5dfd">   32</a></span>        std::shared_ptr&lt;texture&gt; <a class="code hl_variable" href="structbuz_1_1material.html#a8ef360e41caeac60005807fe9a7b5dfd">base_texture</a>;<span class="comment"></span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;<a class="code" href="texture__id_8h.html">core/texture_id.h</a>&quot;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;yes_no.h&gt;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacebuz.html">buz</a></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>{</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    <span class="comment">//--------------------------------------------------------------</span><span class="comment"></span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="comment">    /// @brief Whether a surface is lit by the scene&#39;s light, or shows its</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="comment">    /// color as is.</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="namespacebuz.html#a8072cf99183e4afad505316f89bdbf7e">   16</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="namespacebuz.html#a8072cf99183e4afad505316f89bdbf7e">lighting</a> = utl::yes_no_t&lt;struct lighting_tag&gt;;</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="comment">//--------------------------------------------------------------</span><span class="comment"></span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment">    /// @brief How a mesh looks: a color, optionally times a texture, lit or</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment">    /// not, optionally with see-through holes.</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment">    ///</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment">    /// These are the only options the engine&#39;s shaders read; a surface that</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment">    /// needs anything else needs shaders of its own.</span></div>
+<div class="foldopen" id="foldopen00024" data-start="{" data-end="};">
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="structbuz_1_1material.html">   24</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="structbuz_1_1material.html">material</a></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    {<span class="comment"></span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment">        /// @brief The color, multiplied with the texture.</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="structbuz_1_1material.html#a19eb4db6b3bbd136cdabb9d77708385a">   27</a></span>        <a class="code hl_struct" href="structbuz_1_1color.html">color</a> <a class="code hl_variable" href="structbuz_1_1material.html#a19eb4db6b3bbd136cdabb9d77708385a">base_color</a>;<span class="comment"></span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="comment">        /// @brief The image the texture shows; none means the plain color.</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="comment">        /// A model&#39;s materials name the image in the file: load it with</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment">        /// buz::load_texture(engine, id) and hand the texture to</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment">        /// world_renderer_3d::draw, which draws with the texture it is given.</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="structbuz_1_1material.html#a4aa160c72b41cdb9711dbc6924c56a60">   32</a></span>        <a class="code hl_class" href="classbuz_1_1texture__id.html">texture_id</a> <a class="code hl_variable" href="structbuz_1_1material.html#a4aa160c72b41cdb9711dbc6924c56a60">base_texture</a>;<span class="comment"></span></div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="comment">        /// @brief Whether the scene&#39;s light shades the surface.</span></div>
 <div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="structbuz_1_1material.html#a51fd71c77a1faa219584d4e9bb94089d">   34</a></span>        <a class="code hl_typedef" href="namespacebuz.html#a8072cf99183e4afad505316f89bdbf7e">lighting</a> <a class="code hl_variable" href="structbuz_1_1material.html#a51fd71c77a1faa219584d4e9bb94089d">lit</a> = lighting::yes;<span class="comment"></span></div>
 <div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="comment">        /// @brief Pixels whose alpha (texture times color) is below this are</span></div>
@@ -196,23 +196,24 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('material_8h_so
 <div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    };</div>
 </div>
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>}</div>
-<div class="ttc" id="aclassbuz_1_1texture_html"><div class="ttname"><a href="classbuz_1_1texture.html">buz::texture</a></div><div class="ttdoc">A 2d image living in gpu memory, ready to be drawn.</div><div class="ttdef"><b>Definition</b> <a href="texture_8h_source.html#l00019">texture.h:20</a></div></div>
+<div class="ttc" id="aclassbuz_1_1texture__id_html"><div class="ttname"><a href="classbuz_1_1texture__id.html">buz::texture_id</a></div><div class="ttdoc">Names an image without loading it: an image file in the content folder, or an image inside a model fi...</div><div class="ttdef"><b>Definition</b> <a href="texture__id_8h_source.html#l00039">texture_id.h:40</a></div></div>
 <div class="ttc" id="amath_8h_html"><div class="ttname"><a href="math_8h.html">math.h</a></div><div class="ttdoc">buz&#39;s vector, matrix and color types, and the 2D projection the engine needs.</div></div>
 <div class="ttc" id="anamespacebuz_html"><div class="ttname"><a href="namespacebuz.html">buz</a></div><div class="ttdef"><b>Definition</b> <a href="aabb_8h_source.html#l00008">aabb.h:9</a></div></div>
-<div class="ttc" id="anamespacebuz_html_a8072cf99183e4afad505316f89bdbf7e"><div class="ttname"><a href="namespacebuz.html#a8072cf99183e4afad505316f89bdbf7e">buz::lighting</a></div><div class="ttdeci">utl::yes_no_t&lt; struct lighting_tag &gt; lighting</div><div class="ttdoc">Whether a surface is lit by the scene&#39;s light, or shows its color as is.</div><div class="ttdef"><b>Definition</b> <a href="#l00019">material.h:19</a></div></div>
-<div class="ttc" id="astructbuz_1_1color_html"><div class="ttname"><a href="structbuz_1_1color.html">buz::color</a></div><div class="ttdoc">RGBA color with components in the [0, 1] range.</div><div class="ttdef"><b>Definition</b> <a href="math_8h_source.html#l00054">math.h:55</a></div></div>
-<div class="ttc" id="astructbuz_1_1material_html"><div class="ttname"><a href="structbuz_1_1material.html">buz::material</a></div><div class="ttdoc">How a mesh looks: a color, optionally times a texture, lit or not, optionally with see-through holes.</div><div class="ttdef"><b>Definition</b> <a href="#l00027">material.h:28</a></div></div>
-<div class="ttc" id="astructbuz_1_1material_html_a19eb4db6b3bbd136cdabb9d77708385a"><div class="ttname"><a href="structbuz_1_1material.html#a19eb4db6b3bbd136cdabb9d77708385a">buz::material::base_color</a></div><div class="ttdeci">color base_color</div><div class="ttdoc">The color, multiplied with the texture.</div><div class="ttdef"><b>Definition</b> <a href="#l00030">material.h:30</a></div></div>
+<div class="ttc" id="anamespacebuz_html_a8072cf99183e4afad505316f89bdbf7e"><div class="ttname"><a href="namespacebuz.html#a8072cf99183e4afad505316f89bdbf7e">buz::lighting</a></div><div class="ttdeci">utl::yes_no_t&lt; struct lighting_tag &gt; lighting</div><div class="ttdoc">Whether a surface is lit by the scene&#39;s light, or shows its color as is.</div><div class="ttdef"><b>Definition</b> <a href="#l00016">material.h:16</a></div></div>
+<div class="ttc" id="astructbuz_1_1color_html"><div class="ttname"><a href="structbuz_1_1color.html">buz::color</a></div><div class="ttdoc">RGBA color with components in the [0, 1] range.</div><div class="ttdef"><b>Definition</b> <a href="math_8h_source.html#l00055">math.h:56</a></div></div>
+<div class="ttc" id="astructbuz_1_1material_html"><div class="ttname"><a href="structbuz_1_1material.html">buz::material</a></div><div class="ttdoc">How a mesh looks: a color, optionally times a texture, lit or not, optionally with see-through holes.</div><div class="ttdef"><b>Definition</b> <a href="#l00024">material.h:25</a></div></div>
+<div class="ttc" id="astructbuz_1_1material_html_a19eb4db6b3bbd136cdabb9d77708385a"><div class="ttname"><a href="structbuz_1_1material.html#a19eb4db6b3bbd136cdabb9d77708385a">buz::material::base_color</a></div><div class="ttdeci">color base_color</div><div class="ttdoc">The color, multiplied with the texture.</div><div class="ttdef"><b>Definition</b> <a href="#l00027">material.h:27</a></div></div>
+<div class="ttc" id="astructbuz_1_1material_html_a4aa160c72b41cdb9711dbc6924c56a60"><div class="ttname"><a href="structbuz_1_1material.html#a4aa160c72b41cdb9711dbc6924c56a60">buz::material::base_texture</a></div><div class="ttdeci">texture_id base_texture</div><div class="ttdoc">The image the texture shows; none means the plain color. A model&#39;s materials name the image in the fi...</div><div class="ttdef"><b>Definition</b> <a href="#l00032">material.h:32</a></div></div>
 <div class="ttc" id="astructbuz_1_1material_html_a51fd71c77a1faa219584d4e9bb94089d"><div class="ttname"><a href="structbuz_1_1material.html#a51fd71c77a1faa219584d4e9bb94089d">buz::material::lit</a></div><div class="ttdeci">lighting lit</div><div class="ttdoc">Whether the scene&#39;s light shades the surface.</div><div class="ttdef"><b>Definition</b> <a href="#l00034">material.h:34</a></div></div>
 <div class="ttc" id="astructbuz_1_1material_html_a5552d8ca7b8e5e3af0bc11262a1bb3cd"><div class="ttname"><a href="structbuz_1_1material.html#a5552d8ca7b8e5e3af0bc11262a1bb3cd">buz::material::alpha_cutoff</a></div><div class="ttdeci">float alpha_cutoff</div><div class="ttdoc">Pixels whose alpha (texture times color) is below this are not drawn, which leaves a hole: a railing ...</div><div class="ttdef"><b>Definition</b> <a href="#l00039">material.h:39</a></div></div>
-<div class="ttc" id="astructbuz_1_1material_html_a8ef360e41caeac60005807fe9a7b5dfd"><div class="ttname"><a href="structbuz_1_1material.html#a8ef360e41caeac60005807fe9a7b5dfd">buz::material::base_texture</a></div><div class="ttdeci">std::shared_ptr&lt; texture &gt; base_texture</div><div class="ttdoc">The texture; none means the plain color.</div><div class="ttdef"><b>Definition</b> <a href="#l00032">material.h:32</a></div></div>
+<div class="ttc" id="atexture__id_8h_html"><div class="ttname"><a href="texture__id_8h.html">texture_id.h</a></div><div class="ttdoc">Names an image without loading it: the texture a material asks for.</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a href="dir_815db0563159af41b77de82d2ec73be5.html">renderer_3d</a></li><li class="navelem"><a href="material_8h.html">material.h</a></li>
+    <li class="navelem"><a href="dir_2c5eb61a5511368cb6e8f5f1449a9bb1.html">renderer_3d</a></li><li class="navelem"><a href="material_8h.html">material.h</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
   </ul>
 </div>

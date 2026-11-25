@@ -157,27 +157,25 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('mesh_8h.html',
 </div><!--header-->
 <div class="contents">
 
-<p>Meshes: triangles in gpu memory. Make one with <a class="el" href="namespacebuz.html#a49a44ca2da1a0f4f52c7c02f3cb9cddc" title="Makes a mesh from triangles made in code.">buz::create_mesh</a> or <a class="el" href="namespacebuz.html#ac30fdbff7ce71be3b4b39956388fae5c" title="Loads every mesh of a glTF file as one mesh, placed as in the file: for props and level geometry that...">buz::load_mesh</a> from <a class="el" href="model__loading_8h.html" title="Loading models and meshes from the content folder, and making meshes from triangles.">asset_management/model_loading.h</a>.  
+<p>Meshes: triangles in gpu memory. Make one with <a class="el" href="namespacebuz.html#a49a44ca2da1a0f4f52c7c02f3cb9cddc" title="Makes a mesh from triangles made in code.">buz::create_mesh</a> or <a class="el" href="namespacebuz.html#ab3a034cd4063e03d0bd249c56939288e" title="Loads every mesh of a glTF file as one mesh, placed as in the file: for props and level geometry that...">buz::load_mesh</a> from <a class="el" href="model__loading_8h.html" title="Loading models, meshes and their textures from the content folder, and making meshes from triangles.">asset_management/model_loading.h</a>.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="aabb_8h_source.html">core/aabb.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="math_8h_source.html">core/math.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="mesh__data_8h_source.html">core/mesh_data.h</a>&quot;</code><br />
 <code>#include &lt;cstdint&gt;</code><br />
 </div>
 <p><a href="mesh_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:buz_3A_3Amesh_5Fvertex" id="r_buz_3A_3Amesh_5Fvertex"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structbuz_1_1mesh__vertex.html">buz::mesh_vertex</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">One corner of a triangle of a mesh.  <a href="structbuz_1_1mesh__vertex.html#details">More...</a><br /></td></tr>
 <tr class="memitem:buz_3A_3Amesh" id="r_buz_3A_3Amesh"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classbuz_1_1mesh.html">buz::mesh</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Triangles in gpu memory, ready to be drawn with draw_mesh.  <a href="classbuz_1_1mesh.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Triangles in gpu memory, ready to be drawn with <a class="el" href="classbuz_1_1world__renderer__3d.html#a1f6ff6e0032592a44ab4f851f074295e" title="Draws a mesh in its material&#39;s plain color, untextured.">world_renderer_3d::draw</a>.  <a href="classbuz_1_1mesh.html#details">More...</a><br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-namespaces" class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:buz" id="r_buz"><td class="memItemLeft">namespace &#160;</td><td class="memItemRight"><a class="el" href="namespacebuz.html">buz</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Meshes: triangles in gpu memory. Make one with <a class="el" href="namespacebuz.html#a49a44ca2da1a0f4f52c7c02f3cb9cddc" title="Makes a mesh from triangles made in code.">buz::create_mesh</a> or <a class="el" href="namespacebuz.html#ac30fdbff7ce71be3b4b39956388fae5c" title="Loads every mesh of a glTF file as one mesh, placed as in the file: for props and level geometry that...">buz::load_mesh</a> from <a class="el" href="model__loading_8h.html" title="Loading models and meshes from the content folder, and making meshes from triangles.">asset_management/model_loading.h</a>. </p>
+<div class="textblock"><p>Meshes: triangles in gpu memory. Make one with <a class="el" href="namespacebuz.html#a49a44ca2da1a0f4f52c7c02f3cb9cddc" title="Makes a mesh from triangles made in code.">buz::create_mesh</a> or <a class="el" href="namespacebuz.html#ab3a034cd4063e03d0bd249c56939288e" title="Loads every mesh of a glTF file as one mesh, placed as in the file: for props and level geometry that...">buz::load_mesh</a> from <a class="el" href="model__loading_8h.html" title="Loading models, meshes and their textures from the content folder, and making meshes from triangles.">asset_management/model_loading.h</a>. </p>
 
 <p class="definition">Definition in file <a class="el" href="mesh_8h_source.html">mesh.h</a>.</p>
 </div></div><!-- contents -->
@@ -186,7 +184,7 @@ Namespaces</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a href="dir_815db0563159af41b77de82d2ec73be5.html">renderer_3d</a></li><li class="navelem"><a href="mesh_8h.html">mesh.h</a></li>
+    <li class="navelem"><a href="dir_2c5eb61a5511368cb6e8f5f1449a9bb1.html">renderer_3d</a></li><li class="navelem"><a href="mesh_8h.html">mesh.h</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
   </ul>
 </div>

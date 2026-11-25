@@ -18,12 +18,12 @@ struct pixel_input
     float4 tint : COLOR0;
 };
 
-// Set by renderer_2d for every sprite (must match sprite_constants in renderer_2d.cpp)
+// Set by renderer_2d for every sprite (must match sprite_constants in renderer_2d/private/sprite_layout.h)
 struct sprite_constants
 {
     // Sprite transformation and screen projection combined into one matrix.
-    // Stored column-major (hlsl's default), which is exactly how glm stores
-    // its matrices on the cpu, so the engine can upload them as-is.
+    // Stored column-major (hlsl's default), the same layout glm uses for
+    // its matrices on the cpu, so the engine can upload them unchanged.
     float4x4 transform;
     float4 tint_color;
 
@@ -34,8 +34,9 @@ struct sprite_constants
 };
 
 // DirectX 12 receives these as root constants in register b0; Vulkan as
-// push constants, which is what the vk::push_constant attribute asks for.
-// Each api ignores the other one's annotation.
+// push constants, which the vk::push_constant attribute selects. Each of
+// the two apis ignores the other one's annotation. For OpenGL,
+// shader_compiler turns them into the uniform block buz_constants.
 [[vk::push_constant]] ConstantBuffer<sprite_constants> constants : register(b0);
 
 pixel_input main(vertex_input input)

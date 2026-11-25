@@ -51,8 +51,9 @@ namespace buz
 		else if (graphics == window_graphics::opengl)
 		{
 			// OpenGL draws into the window's own buffers, which are picked
-			// when the window is made: say which OpenGL and which buffers
-			// first. The rhi creates the OpenGL context itself.
+			// when the window is created, so the OpenGL version and the
+			// buffer formats are set first. The rhi creates the OpenGL
+			// context itself.
 #if defined(__EMSCRIPTEN__)
 			// A browser has OpenGL ES 3.0 (WebGL 2)
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
@@ -98,5 +99,29 @@ namespace buz
 	uint32_t native_window::get_height() const
 	{
 		return m_height;
+	}
+
+	//--------------------------------------------------------------
+	void native_window::lock_cursor()
+	{
+		if (!SDL_SetWindowRelativeMouseMode(m_window, true))
+		{
+			log::error("Could not lock the cursor: {}", SDL_GetError());
+		}
+	}
+
+	//--------------------------------------------------------------
+	void native_window::unlock_cursor()
+	{
+		if (!SDL_SetWindowRelativeMouseMode(m_window, false))
+		{
+			log::error("Could not unlock the cursor: {}", SDL_GetError());
+		}
+	}
+
+	//--------------------------------------------------------------
+	bool native_window::is_cursor_locked() const
+	{
+		return SDL_GetWindowRelativeMouseMode(m_window);
 	}
 }

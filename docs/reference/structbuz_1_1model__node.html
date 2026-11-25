@@ -168,18 +168,18 @@ Public Attributes</h2></td></tr>
 <tr class="memdesc:a1235b53ae0915778d16345425697e37c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The node's name in Blender.  <br /></td></tr>
 <tr class="memitem:ae88502135e52909545f46a9b1e88a89e" id="r_ae88502135e52909545f46a9b1e88a89e"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#ae88502135e52909545f46a9b1e88a89e">parent</a> = -1</td></tr>
 <tr class="memdesc:ae88502135e52909545f46a9b1e88a89e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index of the parent node, -1 for a root.  <br /></td></tr>
-<tr class="memitem:a3b2da80226887297c19beb15e27743b1" id="r_a3b2da80226887297c19beb15e27743b1"><td class="memItemLeft"><a class="el" href="structbuz_1_1joint__pose.html">joint_pose</a>&#160;</td><td class="memItemRight"><a class="el" href="#a3b2da80226887297c19beb15e27743b1">local_pose</a></td></tr>
-<tr class="memdesc:a3b2da80226887297c19beb15e27743b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where the node sits relative to its parent, as placed in the file.  <br /></td></tr>
+<tr class="memitem:a95bb6cec570a3ea151ffae04ef9a1640" id="r_a95bb6cec570a3ea151ffae04ef9a1640"><td class="memItemLeft"><a class="el" href="structbuz_1_1node__transform.html">node_transform</a>&#160;</td><td class="memItemRight"><a class="el" href="#a95bb6cec570a3ea151ffae04ef9a1640">local_transform</a></td></tr>
+<tr class="memdesc:a95bb6cec570a3ea151ffae04ef9a1640"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where the node sits relative to its parent, as placed in the file.  <br /></td></tr>
 <tr class="memitem:ae1b2e451fb3c18a387350e4534616622" id="r_ae1b2e451fb3c18a387350e4534616622"><td class="memItemLeft">std::shared_ptr&lt; <a class="el" href="classbuz_1_1mesh.html">mesh</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#ae1b2e451fb3c18a387350e4534616622">shape</a></td></tr>
 <tr class="memdesc:ae1b2e451fb3c18a387350e4534616622"><td class="mdescLeft">&#160;</td><td class="mdescRight">The node's mesh; nullptr for an empty node.  <br /></td></tr>
 <tr class="memitem:a276794915919542b859fcc74c589590f" id="r_a276794915919542b859fcc74c589590f"><td class="memItemLeft"><a class="el" href="structbuz_1_1material.html">material</a>&#160;</td><td class="memItemRight"><a class="el" href="#a276794915919542b859fcc74c589590f">look</a></td></tr>
-<tr class="memdesc:a276794915919542b859fcc74c589590f"><td class="mdescLeft">&#160;</td><td class="mdescRight">How shape looks.  <br /></td></tr>
+<tr class="memdesc:a276794915919542b859fcc74c589590f"><td class="mdescLeft">&#160;</td><td class="mdescRight">How shape looks. Its base_texture names the image; load it with <a class="el" href="namespacebuz.html#adaaa5d1dbfafef1c606ffcca29bb1bec" title="Loads the image a material names, an image file or one inside a model file:">buz::load_texture</a>(engine, look.base_texture).  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>One node of a model, as it was named and placed in Blender. </p>
 <p>A character made of rigid parts (the PS1 way) is a hierarchy of nodes: pelvis -&gt; torso -&gt; head, upper arm -&gt; lower arm, and so on, each part a mesh that moves with its node. A level is a flat list of nodes too: walls with meshes, and empty nodes whose names mark what they are (col_* collision boxes, patrol_* points, camera_* positions). </p>
 
-<p class="definition">Definition at line <a class="el" href="model_8h_source.html#l00041">41</a> of file <a class="el" href="model_8h_source.html">model.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="model_8h_source.html#l00043">43</a> of file <a class="el" href="model_8h_source.html">model.h</a>.</p>
 </div><a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
 <a id="a1235b53ae0915778d16345425697e37c" name="a1235b53ae0915778d16345425697e37c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1235b53ae0915778d16345425697e37c">&#9670;&#160;</a></span>name</h2>
@@ -195,7 +195,7 @@ Public Attributes</h2></td></tr>
 
 <p>The node's name in Blender. </p>
 
-<p class="definition">Definition at line <a class="el" href="model_8h_source.html#l00044">44</a> of file <a class="el" href="model_8h_source.html">model.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="model_8h_source.html#l00046">46</a> of file <a class="el" href="model_8h_source.html">model.h</a>.</p>
 
 </div>
 </div>
@@ -213,25 +213,25 @@ Public Attributes</h2></td></tr>
 
 <p>Index of the parent node, -1 for a root. </p>
 
-<p class="definition">Definition at line <a class="el" href="model_8h_source.html#l00046">46</a> of file <a class="el" href="model_8h_source.html">model.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="model_8h_source.html#l00048">48</a> of file <a class="el" href="model_8h_source.html">model.h</a>.</p>
 
 </div>
 </div>
-<a id="a3b2da80226887297c19beb15e27743b1" name="a3b2da80226887297c19beb15e27743b1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3b2da80226887297c19beb15e27743b1">&#9670;&#160;</a></span>local_pose</h2>
+<a id="a95bb6cec570a3ea151ffae04ef9a1640" name="a95bb6cec570a3ea151ffae04ef9a1640"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95bb6cec570a3ea151ffae04ef9a1640">&#9670;&#160;</a></span>local_transform</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structbuz_1_1joint__pose.html">joint_pose</a> buz::model_node::local_pose</td>
+          <td class="memname"><a class="el" href="structbuz_1_1node__transform.html">node_transform</a> buz::model_node::local_transform</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Where the node sits relative to its parent, as placed in the file. </p>
 
-<p class="definition">Definition at line <a class="el" href="model_8h_source.html#l00048">48</a> of file <a class="el" href="model_8h_source.html">model.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="model_8h_source.html#l00050">50</a> of file <a class="el" href="model_8h_source.html">model.h</a>.</p>
 
 </div>
 </div>
@@ -249,7 +249,7 @@ Public Attributes</h2></td></tr>
 
 <p>The node's mesh; nullptr for an empty node. </p>
 
-<p class="definition">Definition at line <a class="el" href="model_8h_source.html#l00050">50</a> of file <a class="el" href="model_8h_source.html">model.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="model_8h_source.html#l00052">52</a> of file <a class="el" href="model_8h_source.html">model.h</a>.</p>
 
 </div>
 </div>
@@ -265,9 +265,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>How shape looks. </p>
+<p>How shape looks. Its base_texture names the image; load it with <a class="el" href="namespacebuz.html#adaaa5d1dbfafef1c606ffcca29bb1bec" title="Loads the image a material names, an image file or one inside a model file:">buz::load_texture</a>(engine, look.base_texture). </p>
 
-<p class="definition">Definition at line <a class="el" href="model_8h_source.html#l00052">52</a> of file <a class="el" href="model_8h_source.html">model.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="model_8h_source.html#l00055">55</a> of file <a class="el" href="model_8h_source.html">model.h</a>.</p>
 
 </div>
 </div>

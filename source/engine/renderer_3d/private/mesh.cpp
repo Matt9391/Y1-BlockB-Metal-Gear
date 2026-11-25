@@ -1,11 +1,11 @@
 #include "gpu_mesh.h"
 
 #include "core/log.h"
+#include "render_core/render_context.h"
 #include "renderer_3d.h"
-#include "renderer_3d/model_loading.h"
+#include "renderer_3d/mesh_creation.h"
 #include "rhi/buffer.h"
 #include "rhi/device.h"
-#include "rhi/render_context.h"
 
 namespace buz
 {
@@ -44,7 +44,7 @@ namespace buz
 	gpu_mesh::~gpu_mesh() = default;
 
 	//--------------------------------------------------------------
-	std::shared_ptr<mesh> upload_mesh(const render_context& context, std::span<const mesh_vertex> vertices, std::span<const uint32_t> indices)
+	std::shared_ptr<mesh> create_mesh(const render_context& context, std::span<const mesh_vertex> vertices, std::span<const uint32_t> indices)
 	{
 		if (vertices.empty() || indices.empty())
 		{
@@ -68,12 +68,6 @@ namespace buz
 
 		const uint32_t index_count = static_cast<uint32_t>(indices.size());
 		return std::make_shared<gpu_mesh>(std::move(vertex_buffer), std::move(index_buffer), index_count, bounds);
-	}
-
-	//--------------------------------------------------------------
-	std::shared_ptr<mesh> create_mesh(const render_context& context, std::span<const mesh_vertex> vertices, std::span<const uint32_t> indices)
-	{
-		return upload_mesh(context, vertices, indices);
 	}
 
 	//--------------------------------------------------------------

@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['window_5fheight_0',['window_height',['../structbuz_1_1engine__settings.html#a31ddde014a4a0cf0622bc3979a0321de',1,'buz::engine_settings']]],
-  ['window_5ftitle_1',['window_title',['../structbuz_1_1engine__settings.html#aba9748e61cfdbc482e83189c4cd71988',1,'buz::engine_settings']]],
-  ['window_5fwidth_2',['window_width',['../structbuz_1_1engine__settings.html#ab114072ce80b9493286f61ccb044e753',1,'buz::engine_settings']]],
-  ['wireframe_3',['wireframe',['../structbuz_1_1debug__keys.html#a37219e2724b9cfe823e0a1b698d7b8ed',1,'buz::debug_keys']]]
+  ['use_5fvsync_0',['use_vsync',['../structbuz_1_1engine__settings.html#a77ebefb72dc6d25e112a27f915271e61',1,'buz::engine_settings']]],
+  ['uv_1',['uv',['../structbuz_1_1mesh__vertex.html#a46cb9a6a23cd0d142d57b93be568ff91',1,'buz::mesh_vertex']]],
+  ['uvs_2',['uvs',['../structbuz_1_1model__import__options.html#a17ccf09e6c5a158ef110f0bad61d285f',1,'buz::model_import_options']]]
 ];

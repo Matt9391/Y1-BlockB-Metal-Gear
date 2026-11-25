@@ -68,7 +68,7 @@ namespace
 	/// @brief Calculates the capability score of an adapter.
 	///
 	/// The amount of dedicated video memory dominates the score: a discrete
-	/// graphics card with gigabytes of its own memory always beats an
+	/// graphics card with gigabytes of its own memory outscores an
 	/// integrated gpu that borrows system memory. The feature level and
 	/// shader model act as tie breakers between similar cards.
 	uint64_t calculate_score(const buz::d3d12::adapter_info& info)
@@ -99,13 +99,13 @@ namespace buz::d3d12
 			DXGI_ADAPTER_DESC1 desc = {};
 			adapter->GetDesc1(&desc);
 
-			// Create a temporary device to check directx 12 support and to
+			// Create a temporary device to check DirectX 12 support and to
 			// query the adapter capabilities. The device is thrown away
 			// afterwards; only the selected adapter gets a real device.
 			ComPtr<ID3D12Device> temporary_device;
 			if (FAILED(D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&temporary_device))))
 			{
-				log::warn("Skipping adapter \"{}\": no directx 12 support", to_utf8(desc.Description));
+				log::warn("Skipping adapter \"{}\": no DirectX 12 support", to_utf8(desc.Description));
 				continue;
 			}
 

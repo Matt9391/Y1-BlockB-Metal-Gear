@@ -12,7 +12,8 @@ namespace buz::rhi
 
 	//--------------------------------------------------------------
 	gpu_texture::gpu_texture(uint32_t width, uint32_t height, std::unique_ptr<native> data)
-		: texture(width, height)
+		: m_width(width)
+		, m_height(height)
 		, m_native(std::move(data))
 	{
 	}

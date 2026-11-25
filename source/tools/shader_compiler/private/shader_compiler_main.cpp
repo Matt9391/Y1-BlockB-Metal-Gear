@@ -1,7 +1,7 @@
 //--------------------------------------------------------------
 // shader_compiler
 //
-// Compiles a single hlsl source file with the directx shader compiler
+// Compiles a single hlsl source file with the DirectX Shader Compiler
 // (dxc). Graphics apis only load compiled shaders, so this tool runs as
 // part of the build: the build system invokes it for every shader that
 // changed since the last build (see BUZ_COMPILE_SHADERS in
@@ -27,7 +27,8 @@
 #endif
 
 // On Linux dxcapi.h brings WinAdapter.h, which stands in for the bits of
-// com it uses (IUnknown, HRESULT, ...), so the code below is the same on both.
+// com it uses (IUnknown, HRESULT, ...), so the code below is the same on
+// Windows and Linux.
 #include <dxcapi.h>
 
 #if defined(BUZ_SHADER_GLSL)
@@ -222,7 +223,7 @@ int main(int argument_count, char* arguments[])
 		// Vulkan's clip space has y pointing down where DirectX (and
 		// OpenGL) have it pointing up. Flipping the position the vertex
 		// shader outputs makes the same shader and the same matrices work
-		// for both.
+		// in every backend.
 		if (!glsl && profile_name.starts_with("vs_"))
 		{
 			compile_arguments.push_back(L"-fvk-invert-y");

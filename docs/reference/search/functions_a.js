@@ -1,5 +1,8 @@
 var searchData=
 [
-  ['noise_5f2d_0',['noise_2d',['../namespacebuz.html#a623423e1e80f8323b477f447e5ce0091',1,'buz']]],
-  ['noise_5f3d_1',['noise_3d',['../namespacebuz.html#a2508d0202f85440006c1eb27697e7bf7',1,'buz']]]
+  ['make_5forthographic_5fprojection_0',['make_orthographic_projection',['../namespacebuz.html#ae4898674f328ab84f05982e76571c978',1,'buz']]],
+  ['make_5fprimitive_1',['make_primitive',['../namespacebuz.html#a0cdb29a2b34128954c2042aa6bba185b',1,'buz']]],
+  ['make_5frandom_5fstate_2',['make_random_state',['../namespacebuz.html#a41fcf62e253affbba691810e2cbd44b7',1,'buz']]],
+  ['merge_5fmeshes_3',['merge_meshes',['../namespacebuz.html#ab8c47850e3c2e73c4e1e0edccb6e7fa7',1,'buz']]],
+  ['mesh_4',['mesh',['../classbuz_1_1mesh.html#a4e1b0b5f9a992b2e60b4f3549a60899a',1,'buz::mesh::mesh(const mesh &amp;)=delete'],['../classbuz_1_1mesh.html#aeafa9bc58c78eeacb01af00a31011c7c',1,'buz::mesh::mesh(uint32_t index_count, const aabb &amp;bounds)']]]
 ];

@@ -1,12 +1,13 @@
 var searchData=
 [
-  ['save_5fjson_0',['save_json',['../namespacebuz.html#af3bde0ec27d14bfd7243e63ec3eb53c6',1,'buz']]],
-  ['screen_5frenderer_1',['screen_renderer',['../classbuz_1_1screen__renderer.html#a3530d62e8859cdeaaf78858fd56fae33',1,'buz::screen_renderer']]],
-  ['screenshot_5fsaver_2',['screenshot_saver',['../classbuz_1_1screenshot__saver.html#afb2e0c55b6064e29d60c3910f114084f',1,'buz::screenshot_saver::screenshot_saver(screenshot &amp;capture)'],['../classbuz_1_1screenshot__saver.html#ac26bd7bb9246d3eba5af3eebb9fb9b53',1,'buz::screenshot_saver::screenshot_saver(const screenshot_saver &amp;)=delete']]],
-  ['set_5fcamera_3',['set_camera',['../classbuz_1_1world__renderer__2d.html#a810d2ed9eda5a29f48ddeb2408ee3598',1,'buz::world_renderer_2d::set_camera()'],['../classbuz_1_1world__renderer__3d.html#aefff566c939852d89f8201d22fd64fdc',1,'buz::world_renderer_3d::set_camera()']]],
-  ['set_5fmaster_5fvolume_4',['set_master_volume',['../classbuz_1_1audio.html#a10ad6ca74e7a8c8787f3b3e80bd3a07a',1,'buz::audio']]],
-  ['set_5frandom_5fseed_5',['set_random_seed',['../namespacebuz.html#a8bd2550be65e92fe90bdf0533806c20c',1,'buz']]],
-  ['size_6',['size',['../structbuz_1_1aabb.html#a79aecf0f3cb336de4e41fd7678d1dd06',1,'buz::aabb::size()'],['../structbuz_1_1rect.html#a81be2a26917f6f9c7b27564609fb6d62',1,'buz::rect::size()']]],
-  ['sphere_7',['sphere',['../namespacebuz_1_1debug__draw.html#a3c229758076dfd267b502dbe32f8900f',1,'buz::debug_draw']]],
-  ['stop_5fmusic_8',['stop_music',['../classbuz_1_1audio.html#ad1b149edb24b945b70f27d784a4f3347',1,'buz::audio']]]
+  ['random_5ffloat_0',['random_float',['../namespacebuz.html#a3d4f11747a4e6a8b2ff7de3369c03d37',1,'buz::random_float()'],['../namespacebuz.html#a843c1d25b34b6c4f6f934d382a4058aa',1,'buz::random_float(uint32_t &amp;state)']]],
+  ['random_5frange_1',['random_range',['../namespacebuz.html#a53e93e381ba4a9182af0d667733eeea6',1,'buz::random_range(float min, float max)'],['../namespacebuz.html#ac6c46e13d0d88d885baf1e597cf63de4',1,'buz::random_range(int min, int max)']]],
+  ['random_5fuint_2',['random_uint',['../namespacebuz.html#a1048fd09cfea48bb4295cc95faf7e067',1,'buz::random_uint()'],['../namespacebuz.html#af2bd330f57bd3005dc96bf555c315471',1,'buz::random_uint(uint32_t &amp;state)']]],
+  ['rect_5ffrom_5fcenter_5fsize_3',['rect_from_center_size',['../namespacebuz.html#a419e00519886a58aeb4dcae5bda48bee',1,'buz']]],
+  ['remove_4',['remove',['../namespacebuz_1_1fs.html#a5ead0f67c0ec3506c29141da1b0c8873',1,'buz::fs']]],
+  ['render_5fscreen_5',['render_screen',['../classbuz_1_1playable.html#a3645c15db7a782a7ca8fc2dbbdb612e8',1,'buz::playable']]],
+  ['render_5fworld_6',['render_world',['../classbuz_1_1playable.html#ab86a9aded682de823c7b8bc256564fc4',1,'buz::playable']]],
+  ['renderer_5f2d_7',['renderer_2d',['../classbuz_1_1renderer__2d.html#ac6064d84c693a49d6bbeadcbe781d93d',1,'buz::renderer_2d::renderer_2d(const render_context &amp;context, texture_filter sampler_filter)'],['../classbuz_1_1renderer__2d.html#a0d1628a2a3fd66cfabc07a4442151c33',1,'buz::renderer_2d::renderer_2d(const renderer_2d &amp;)=delete']]],
+  ['reset_8',['reset',['../classbuz_1_1timer.html#aed1000454aac672e23161139fb929df2',1,'buz::timer']]],
+  ['run_9',['run',['../classbuz_1_1engine.html#acd9632a8154e3ecaced1689f81c3ca5e',1,'buz::engine']]]
 ];

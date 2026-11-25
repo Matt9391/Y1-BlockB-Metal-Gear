@@ -26,17 +26,45 @@ namespace buz
 	world_renderer_3d::~world_renderer_3d() = default;
 
 	//--------------------------------------------------------------
+	void world_renderer_3d::begin_frame(rhi::command_list& commands)
+	{
+		m_renderer->begin_frame(commands);
+	}
+
+	//--------------------------------------------------------------
+	void world_renderer_3d::end_frame()
+	{
+		m_renderer->end_frame();
+	}
+
+	//--------------------------------------------------------------
+	void world_renderer_3d::set_debug_views(const debug_views& views)
+	{
+		m_renderer->set_debug_views(views);
+	}
+
+	//--------------------------------------------------------------
+	const debug_views& world_renderer_3d::get_debug_views() const
+	{
+		return m_renderer->get_debug_views();
+	}
+
+	//--------------------------------------------------------------
 	void world_renderer_3d::set_camera(const mat4& view, const mat4& projection)
 	{
-		// Column-vector convention: the view applies first, then the
-		// projection, so the projection comes first in the product.
-		m_renderer->set_view_projection(projection * view);
+		m_renderer->set_camera(view, projection);
 	}
 
 	//--------------------------------------------------------------
 	void world_renderer_3d::draw(const mesh& shape, const material& look, const mat4& transform)
 	{
-		m_renderer->draw(shape, look, transform);
+		m_renderer->draw(shape, look, nullptr, transform);
+	}
+
+	//--------------------------------------------------------------
+	void world_renderer_3d::draw(const mesh& shape, const material& look, const texture& surface, const mat4& transform)
+	{
+		m_renderer->draw(shape, look, &surface, transform);
 	}
 
 	//--------------------------------------------------------------
@@ -67,6 +95,12 @@ namespace buz
 	void world_renderer_3d::draw_octahedron(vec3 position, vec3 size, const material& look)
 	{
 		m_renderer->draw(primitive::octahedron, look, place(position, size));
+	}
+
+	//--------------------------------------------------------------
+	void world_renderer_3d::set_shader_data(std::span<const std::byte> data)
+	{
+		m_renderer->set_shader_data(data);
 	}
 
 	//--------------------------------------------------------------

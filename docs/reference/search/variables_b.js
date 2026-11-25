@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['r_0',['r',['../structbuz_1_1color.html#ac17a538d027fed9cd2b8c3ca3f4aaa83',1,'buz::color']]],
-  ['rotation_1',['rotation',['../structbuz_1_1joint__pose.html#af60247e1bf5e0b196bf7399a0b318c28',1,'buz::joint_pose']]],
-  ['rotation_5fradians_2',['rotation_radians',['../structbuz_1_1sprite__instance.html#a2bb9a8d79dd74d2f5eacfab47bb7b978',1,'buz::sprite_instance']]]
+  ['parent_0',['parent',['../structbuz_1_1model__node.html#ae88502135e52909545f46a9b1e88a89e',1,'buz::model_node::parent'],['../structbuz_1_1model__node__data.html#ab74703fc23fd3ecb088355035e359ffb',1,'buz::model_node_data::parent']]],
+  ['pixel_5fshader_1',['pixel_shader',['../structbuz_1_1surface__shading.html#a43fc602d3b0b5787d7d31d9f18ac7eda',1,'buz::surface_shading']]],
+  ['position_2',['position',['../structbuz_1_1mesh__vertex.html#a06eac034667786533f47263cd1deecfb',1,'buz::mesh_vertex::position'],['../structbuz_1_1sprite__instance.html#af8fd681e99c694f1c226671f305f1865',1,'buz::sprite_instance::position']]]
 ];

@@ -8,17 +8,17 @@
 namespace buz::d3d12
 {
 	//--------------------------------------------------------------
-	/// @brief Wraps a directx 12 command queue together with its fence.
+	/// @brief Wraps a DirectX 12 command queue together with its fence.
 	///
 	/// The gpu executes command lists asynchronously: submitting work only
-	/// queues it. The fence is a counter the gpu increments when it reaches
-	/// a certain point in the queue, which lets the cpu wait until submitted
-	/// work has actually finished.
+	/// queues it. The fence is a counter that the gpu sets to a given value
+	/// when it reaches the signal for that value in the queue, which lets the
+	/// cpu wait until submitted work has finished.
 	class command_queue
 	{
 	public:
 		//----------------------------------------------------------
-		/// @brief Creates an empty queue; initialize creates it.
+		/// @brief Creates an empty wrapper; initialize creates the queue.
 		command_queue();
 
 		//----------------------------------------------------------
@@ -33,7 +33,7 @@ namespace buz::d3d12
 		~command_queue();
 
 		//----------------------------------------------------------
-		/// @brief Returns the underlying directx 12 command queue.
+		/// @brief Returns the underlying DirectX 12 command queue.
 		ID3D12CommandQueue* get_d3d_command_queue() const;
 
 		//----------------------------------------------------------

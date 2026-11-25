@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['texture_2eh_0',['texture.h',['../texture_8h.html',1,'']]],
-  ['texture_5floading_2eh_1',['texture_loading.h',['../texture__loading_8h.html',1,'']]],
-  ['timer_2eh_2',['timer.h',['../timer_8h.html',1,'']]]
+  ['screen_5frenderer_2eh_0',['screen_renderer.h',['../screen__renderer_8h.html',1,'']]],
+  ['screenshot_5fsaver_2eh_1',['screenshot_saver.h',['../screenshot__saver_8h.html',1,'']]],
+  ['surface_5fshading_2eh_2',['surface_shading.h',['../surface__shading_8h.html',1,'']]]
 ];

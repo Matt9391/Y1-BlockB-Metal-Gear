@@ -24,7 +24,7 @@ namespace buz::d3d12
 	{
 	public:
 		//----------------------------------------------------------
-		/// @brief Creates an empty swap chain; initialize creates it.
+		/// @brief Creates an empty wrapper; initialize creates the swap chain.
 		swap_chain();
 
 		// Two buffers: one on screen, one being rendered into
@@ -39,7 +39,7 @@ namespace buz::d3d12
 		/// @param height Height of the back buffers in pixels.
 		/// @param wait_for_vsync Whether present waits for the monitor's refresh.
 		/// @return True when the swap chain was created successfully.
-		bool initialize(device& graphics_device, command_queue& direct_queue, HWND window_handle, uint32_t width, uint32_t height, vsync wait_for_vsync);
+		bool initialize(device& graphics_device, command_queue& direct_queue, HWND window_handle, uint32_t width, uint32_t height, rhi::vsync wait_for_vsync);
 
 		//----------------------------------------------------------
 		/// @brief Returns the index of the back buffer to render into this
@@ -68,7 +68,7 @@ namespace buz::d3d12
 		/// @brief Returns the height of the back buffers in pixels.
 		uint32_t get_height() const;
 
-		// The format all rendering targets, used when creating pipelines
+		// The pixel format of the back buffers; pipelines are created with it
 		static constexpr DXGI_FORMAT k_back_buffer_format = DXGI_FORMAT_R8G8B8A8_UNORM;
 
 	private:
@@ -76,7 +76,7 @@ namespace buz::d3d12
 		Microsoft::WRL::ComPtr<ID3D12Resource> m_back_buffers[k_back_buffer_count]; // drawn into, one at a time
 
 		descriptor_heap m_rtv_heap; // the back buffers' render target views
-		vsync m_vsync;              // whether presenting waits for the monitor
+		rhi::vsync m_vsync;              // whether presenting waits for the monitor
 
 		uint32_t m_width;  // of the back buffers, in pixels
 		uint32_t m_height; // of the back buffers, in pixels

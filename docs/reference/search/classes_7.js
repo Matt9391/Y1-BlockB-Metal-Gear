@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['joint_5fpose_0',['joint_pose',['../structbuz_1_1joint__pose.html',1,'buz']]]
+  ['input_0',['input',['../classbuz_1_1input.html',1,'buz']]]
 ];

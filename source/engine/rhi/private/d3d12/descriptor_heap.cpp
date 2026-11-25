@@ -1,6 +1,6 @@
 #include "d3d12/descriptor_heap.h"
 
-#include "core/log.h"
+#include "core/assert.h"
 #include "d3d12/d3d_utils.h"
 
 namespace buz::d3d12
@@ -45,10 +45,11 @@ namespace buz::d3d12
 			return index;
 		}
 
+		// Handing out a slot that is in use would silently replace another
+		// texture on screen, so a full heap stops the program instead
 		if (m_allocated_count >= m_capacity)
 		{
-			log::error("Descriptor heap is full (capacity: {})", m_capacity);
-			return 0;
+			fatal_error("More than {} textures are loaded at the same time, which is all the DirectX 12 backend has room for. Load each texture once and share it, and let go of textures you no longer use.", m_capacity);
 		}
 
 		return m_allocated_count++;

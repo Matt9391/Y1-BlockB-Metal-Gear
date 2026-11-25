@@ -39,8 +39,8 @@ bool translate_to_glsl(std::span<const uint32_t> spirv, shader_stage stage, glsl
 		options.fragment.default_float_precision = spirv_cross::CompilerGLSL::Options::Highp;
 		options.fragment.default_int_precision = spirv_cross::CompilerGLSL::Options::Highp;
 
-		// The engine's matrices map depth to 0..1, as DirectX and Vulkan
-		// want it; OpenGL wants -1..1, so the vertex shader converts.
+		// The engine's matrices map depth to 0..1, the range DirectX and
+		// Vulkan use; OpenGL uses -1..1, so the vertex shader converts.
 		options.vertex.fixup_clipspace = stage == shader_stage::vertex;
 		compiler.set_common_options(options);
 
@@ -48,6 +48,16 @@ bool translate_to_glsl(std::span<const uint32_t> spirv, shader_stage stage, glsl
 		for (const spirv_cross::Resource& constants : resources.push_constant_buffers)
 		{
 			compiler.set_name(constants.base_type_id, "buz_constants");
+		}
+
+		// A cbuffer is the shader data (register(b1), descriptor set 2) or
+		// the frame data (register(b2), descriptor set 3). SPIR-V only has
+		// the set, from [[vk::binding]], and the backend finds each block
+		// by the name it gets here.
+		for (const spirv_cross::Resource& block : resources.uniform_buffers)
+		{
+			const uint32_t set = compiler.get_decoration(block.id, spv::DecorationDescriptorSet);
+			compiler.set_name(block.base_type_id, set == 3 ? "buz_frame_data" : "buz_shader_data");
 		}
 
 		if (stage == shader_stage::vertex)
@@ -68,13 +78,22 @@ bool translate_to_glsl(std::span<const uint32_t> spirv, shader_stage stage, glsl
 
 		out_glsl = compiler.compile();
 
-		// hlsl matrices reach SPIR-V as row-major. For constants it turns
-		// into a uniform block, SPIRV-Cross already undoes that by flipping
-		// every multiplication (m * v becomes v * m), and still declares the
-		// matrix layout(row_major), which would undo it a second time.
-		for (size_t found = out_glsl.find("layout(row_major) "); found != std::string::npos; found = out_glsl.find("layout(row_major) "))
+		// hlsl matrices reach SPIR-V as row-major. When SPIRV-Cross turns
+		// the push constants into a uniform block, it already undoes that
+		// by flipping every multiplication (m * v becomes v * m), and still
+		// declares the matrix layout(row_major), which would undo it a
+		// second time. A cbuffer (the shader data, the frame data) is a
+		// uniform block to begin with: SPIRV-Cross keeps the order of its
+		// multiplications, so it needs its layout(row_major).
+		const size_t constants_start = out_glsl.find("uniform buz_constants");
+		if (constants_start != std::string::npos)
 		{
-			out_glsl.erase(found, std::strlen("layout(row_major) "));
+			size_t constants_end = out_glsl.find('}', constants_start);
+			for (size_t found = out_glsl.find("layout(row_major) ", constants_start); found < constants_end; found = out_glsl.find("layout(row_major) ", found))
+			{
+				out_glsl.erase(found, std::strlen("layout(row_major) "));
+				constants_end -= std::strlen("layout(row_major) ");
+			}
 		}
 
 		// OpenGL counts pixel rows (gl_FragCoord.y) from the bottom of the

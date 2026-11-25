@@ -23,8 +23,8 @@ namespace buz
 	/// @brief The engine's side of the window: the fixed-size SDL window
 	/// the engine renders into. Games read its size through buz::window.
 	///
-	/// A thin layer over an SDL window (https://wiki.libsdl.org/SDL3), which
-	/// is what makes the same code run on Windows and Linux.
+	/// A thin layer over an SDL window (https://wiki.libsdl.org/SDL3); SDL
+	/// lets the same code run on Windows, on Linux and in the browser.
 	class native_window
 	{
 	public:
@@ -54,6 +54,19 @@ namespace buz
 		//----------------------------------------------------------
 		/// @brief Returns the height of the drawable area in pixels.
 		uint32_t get_height() const;
+
+		//----------------------------------------------------------
+		/// @brief Hides the cursor and keeps it in the window (SDL's
+		/// relative mouse mode).
+		void lock_cursor();
+
+		//----------------------------------------------------------
+		/// @brief Shows the cursor again and lets it leave the window.
+		void unlock_cursor();
+
+		//----------------------------------------------------------
+		/// @brief Returns true while the cursor is locked.
+		bool is_cursor_locked() const;
 
 	private:
 		SDL_Window* m_window; // owned: destroyed with the window; nullptr until initialize

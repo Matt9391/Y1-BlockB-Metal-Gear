@@ -172,7 +172,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aefff566c939852d89f8201d22fd64fdc" id="r_aefff566c939852d89f8201d22fd64fdc"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#aefff566c939852d89f8201d22fd64fdc">set_camera</a> (const <a class="el" href="namespacebuz.html#acdb2c70a0426fc209337d5bcdf33333c">mat4</a> &amp;view, const <a class="el" href="namespacebuz.html#acdb2c70a0426fc209337d5bcdf33333c">mat4</a> &amp;projection)</td></tr>
 <tr class="memdesc:aefff566c939852d89f8201d22fd64fdc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the camera for the draws that follow, until it is set again. Building the two matrices is yours to do (see Drawing in 3D for the conventions they follow).  <br /></td></tr>
 <tr class="memitem:a1f6ff6e0032592a44ab4f851f074295e" id="r_a1f6ff6e0032592a44ab4f851f074295e"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a1f6ff6e0032592a44ab4f851f074295e">draw</a> (const <a class="el" href="classbuz_1_1mesh.html">mesh</a> &amp;shape, const <a class="el" href="structbuz_1_1material.html">material</a> &amp;look, const <a class="el" href="namespacebuz.html#acdb2c70a0426fc209337d5bcdf33333c">mat4</a> &amp;transform)</td></tr>
-<tr class="memdesc:a1f6ff6e0032592a44ab4f851f074295e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a mesh.  <br /></td></tr>
+<tr class="memdesc:a1f6ff6e0032592a44ab4f851f074295e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a mesh in its material's plain color, untextured.  <br /></td></tr>
+<tr class="memitem:afe72e74f64208199f02d1ea094e0d35e" id="r_afe72e74f64208199f02d1ea094e0d35e"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#afe72e74f64208199f02d1ea094e0d35e">draw</a> (const <a class="el" href="classbuz_1_1mesh.html">mesh</a> &amp;shape, const <a class="el" href="structbuz_1_1material.html">material</a> &amp;look, const <a class="el" href="classbuz_1_1texture.html">texture</a> &amp;surface, const <a class="el" href="namespacebuz.html#acdb2c70a0426fc209337d5bcdf33333c">mat4</a> &amp;transform)</td></tr>
+<tr class="memdesc:afe72e74f64208199f02d1ea094e0d35e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a mesh with a texture, times the material's color. The material only names its image (<a class="el" href="structbuz_1_1material.html#a4aa160c72b41cdb9711dbc6924c56a60" title="The image the texture shows; none means the plain color. A model&#39;s materials name the image in the fi...">material::base_texture</a>); loading that image is yours (<a class="el" href="namespacebuz.html#adaaa5d1dbfafef1c606ffcca29bb1bec" title="Loads the image a material names, an image file or one inside a model file:">buz::load_texture</a>), and this draws with the texture you hand it.  <br /></td></tr>
 <tr class="memitem:ad82cda962d7c46dd474b6e3d31df4059" id="r_ad82cda962d7c46dd474b6e3d31df4059"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ad82cda962d7c46dd474b6e3d31df4059">draw_box</a> (<a class="el" href="namespacebuz.html#aa15b1d11eb74450ffdda877acb81cb1c">vec3</a> position, <a class="el" href="namespacebuz.html#aa15b1d11eb74450ffdda877acb81cb1c">vec3</a> size, const <a class="el" href="structbuz_1_1material.html">material</a> &amp;look)</td></tr>
 <tr class="memdesc:ad82cda962d7c46dd474b6e3d31df4059"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a box. Handy for greyboxing a level.  <br /></td></tr>
 <tr class="memitem:a7a3994e6690a897e034a55ef21f2f0ab" id="r_a7a3994e6690a897e034a55ef21f2f0ab"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a7a3994e6690a897e034a55ef21f2f0ab">draw_sphere</a> (<a class="el" href="namespacebuz.html#aa15b1d11eb74450ffdda877acb81cb1c">vec3</a> position, <a class="el" href="namespacebuz.html#aa15b1d11eb74450ffdda877acb81cb1c">vec3</a> size, const <a class="el" href="structbuz_1_1material.html">material</a> &amp;look)</td></tr>
@@ -183,23 +185,33 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aa2aa45a7734ea25fd0995de01edf9e38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a cylinder standing along y.  <br /></td></tr>
 <tr class="memitem:a2ad9c7869c2723cb6261dda3ee5388eb" id="r_a2ad9c7869c2723cb6261dda3ee5388eb"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a2ad9c7869c2723cb6261dda3ee5388eb">draw_octahedron</a> (<a class="el" href="namespacebuz.html#aa15b1d11eb74450ffdda877acb81cb1c">vec3</a> position, <a class="el" href="namespacebuz.html#aa15b1d11eb74450ffdda877acb81cb1c">vec3</a> size, const <a class="el" href="structbuz_1_1material.html">material</a> &amp;look)</td></tr>
 <tr class="memdesc:a2ad9c7869c2723cb6261dda3ee5388eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws an octahedron (two pyramids back to back): pickups, markers.  <br /></td></tr>
+<tr class="memitem:a43d1a511a7a88344f6cfaa6b81825d16" id="r_a43d1a511a7a88344f6cfaa6b81825d16"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a43d1a511a7a88344f6cfaa6b81825d16">set_shader_data</a> (std::span&lt; const std::byte &gt; data)</td></tr>
+<tr class="memdesc:a43d1a511a7a88344f6cfaa6b81825d16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hands data to your own mesh shaders (see <a class="el" href="namespacebuz.html#a121fa3bdb3c7d5d48742630e3edf893c" title="Draws the meshes of world with other shaders from now on. Setting the shading that is already in use ...">buz::set_surface_shading</a>), for every draw that follows, in this frame and the next ones, until you set it again. The shaders read it as a cbuffer at register(b1):  <br /></td></tr>
+<tr class="memitem:a404e5351cc683613142336771ecee743" id="r_a404e5351cc683613142336771ecee743"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a404e5351cc683613142336771ecee743">begin_frame</a> (rhi::command_list &amp;commands)</td></tr>
+<tr class="memdesc:a404e5351cc683613142336771ecee743"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws into this command list until end_frame; <a class="el" href="classbuz_1_1game__3d.html" title="The base class of a game with a 3D world: derive your game from it.">buz::game_3d</a> calls it before on_render_world. A game cannot call it: rhi::command_list is defined in the engine's internal headers.  <br /></td></tr>
+<tr class="memitem:a48c9b8e1ab39109d0c0516eb7917c7ec" id="r_a48c9b8e1ab39109d0c0516eb7917c7ec"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a48c9b8e1ab39109d0c0516eb7917c7ec">end_frame</a> ()</td></tr>
+<tr class="memdesc:a48c9b8e1ab39109d0c0516eb7917c7ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stops drawing into the frame begin_frame started; <a class="el" href="classbuz_1_1game__3d.html" title="The base class of a game with a 3D world: derive your game from it.">buz::game_3d</a> calls it after on_render_world.  <br /></td></tr>
+<tr class="memitem:a6909e9b6b16694bf508c446a37ed0f0d" id="r_a6909e9b6b16694bf508c446a37ed0f0d"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a6909e9b6b16694bf508c446a37ed0f0d">set_debug_views</a> (const <a class="el" href="structbuz_1_1debug__views.html">debug_views</a> &amp;views)</td></tr>
+<tr class="memdesc:a6909e9b6b16694bf508c446a37ed0f0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws with these debug views from now on; <a class="el" href="classbuz_1_1game__3d.html" title="The base class of a game with a 3D world: derive your game from it.">buz::game_3d</a> switches them with the engine's debug keys.  <br /></td></tr>
+<tr class="memitem:a309d381ef68a8416a8aa0743feb1ea53" id="r_a309d381ef68a8416a8aa0743feb1ea53"><td class="memItemLeft">const <a class="el" href="structbuz_1_1debug__views.html">debug_views</a> &amp;&#160;</td><td class="memItemRight"><a class="el" href="#a309d381ef68a8416a8aa0743feb1ea53">get_debug_views</a> () const</td></tr>
+<tr class="memdesc:a309d381ef68a8416a8aa0743feb1ea53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the debug views it draws with.  <br /></td></tr>
 <tr class="memitem:a032635f480edaee920c6097532c3efc9" id="r_a032635f480edaee920c6097532c3efc9"><td class="memItemLeft">renderer_3d &amp;&#160;</td><td class="memItemRight"><a class="el" href="#a032635f480edaee920c6097532c3efc9">get_renderer</a> () const</td></tr>
-<tr class="memdesc:a032635f480edaee920c6097532c3efc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the engine's side of this renderer (<a class="el" href="namespacebuz_1_1debug__draw.html">debug_draw</a> draws its lines with it, set_mesh_shading changes its shaders). A game cannot use it: the type lives in the module's private headers.  <br /></td></tr>
+<tr class="memdesc:a032635f480edaee920c6097532c3efc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the engine's side of this renderer (<a class="el" href="namespacebuz_1_1debug__draw.html">debug_draw</a> draws its lines with it, set_surface_shading changes its shaders). A game cannot use it: renderer_3d is defined in the module's private headers.  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Draws the 3D game world, through a camera. </p>
 <p>Owned by <a class="el" href="classbuz_1_1game__3d.html" title="The base class of a game with a 3D world: derive your game from it.">buz::game_3d</a> and handed to on_render_world every frame; the world is drawn in the order of your calls, and nearer surfaces hide farther ones whatever that order (there is a depth buffer). </p><div class="fragment"><div class="line"><span class="keywordtype">void</span> my_game::on_render_world(<a class="code hl_class" href="classbuz_1_1engine.html">buz::engine</a>&amp; <a class="code hl_class" href="classbuz_1_1engine.html">engine</a>, <a class="code hl_class" href="classbuz_1_1world__renderer__3d.html">buz::world_renderer_3d</a>&amp; world)</div>
 <div class="line">{</div>
 <div class="line">    world.<a class="code hl_function" href="#ad82cda962d7c46dd474b6e3d31df4059">draw_box</a>({ 0.0f, 0.5f, 0.0f }, { 1.0f, 1.0f, 1.0f }, m_crate_material);</div>
-<div class="line">    world.<a class="code hl_function" href="#a1f6ff6e0032592a44ab4f851f074295e">draw</a>(*m_snake_mesh, m_snake_material, m_snake_transform);</div>
+<div class="line">    world.<a class="code hl_function" href="#a1f6ff6e0032592a44ab4f851f074295e">draw</a>(*m_snake_mesh, m_snake_material, *m_snake_texture, m_snake_transform);</div>
 <div class="line">}</div>
 <div class="ttc" id="aclassbuz_1_1engine_html"><div class="ttname"><a href="classbuz_1_1engine.html">buz::engine</a></div><div class="ttdoc">Owns all engine systems and runs the main loop.</div><div class="ttdef"><b>Definition</b> <a href="engine_8h_source.html#l00036">engine.h:37</a></div></div>
-<div class="ttc" id="aclassbuz_1_1world__renderer__3d_html"><div class="ttname"><a href="classbuz_1_1world__renderer__3d.html">buz::world_renderer_3d</a></div><div class="ttdoc">Draws the 3D game world, through a camera.</div><div class="ttdef"><b>Definition</b> <a href="world__renderer__3d_8h_source.html#l00033">world_renderer_3d.h:34</a></div></div>
-<div class="ttc" id="aclassbuz_1_1world__renderer__3d_html_a1f6ff6e0032592a44ab4f851f074295e"><div class="ttname"><a href="#a1f6ff6e0032592a44ab4f851f074295e">buz::world_renderer_3d::draw</a></div><div class="ttdeci">void draw(const mesh &amp;shape, const material &amp;look, const mat4 &amp;transform)</div><div class="ttdoc">Draws a mesh.</div></div>
+<div class="ttc" id="aclassbuz_1_1world__renderer__3d_html"><div class="ttname"><a href="classbuz_1_1world__renderer__3d.html">buz::world_renderer_3d</a></div><div class="ttdoc">Draws the 3D game world, through a camera.</div><div class="ttdef"><b>Definition</b> <a href="world__renderer__3d_8h_source.html#l00066">world_renderer_3d.h:67</a></div></div>
+<div class="ttc" id="aclassbuz_1_1world__renderer__3d_html_a1f6ff6e0032592a44ab4f851f074295e"><div class="ttname"><a href="#a1f6ff6e0032592a44ab4f851f074295e">buz::world_renderer_3d::draw</a></div><div class="ttdeci">void draw(const mesh &amp;shape, const material &amp;look, const mat4 &amp;transform)</div><div class="ttdoc">Draws a mesh in its material&#39;s plain color, untextured.</div></div>
 <div class="ttc" id="aclassbuz_1_1world__renderer__3d_html_ad82cda962d7c46dd474b6e3d31df4059"><div class="ttname"><a href="#ad82cda962d7c46dd474b6e3d31df4059">buz::world_renderer_3d::draw_box</a></div><div class="ttdeci">void draw_box(vec3 position, vec3 size, const material &amp;look)</div><div class="ttdoc">Draws a box. Handy for greyboxing a level.</div></div>
 </div><!-- fragment --><p>Until your game sets a camera, the world is seen from a fixed spot up, behind and to the side of the origin, looking at it. </p>
 
-<p class="definition">Definition at line <a class="el" href="world__renderer__3d_8h_source.html#l00033">33</a> of file <a class="el" href="world__renderer__3d_8h_source.html">world_renderer_3d.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="world__renderer__3d_8h_source.html#l00066">66</a> of file <a class="el" href="world__renderer__3d_8h_source.html">world_renderer_3d.h</a>.</p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a192ebc2c41c9cfb407a5154a86f262ae" name="a192ebc2c41c9cfb407a5154a86f262ae"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a192ebc2c41c9cfb407a5154a86f262ae">&#9670;&#160;</a></span>world_renderer_3d() <span class="overload">[1/2]</span></h2>
@@ -227,7 +239,7 @@ Public Member Functions</h2></td></tr>
 <p>Creates the pipelines and the built-in shapes on the engine's graphics card. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">context</td><td>The engine's render context (<a class="el" href="classbuz_1_1engine.html#a2067b8ba0193298894a30cd5f86c533d" title="Returns what engine modules (the 3D renderer, model loading) create gpu resources with....">engine::get_render_context</a>). </td></tr>
+    <tr><td class="paramname">context</td><td>The engine's render context (<a class="el" href="classbuz_1_1engine.html#a2067b8ba0193298894a30cd5f86c533d" title="Returns what engine modules (the game framework&#39;s renderers, asset loading) create gpu resources with...">engine::get_render_context</a>). </td></tr>
   </table>
   </dd>
 </dl>
@@ -333,7 +345,7 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <a id="a1f6ff6e0032592a44ab4f851f074295e" name="a1f6ff6e0032592a44ab4f851f074295e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1f6ff6e0032592a44ab4f851f074295e">&#9670;&#160;</a></span>draw()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f6ff6e0032592a44ab4f851f074295e">&#9670;&#160;</a></span>draw() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -356,11 +368,53 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Draws a mesh. </p>
+<p>Draws a mesh in its material's plain color, untextured. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">shape</td><td>The mesh. </td></tr>
+    <tr><td class="paramname">look</td><td>Its material; its base_texture is not looked at. </td></tr>
+    <tr><td class="paramname">transform</td><td>Where it is: object space to world space. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="afe72e74f64208199f02d1ea094e0d35e" name="afe72e74f64208199f02d1ea094e0d35e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe72e74f64208199f02d1ea094e0d35e">&#9670;&#160;</a></span>draw() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void buz::world_renderer_3d::draw </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classbuz_1_1mesh.html">mesh</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>shape</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structbuz_1_1material.html">material</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>look</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classbuz_1_1texture.html">texture</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>surface</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespacebuz.html#acdb2c70a0426fc209337d5bcdf33333c">mat4</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>transform</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Draws a mesh with a texture, times the material's color. The material only names its image (<a class="el" href="structbuz_1_1material.html#a4aa160c72b41cdb9711dbc6924c56a60" title="The image the texture shows; none means the plain color. A model&#39;s materials name the image in the fi...">material::base_texture</a>); loading that image is yours (<a class="el" href="namespacebuz.html#adaaa5d1dbfafef1c606ffcca29bb1bec" title="Loads the image a material names, an image file or one inside a model file:">buz::load_texture</a>), and this draws with the texture you hand it. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">shape</td><td>The mesh. </td></tr>
     <tr><td class="paramname">look</td><td>Its material. </td></tr>
+    <tr><td class="paramname">surface</td><td>The texture. </td></tr>
     <tr><td class="paramname">transform</td><td>Where it is: object space to world space. </td></tr>
   </table>
   </dd>
@@ -548,6 +602,119 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a43d1a511a7a88344f6cfaa6b81825d16" name="a43d1a511a7a88344f6cfaa6b81825d16"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a43d1a511a7a88344f6cfaa6b81825d16">&#9670;&#160;</a></span>set_shader_data()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void buz::world_renderer_3d::set_shader_data </td>
+          <td>(</td>
+          <td class="paramtype">std::span&lt; const std::byte &gt;</td>          <td class="paramname"><span class="paramname"><em>data</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Hands data to your own mesh shaders (see <a class="el" href="namespacebuz.html#a121fa3bdb3c7d5d48742630e3edf893c" title="Draws the meshes of world with other shaders from now on. Setting the shading that is already in use ...">buz::set_surface_shading</a>), for every draw that follows, in this frame and the next ones, until you set it again. The shaders read it as a cbuffer at register(b1): </p>
+<div class="fragment"><div class="line">[[vk::binding(0, 2)]] cbuffer shader_data : register(b1)</div>
+<div class="line">{</div>
+<div class="line">    float4 fog_color;</div>
+<div class="line">    float fog_distance;</div>
+<div class="line">};</div>
+</div><!-- fragment --><p> The struct you pass and the cbuffer must agree on the layout: hlsl packs the members in rows of four floats, and a member never straddles two rows. The built-in shaders don't read it.</p>
+<p>The engine fills the other two blocks: the draw's <span class="tt">world</span> matrix, normal matrix, <span class="tt">lit</span>, <span class="tt">alpha_cutoff</span> and <span class="tt">base_color</span> at register(b0), and the camera's <span class="tt">view_projection</span> and <span class="tt">camera_position</span> at register(b2), with [[vk::binding(0, 3)]] (<a class="el" href="structbuz_1_1surface__shading.html" title="Which shaders draw a world_renderer_3d&#39;s meshes, and how they filter textures. The defaults are the b...">buz::surface_shading</a> lists them; the diffuse shaders declare them). </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>At most 4096 bytes; a copy is kept. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a404e5351cc683613142336771ecee743" name="a404e5351cc683613142336771ecee743"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a404e5351cc683613142336771ecee743">&#9670;&#160;</a></span>begin_frame()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void buz::world_renderer_3d::begin_frame </td>
+          <td>(</td>
+          <td class="paramtype">rhi::command_list &amp;</td>          <td class="paramname"><span class="paramname"><em>commands</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Draws into this command list until end_frame; <a class="el" href="classbuz_1_1game__3d.html" title="The base class of a game with a 3D world: derive your game from it.">buz::game_3d</a> calls it before on_render_world. A game cannot call it: rhi::command_list is defined in the engine's internal headers. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">commands</td><td>The frame's command list. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a48c9b8e1ab39109d0c0516eb7917c7ec" name="a48c9b8e1ab39109d0c0516eb7917c7ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a48c9b8e1ab39109d0c0516eb7917c7ec">&#9670;&#160;</a></span>end_frame()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void buz::world_renderer_3d::end_frame </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Stops drawing into the frame begin_frame started; <a class="el" href="classbuz_1_1game__3d.html" title="The base class of a game with a 3D world: derive your game from it.">buz::game_3d</a> calls it after on_render_world. </p>
+
+</div>
+</div>
+<a id="a6909e9b6b16694bf508c446a37ed0f0d" name="a6909e9b6b16694bf508c446a37ed0f0d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6909e9b6b16694bf508c446a37ed0f0d">&#9670;&#160;</a></span>set_debug_views()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void buz::world_renderer_3d::set_debug_views </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structbuz_1_1debug__views.html">debug_views</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>views</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Draws with these debug views from now on; <a class="el" href="classbuz_1_1game__3d.html" title="The base class of a game with a 3D world: derive your game from it.">buz::game_3d</a> switches them with the engine's debug keys. </p>
+
+</div>
+</div>
+<a id="a309d381ef68a8416a8aa0743feb1ea53" name="a309d381ef68a8416a8aa0743feb1ea53"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a309d381ef68a8416a8aa0743feb1ea53">&#9670;&#160;</a></span>get_debug_views()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="structbuz_1_1debug__views.html">debug_views</a> &amp; buz::world_renderer_3d::get_debug_views </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the debug views it draws with. </p>
+
+</div>
+</div>
 <a id="a032635f480edaee920c6097532c3efc9" name="a032635f480edaee920c6097532c3efc9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a032635f480edaee920c6097532c3efc9">&#9670;&#160;</a></span>get_renderer()</h2>
 
@@ -563,7 +730,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Returns the engine's side of this renderer (<a class="el" href="namespacebuz_1_1debug__draw.html">debug_draw</a> draws its lines with it, set_mesh_shading changes its shaders). A game cannot use it: the type lives in the module's private headers. </p>
+<p>Returns the engine's side of this renderer (<a class="el" href="namespacebuz_1_1debug__draw.html">debug_draw</a> draws its lines with it, set_surface_shading changes its shaders). A game cannot use it: renderer_3d is defined in the module's private headers. </p>
 
 </div>
 </div>

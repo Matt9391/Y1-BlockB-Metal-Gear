@@ -37,7 +37,7 @@ namespace buz
 		vec4 rotation;      // radians in x
 	};
 
-	static_assert(sizeof(gpu_sprite_instance) == 4 * sizeof(vec4), "renderer_2d::m_instance_data stores instances as four vec4");
+	static_assert(sizeof(gpu_sprite_instance) == 4 * sizeof(vec4), "sprite_pass::m_instance_data stores instances as four vec4");
 
 	//--------------------------------------------------------------
 	/// @brief Constants of the instanced pipeline: only the camera, every

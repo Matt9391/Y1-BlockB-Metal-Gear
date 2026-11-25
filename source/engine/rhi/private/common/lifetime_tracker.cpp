@@ -55,7 +55,8 @@ namespace buz::rhi
 
 		// The leaked resources still point at the device that is about to
 		// go; anything they do after this would touch freed memory and fail
-		// in a different way per backend. Stop here instead, with the reason.
+		// in a different way per backend, so the program stops here with a
+		// fatal error that names the cause.
 		fatal_error("{}: {} gpu resource(s) still alive when the device shut down. Every texture, buffer and pipeline must be destroyed before the device; the engine releases the ones it handed out, so this is a resource created directly on the device and never destroyed.", backend_name, m_live_resources);
 	}
 }

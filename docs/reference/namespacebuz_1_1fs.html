@@ -164,6 +164,8 @@ Functions</h2></td></tr>
 <tr class="memdesc:a4562e5879b695c115f7e628e8a113c96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the directory and any parents that are missing.  <br /></td></tr>
 <tr class="memitem:a5ead0f67c0ec3506c29141da1b0c8873" id="r_a5ead0f67c0ec3506c29141da1b0c8873"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a5ead0f67c0ec3506c29141da1b0c8873">remove</a> (const path &amp;file)</td></tr>
 <tr class="memdesc:a5ead0f67c0ec3506c29141da1b0c8873"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deletes a file, or an empty directory.  <br /></td></tr>
+<tr class="memitem:a612ffcca1954948f39f8b99ab87860ae" id="r_a612ffcca1954948f39f8b99ab87860ae"><td class="memItemLeft">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a612ffcca1954948f39f8b99ab87860ae">list_content_files</a> (std::string_view content_relative_directory)</td></tr>
+<tr class="memdesc:a612ffcca1954948f39f8b99ab87860ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lists every file in a folder of the content folder and all of its subfolders:  <br /></td></tr>
 </table>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
 <a id="ae7dbc94022c491004fc7a011a04c8498" name="ae7dbc94022c491004fc7a011a04c8498"></a>
@@ -222,6 +224,34 @@ Functions</h2></td></tr>
 
 <p>Deletes a file, or an empty directory. </p>
 <dl class="section return"><dt>Returns</dt><dd>True when nothing exists at the path afterwards. </dd></dl>
+
+</div>
+</div>
+<a id="a612ffcca1954948f39f8b99ab87860ae" name="a612ffcca1954948f39f8b99ab87860ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a612ffcca1954948f39f8b99ab87860ae">&#9670;&#160;</a></span>list_content_files()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::string &gt; buz::fs::list_content_files </td>
+          <td>(</td>
+          <td class="paramtype">std::string_view</td>          <td class="paramname"><span class="paramname"><em>content_relative_directory</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Lists every file in a folder of the content folder and all of its subfolders: </p>
+<div class="fragment"><div class="line"><span class="keywordflow">for</span> (<span class="keyword">const</span> std::string&amp; file : <a class="code hl_function" href="#a612ffcca1954948f39f8b99ab87860ae">buz::fs::list_content_files</a>(<span class="stringliteral">&quot;shared&quot;</span>))</div>
+<div class="ttc" id="anamespacebuz_1_1fs_html_a612ffcca1954948f39f8b99ab87860ae"><div class="ttname"><a href="#a612ffcca1954948f39f8b99ab87860ae">buz::fs::list_content_files</a></div><div class="ttdeci">std::vector&lt; std::string &gt; list_content_files(std::string_view content_relative_directory)</div><div class="ttdoc">Lists every file in a folder of the content folder and all of its subfolders:</div></div>
+</div><!-- fragment --><p> gives "shared/textures/checker.png" and so on. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">content_relative_directory</td><td>Folder, relative to the content folder, with / between folders. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The files, relative to the content folder with / between folders, sorted. Empty (and an error logged) when the folder does not exist. </dd></dl>
 
 </div>
 </div>

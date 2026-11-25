@@ -15,12 +15,13 @@ var searchData=
   ['f9_12',['f9',['../namespacebuz.html#a5f8814179d73e55467bf33039e0bd9caa6506f0388343a1f09fd708fb15c5ade9',1,'buz']]],
   ['fatal_5ferror_13',['fatal_error',['../namespacebuz.html#ad25801e9838109a9796f0beef801cb03',1,'buz']]],
   ['filesystem_2eh_14',['filesystem.h',['../filesystem_8h.html',1,'']]],
-  ['find_5fclip_15',['find_clip',['../structbuz_1_1model.html#a4a2ed225fdb4aaa575eb8caf1a762220',1,'buz::model']]],
-  ['find_5fnode_16',['find_node',['../structbuz_1_1model.html#a9e347310d4e3563d0e6e719a049e2bde',1,'buz::model']]],
-  ['first_5fcharacter_17',['first_character',['../structbuz_1_1font.html#a82301b32d21365319151afb8b59f2fd6',1,'buz::font']]],
-  ['font_18',['font',['../structbuz_1_1font.html',1,'buz']]],
-  ['font_2eh_19',['font.h',['../font_8h.html',1,'']]],
-  ['for_20examples_20',['Looking for examples?',['../index.html#autotoc_md0',1,'']]],
-  ['frames_21',['frames',['../structbuz_1_1keyframe__clip.html#a5f897b36d97f81316488acfe50d18dc5',1,'buz::keyframe_clip']]],
-  ['frames_5fper_5fsecond_22',['frames_per_second',['../structbuz_1_1keyframe__clip.html#aa737ce3e6ba0830cee2f5948a527df14',1,'buz::keyframe_clip']]]
+  ['filter_15',['filter',['../structbuz_1_1surface__shading.html#a7d6e44f166c0451ca397268b2036e459',1,'buz::surface_shading']]],
+  ['find_5fclip_16',['find_clip',['../structbuz_1_1model.html#a4a2ed225fdb4aaa575eb8caf1a762220',1,'buz::model']]],
+  ['find_5fnode_17',['find_node',['../structbuz_1_1model.html#a9e347310d4e3563d0e6e719a049e2bde',1,'buz::model']]],
+  ['first_5fcharacter_18',['first_character',['../structbuz_1_1font.html#a82301b32d21365319151afb8b59f2fd6',1,'buz::font']]],
+  ['font_19',['font',['../structbuz_1_1font.html',1,'buz']]],
+  ['font_2eh_20',['font.h',['../font_8h.html',1,'']]],
+  ['for_20examples_21',['Looking for examples?',['../index.html#autotoc_md0',1,'']]],
+  ['frames_22',['frames',['../structbuz_1_1keyframe__clip.html#a3758286dc9d1bc6e7c8dbe3b01ff2b1c',1,'buz::keyframe_clip']]],
+  ['frames_5fper_5fsecond_23',['frames_per_second',['../structbuz_1_1keyframe__clip.html#aa737ce3e6ba0830cee2f5948a527df14',1,'buz::keyframe_clip']]]
 ];

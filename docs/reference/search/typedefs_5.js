@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['stats_5foverlay_0',['stats_overlay',['../namespacebuz.html#a25362f6726dde95aff4935783bc373c5',1,'buz']]]
+  ['orient_5fnormals_0',['orient_normals',['../namespacebuz.html#aba0c3958e4dce18994ae00dd6abae984',1,'buz']]]
 ];

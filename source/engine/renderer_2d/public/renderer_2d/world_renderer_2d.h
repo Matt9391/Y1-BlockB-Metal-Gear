@@ -12,9 +12,8 @@ namespace buz
 	/// and moves when the camera moves.
 	///
 	/// Owned by buz::game_2d and handed to on_render_world every frame. Until
-	/// you call set_camera,
-	/// world positions are plain window pixels, with (0, 0) in the top-left
-	/// corner. A camera is two matrices: the view (where the camera is) and
+	/// you call set_camera, world positions are plain window pixels, with
+	/// (0, 0) in the top-left corner. A camera is two matrices: the view (where the camera is) and
 	/// the projection (how the world maps onto the window). Scrolling a
 	/// level to follow the player is a view that moves:
 	/// @code{.cpp}
@@ -35,7 +34,9 @@ namespace buz
 		/// graphics card; buz::game_2d makes one for your game.
 		/// @param context The engine's render context
 		/// (engine::get_render_context).
-		explicit world_renderer_2d(const render_context& context);
+		/// @param sampler_filter How its textures are filtered when scaled
+		/// on screen (engine_settings::sampler_filter).
+		world_renderer_2d(const render_context& context, texture_filter sampler_filter);
 
 		//----------------------------------------------------------
 		// Camera

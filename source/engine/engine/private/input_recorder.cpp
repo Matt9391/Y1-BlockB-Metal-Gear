@@ -84,6 +84,7 @@ namespace buz
 		, m_previous_buttons{}
 		, m_mouse_position(0.0f, 0.0f)
 		, m_wheel_delta(0.0f)
+		, m_mouse_movement(0.0f, 0.0f)
 	{
 	}
 
@@ -140,6 +141,12 @@ namespace buz
 	}
 
 	//--------------------------------------------------------------
+	vec2 input_recorder::get_mouse_movement() const
+	{
+		return m_mouse_movement;
+	}
+
+	//--------------------------------------------------------------
 	void input_recorder::new_frame()
 	{
 		std::memcpy(m_previous_keys, m_current_keys, sizeof(m_current_keys));
@@ -148,6 +155,7 @@ namespace buz
 		// The wheel delta is per frame, so it starts at zero and the wheel
 		// events of the coming frame add to it.
 		m_wheel_delta = 0.0f;
+		m_mouse_movement = { 0.0f, 0.0f };
 	}
 
 	//--------------------------------------------------------------
@@ -174,6 +182,9 @@ namespace buz
 		case SDL_EVENT_MOUSE_MOTION:
 			// Relative to the top-left corner of the drawable area
 			m_mouse_position = { event.motion.x, event.motion.y };
+			// SDL reports the movement also while the cursor is locked, when
+			// the position stays where it is
+			m_mouse_movement += vec2(event.motion.xrel, event.motion.yrel);
 			break;
 
 		case SDL_EVENT_MOUSE_WHEEL:
@@ -197,7 +208,7 @@ namespace buz
 		if (scancode == SDL_SCANCODE_RSHIFT) { scancode = SDL_SCANCODE_LSHIFT; }
 		if (scancode == SDL_SCANCODE_RCTRL) { scancode = SDL_SCANCODE_LCTRL; }
 
-		// A handful of keys: a search is quicker to read than a lookup table
+		// With this few keys, a linear search is easier to read than a lookup table
 		for (size_t index = 0; index < k_scancodes.size(); ++index)
 		{
 			if (static_cast<uint32_t>(k_scancodes[index]) == scancode)

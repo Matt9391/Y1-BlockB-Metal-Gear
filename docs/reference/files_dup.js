@@ -1,10 +1,10 @@
 var files_dup =
 [
-    [ "asset_management", "dir_c95e216642735914dec630eeb8b802ab.html", "dir_c95e216642735914dec630eeb8b802ab" ],
-    [ "core", "dir_1da1f8844cdd287afd0121ebe5ba1338.html", "dir_1da1f8844cdd287afd0121ebe5ba1338" ],
-    [ "docs", "dir_49e56c817e5e54854c35e136979f97ca.html", null ],
-    [ "engine", "dir_95f27662b8301e631d7123371db67390.html", "dir_95f27662b8301e631d7123371db67390" ],
-    [ "renderer_2d", "dir_6f9ba63c1e6703776d3763c2ff46adb4.html", "dir_6f9ba63c1e6703776d3763c2ff46adb4" ],
-    [ "renderer_3d", "dir_815db0563159af41b77de82d2ec73be5.html", "dir_815db0563159af41b77de82d2ec73be5" ],
-    [ "rhi", "dir_10961add05dedbcf1411ac28d48b63e0.html", "dir_10961add05dedbcf1411ac28d48b63e0" ]
+    [ "asset_management", "dir_faf9252ad727d6c42c5f7ead25f8792e.html", "dir_faf9252ad727d6c42c5f7ead25f8792e" ],
+    [ "core", "dir_41f2d38fd196c32d665c833f4735cb96.html", "dir_41f2d38fd196c32d665c833f4735cb96" ],
+    [ "engine", "dir_07ecc04e2138ab4b7e671c62af30c65b.html", "dir_07ecc04e2138ab4b7e671c62af30c65b" ],
+    [ "game_framework", "dir_f93a4c87791a4409bb3c87681328b542.html", "dir_f93a4c87791a4409bb3c87681328b542" ],
+    [ "render_core", "dir_91bb0fa872cad40184897be90f1ae41d.html", "dir_91bb0fa872cad40184897be90f1ae41d" ],
+    [ "renderer_2d", "dir_4eb240cf58aabfdc4f5151186b6d1658.html", "dir_4eb240cf58aabfdc4f5151186b6d1658" ],
+    [ "renderer_3d", "dir_2c5eb61a5511368cb6e8f5f1449a9bb1.html", "dir_2c5eb61a5511368cb6e8f5f1449a9bb1" ]
 ];

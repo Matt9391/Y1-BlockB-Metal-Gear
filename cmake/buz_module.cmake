@@ -13,13 +13,18 @@
 # and its CMakeLists.txt is a single call:
 #
 #   BUZ_MODULE(renderer_2d
-#              PUBLIC_DEPS buz_core buz_rhi
-#              PRIVATE_DEPS stb)
+#              PUBLIC_DEPS buz_core buz_render_core
+#              PRIVATE_DEPS buz_core_internal)
 #
 # which creates the target buz_<name> and picks up every file in the
-# folder. PUBLIC_DEPS are the
-# libraries whose headers the module's public headers include; everything
-# else is a PRIVATE_DEP, so it stays out of the code that uses the module.
+# folder. PUBLIC_DEPS are the libraries whose headers the module's public
+# headers include; everything else is a PRIVATE_DEP, so it stays out of the
+# code that uses the module.
+#
+# ENGINE_ONLY: a module that only other engine modules may use, such as
+# the rhi. They link it privately, and BUZ_CHECK_ENGINE_ONLY fails when a
+# game reaches it, whether it links the module itself or a module that
+# links it publicly. Such a module needs no public/ folder.
 #
 # internal: a module with an internal/ folder also gets the target
 # buz_<name>_internal. Engine modules that need those headers list it in
@@ -27,14 +32,14 @@
 # one does).
 # INTERNAL_DEPS are what the internal headers themselves include (other
 # modules' _internal targets, usually); they come along with the target.
-# This keeps engine plumbing out of reach of game code, like Unreal's
-# Internal folders: a header is a promise, and games get the public one.
+# The internal targets keep the engine's own plumbing out of game code, as
+# Unreal's Internal folders do: games include only the public headers.
 #
 # -------------------------------
 FUNCTION(BUZ_MODULE name)
     SET(value_arguments "")
     SET(list_arguments PUBLIC_DEPS PRIVATE_DEPS INTERNAL_DEPS EXCLUDE)
-    CMAKE_PARSE_ARGUMENTS(MODULE "" "${value_arguments}" "${list_arguments}" ${ARGN})
+    CMAKE_PARSE_ARGUMENTS(MODULE "ENGINE_ONLY" "${value_arguments}" "${list_arguments}" ${ARGN})
 
 
     SET(target buz_${name})
@@ -54,14 +59,14 @@ FUNCTION(BUZ_MODULE name)
     ENDFOREACH()
 
     TARGET_SOURCES(${target} PRIVATE ${module_sources})
-    GROUPSOURCES(${CMAKE_CURRENT_LIST_DIR}/public public)
+    IF(EXISTS ${CMAKE_CURRENT_LIST_DIR}/public)
+        GROUPSOURCES(${CMAKE_CURRENT_LIST_DIR}/public public)
+        TARGET_INCLUDE_DIRECTORIES(${target} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/public)
+    ENDIF()
     IF(EXISTS ${CMAKE_CURRENT_LIST_DIR}/private)
         GROUPSOURCES(${CMAKE_CURRENT_LIST_DIR}/private private)
     ENDIF()
-
-    TARGET_INCLUDE_DIRECTORIES(${target}
-        PUBLIC ${CMAKE_CURRENT_LIST_DIR}/public
-        PRIVATE ${CMAKE_CURRENT_LIST_DIR}/private)
+    TARGET_INCLUDE_DIRECTORIES(${target} PRIVATE ${CMAKE_CURRENT_LIST_DIR}/private)
 
     IF(EXISTS ${CMAKE_CURRENT_LIST_DIR}/internal)
         GROUPSOURCES(${CMAKE_CURRENT_LIST_DIR}/internal internal)
@@ -82,4 +87,7 @@ FUNCTION(BUZ_MODULE name)
 
     SET_TARGET_PROPERTIES(${target} PROPERTIES FOLDER "engine")
     SET_PROPERTY(TARGET ${target} PROPERTY BUZ_MODULE TRUE)
+    IF(MODULE_ENGINE_ONLY)
+        SET_PROPERTY(TARGET ${target} PROPERTY BUZ_ENGINE_ONLY TRUE)
+    ENDIF()
 ENDFUNCTION()

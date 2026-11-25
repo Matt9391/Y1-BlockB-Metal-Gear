@@ -164,10 +164,10 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('classbuz_1_1in
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a7b6d661987d63f90932d2bfee4af29c8" id="r_a7b6d661987d63f90932d2bfee4af29c8"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a7b6d661987d63f90932d2bfee4af29c8">input</a> (const input_recorder &amp;recorder)</td></tr>
-<tr class="memdesc:a7b6d661987d63f90932d2bfee4af29c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Answers questions about what the engine recorded; only the engine has one to pass in.  <br /></td></tr>
+<tr class="memitem:a18b03a78388b1ff910d569a42f268d1c" id="r_a18b03a78388b1ff910d569a42f268d1c"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a18b03a78388b1ff910d569a42f268d1c">input</a> (const input_recorder &amp;recorder, native_window &amp;window)</td></tr>
+<tr class="memdesc:a18b03a78388b1ff910d569a42f268d1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads the input the engine recorded, and locks the cursor in the engine's window; only the engine has the recorder and the window to pass in.  <br /></td></tr>
 <tr class="memitem:ab79f7e9786de79c86d56489ea5e60c53" id="r_ab79f7e9786de79c86d56489ea5e60c53"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ab79f7e9786de79c86d56489ea5e60c53">input</a> (const input &amp;)=delete</td></tr>
-<tr class="memitem:a095e366014d32f2cef16a7885492e1e9" id="r_a095e366014d32f2cef16a7885492e1e9"><td class="memItemLeft"><a class="el" href="#a7b6d661987d63f90932d2bfee4af29c8">input</a> &amp;&#160;</td><td class="memItemRight"><a class="el" href="#a095e366014d32f2cef16a7885492e1e9">operator=</a> (const <a class="el" href="#a7b6d661987d63f90932d2bfee4af29c8">input</a> &amp;)=delete</td></tr>
+<tr class="memitem:a095e366014d32f2cef16a7885492e1e9" id="r_a095e366014d32f2cef16a7885492e1e9"><td class="memItemLeft"><a class="el" href="#a18b03a78388b1ff910d569a42f268d1c">input</a> &amp;&#160;</td><td class="memItemRight"><a class="el" href="#a095e366014d32f2cef16a7885492e1e9">operator=</a> (const <a class="el" href="#a18b03a78388b1ff910d569a42f268d1c">input</a> &amp;)=delete</td></tr>
 <tr class="memitem:a872b9ae9723d00293e8d9a44e2ae088c" id="r_a872b9ae9723d00293e8d9a44e2ae088c"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a872b9ae9723d00293e8d9a44e2ae088c">is_key_down</a> (<a class="el" href="namespacebuz.html#a5f8814179d73e55467bf33039e0bd9ca">key</a> value) const</td></tr>
 <tr class="memdesc:a872b9ae9723d00293e8d9a44e2ae088c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true while the key is held down.  <br /></td></tr>
 <tr class="memitem:a4a897d30513221c0cc535faac9f0a9a3" id="r_a4a897d30513221c0cc535faac9f0a9a3"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a4a897d30513221c0cc535faac9f0a9a3">was_key_pressed</a> (<a class="el" href="namespacebuz.html#a5f8814179d73e55467bf33039e0bd9ca">key</a> value) const</td></tr>
@@ -184,45 +184,49 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aeef25281aa5ee4b7655a0e3c41d21f9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the mouse position in pixels, relative to the top-left corner of the drawable area.  <br /></td></tr>
 <tr class="memitem:a5ff5460bc0dd2bc1eafe4ec4a4baffdd" id="r_a5ff5460bc0dd2bc1eafe4ec4a4baffdd"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="#a5ff5460bc0dd2bc1eafe4ec4a4baffdd">get_mouse_wheel_delta</a> () const</td></tr>
 <tr class="memdesc:a5ff5460bc0dd2bc1eafe4ec4a4baffdd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns how far the mouse wheel turned this frame: positive away from you, negative towards you, one "click" is 1.  <br /></td></tr>
+<tr class="memitem:a022a188429caed719f21d20d426ffaaa" id="r_a022a188429caed719f21d20d426ffaaa"><td class="memItemLeft"><a class="el" href="namespacebuz.html#a97def2f877690e2da5aac438c7cfe9b9">vec2</a>&#160;</td><td class="memItemRight"><a class="el" href="#a022a188429caed719f21d20d426ffaaa">get_mouse_movement</a> () const</td></tr>
+<tr class="memdesc:a022a188429caed719f21d20d426ffaaa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns how far the mouse moved this frame, in pixels: positive x to the right, positive y down. Unlike the position, the movement keeps changing while the cursor is locked, so it is the value to use for mouse look:  <br /></td></tr>
+<tr class="memitem:aeb3fb879eb1feebfcd68d9a3d90f5865" id="r_aeb3fb879eb1feebfcd68d9a3d90f5865"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#aeb3fb879eb1feebfcd68d9a3d90f5865">lock_cursor</a> ()</td></tr>
+<tr class="memdesc:aeb3fb879eb1feebfcd68d9a3d90f5865"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hides the cursor and keeps it inside the window, so the mouse can turn a camera without the cursor hitting the edge of the screen. get_mouse_position stays where it was; read get_mouse_movement instead. Unlock it for menus.  <br /></td></tr>
+<tr class="memitem:a2267f92660998d653179b9266570a2b3" id="r_a2267f92660998d653179b9266570a2b3"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a2267f92660998d653179b9266570a2b3">unlock_cursor</a> ()</td></tr>
+<tr class="memdesc:a2267f92660998d653179b9266570a2b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shows the cursor again and lets it leave the window.  <br /></td></tr>
+<tr class="memitem:ae2fedb339329cec31b3a2eb721fa7bb9" id="r_ae2fedb339329cec31b3a2eb721fa7bb9"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#ae2fedb339329cec31b3a2eb721fa7bb9">is_cursor_locked</a> () const</td></tr>
+<tr class="memdesc:ae2fedb339329cec31b3a2eb721fa7bb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true while the cursor is locked.  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The keyboard and mouse state of this frame. </p>
-<p>The engine owns one instance (<a class="el" href="classbuz_1_1engine.html#aa05b9d843e63e50f5d544b5f2bcd4506" title="Returns the keyboard and mouse state of this frame.">engine::get_input</a>) and records every keyboard and mouse event into it. Game code just asks questions: </p><div class="fragment"><div class="line"><span class="keywordflow">if</span> (<a class="code hl_function" href="#a7b6d661987d63f90932d2bfee4af29c8">input</a>.is_key_down(<a class="code hl_enumvalue" href="namespacebuz.html#a5f8814179d73e55467bf33039e0bd9caa0cc175b9c0f1b6a831c399e269772661">buz::key::a</a>))            { }  <span class="comment">// every frame while held</span></div>
+<p>The engine owns one instance (<a class="el" href="classbuz_1_1engine.html#ab29dc154ff81b24bfca5c090ca7d443e" title="Returns the keyboard and mouse state of this frame, and the cursor lock.">engine::get_input</a>), which reports the keyboard and mouse events of this frame. Game code queries it like this: </p><div class="fragment"><div class="line"><span class="keywordflow">if</span> (<a class="code hl_function" href="#a18b03a78388b1ff910d569a42f268d1c">input</a>.is_key_down(<a class="code hl_enumvalue" href="namespacebuz.html#a5f8814179d73e55467bf33039e0bd9caa0cc175b9c0f1b6a831c399e269772661">buz::key::a</a>))            { }  <span class="comment">// every frame while held</span></div>
 <div class="line"><span class="keywordflow">if</span> (<a class="code hl_class" href="classbuz_1_1input.html">input</a>.<a class="code hl_function" href="#a4a897d30513221c0cc535faac9f0a9a3">was_key_pressed</a>(<a class="code hl_enumvalue" href="namespacebuz.html#a5f8814179d73e55467bf33039e0bd9caaff2364a0be3d20e46cc69efb36afe9a5">buz::key::space</a>))    { }  <span class="comment">// only the frame it went down</span></div>
-<div class="line"><span class="keywordflow">if</span> (<a class="code hl_function" href="#a7b6d661987d63f90932d2bfee4af29c8">input</a>.was_key_released(<a class="code hl_enumvalue" href="namespacebuz.html#a5f8814179d73e55467bf33039e0bd9caae0ebc3c409070d07f1df0f2f4132509e">buz::key::escape</a>))  { }  <span class="comment">// only the frame it came up</span></div>
-<div class="ttc" id="aclassbuz_1_1input_html"><div class="ttname"><a href="classbuz_1_1input.html">buz::input</a></div><div class="ttdoc">The keyboard and mouse state of this frame.</div><div class="ttdef"><b>Definition</b> <a href="input_8h_source.html#l00108">input.h:109</a></div></div>
+<div class="line"><span class="keywordflow">if</span> (<a class="code hl_function" href="#a18b03a78388b1ff910d569a42f268d1c">input</a>.was_key_released(<a class="code hl_enumvalue" href="namespacebuz.html#a5f8814179d73e55467bf33039e0bd9caae0ebc3c409070d07f1df0f2f4132509e">buz::key::escape</a>))  { }  <span class="comment">// only the frame it came up</span></div>
+<div class="ttc" id="aclassbuz_1_1input_html"><div class="ttname"><a href="classbuz_1_1input.html">buz::input</a></div><div class="ttdoc">The keyboard and mouse state of this frame.</div><div class="ttdef"><b>Definition</b> <a href="input_8h_source.html#l00110">input.h:111</a></div></div>
+<div class="ttc" id="aclassbuz_1_1input_html_a18b03a78388b1ff910d569a42f268d1c"><div class="ttname"><a href="#a18b03a78388b1ff910d569a42f268d1c">buz::input::input</a></div><div class="ttdeci">input(const input_recorder &amp;recorder, native_window &amp;window)</div><div class="ttdoc">Reads the input the engine recorded, and locks the cursor in the engine&#39;s window; only the engine has...</div></div>
 <div class="ttc" id="aclassbuz_1_1input_html_a4a897d30513221c0cc535faac9f0a9a3"><div class="ttname"><a href="#a4a897d30513221c0cc535faac9f0a9a3">buz::input::was_key_pressed</a></div><div class="ttdeci">bool was_key_pressed(key value) const</div><div class="ttdoc">Returns true only in the frame the key went down.</div></div>
-<div class="ttc" id="aclassbuz_1_1input_html_a7b6d661987d63f90932d2bfee4af29c8"><div class="ttname"><a href="#a7b6d661987d63f90932d2bfee4af29c8">buz::input::input</a></div><div class="ttdeci">input(const input_recorder &amp;recorder)</div><div class="ttdoc">Answers questions about what the engine recorded; only the engine has one to pass in.</div></div>
-<div class="ttc" id="anamespacebuz_html_a5f8814179d73e55467bf33039e0bd9caa0cc175b9c0f1b6a831c399e269772661"><div class="ttname"><a href="namespacebuz.html#a5f8814179d73e55467bf33039e0bd9caa0cc175b9c0f1b6a831c399e269772661">buz::key::a</a></div><div class="ttdeci">@ a</div><div class="ttdef"><b>Definition</b> <a href="input_8h_source.html#l00046">input.h:46</a></div></div>
-<div class="ttc" id="anamespacebuz_html_a5f8814179d73e55467bf33039e0bd9caae0ebc3c409070d07f1df0f2f4132509e"><div class="ttname"><a href="namespacebuz.html#a5f8814179d73e55467bf33039e0bd9caae0ebc3c409070d07f1df0f2f4132509e">buz::key::escape</a></div><div class="ttdeci">@ escape</div><div class="ttdef"><b>Definition</b> <a href="input_8h_source.html#l00027">input.h:27</a></div></div>
-<div class="ttc" id="anamespacebuz_html_a5f8814179d73e55467bf33039e0bd9caaff2364a0be3d20e46cc69efb36afe9a5"><div class="ttname"><a href="namespacebuz.html#a5f8814179d73e55467bf33039e0bd9caaff2364a0be3d20e46cc69efb36afe9a5">buz::key::space</a></div><div class="ttdeci">@ space</div><div class="ttdef"><b>Definition</b> <a href="input_8h_source.html#l00028">input.h:28</a></div></div>
+<div class="ttc" id="anamespacebuz_html_a5f8814179d73e55467bf33039e0bd9caa0cc175b9c0f1b6a831c399e269772661"><div class="ttname"><a href="namespacebuz.html#a5f8814179d73e55467bf33039e0bd9caa0cc175b9c0f1b6a831c399e269772661">buz::key::a</a></div><div class="ttdeci">@ a</div><div class="ttdef"><b>Definition</b> <a href="input_8h_source.html#l00047">input.h:47</a></div></div>
+<div class="ttc" id="anamespacebuz_html_a5f8814179d73e55467bf33039e0bd9caae0ebc3c409070d07f1df0f2f4132509e"><div class="ttname"><a href="namespacebuz.html#a5f8814179d73e55467bf33039e0bd9caae0ebc3c409070d07f1df0f2f4132509e">buz::key::escape</a></div><div class="ttdeci">@ escape</div><div class="ttdef"><b>Definition</b> <a href="input_8h_source.html#l00028">input.h:28</a></div></div>
+<div class="ttc" id="anamespacebuz_html_a5f8814179d73e55467bf33039e0bd9caaff2364a0be3d20e46cc69efb36afe9a5"><div class="ttname"><a href="namespacebuz.html#a5f8814179d73e55467bf33039e0bd9caaff2364a0be3d20e46cc69efb36afe9a5">buz::key::space</a></div><div class="ttdeci">@ space</div><div class="ttdef"><b>Definition</b> <a href="input_8h_source.html#l00029">input.h:29</a></div></div>
 </div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="input_8h_source.html#l00108">108</a> of file <a class="el" href="input_8h_source.html">input.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="input_8h_source.html#l00110">110</a> of file <a class="el" href="input_8h_source.html">input.h</a>.</p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a7b6d661987d63f90932d2bfee4af29c8" name="a7b6d661987d63f90932d2bfee4af29c8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7b6d661987d63f90932d2bfee4af29c8">&#9670;&#160;</a></span>input() <span class="overload">[1/2]</span></h2>
+<a id="a18b03a78388b1ff910d569a42f268d1c" name="a18b03a78388b1ff910d569a42f268d1c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18b03a78388b1ff910d569a42f268d1c">&#9670;&#160;</a></span>input() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">buz::input::input </td>
           <td>(</td>
-          <td class="paramtype">const input_recorder &amp;</td>          <td class="paramname"><span class="paramname"><em>recorder</em></span></td><td>)</td>
+          <td class="paramtype">const input_recorder &amp;</td>          <td class="paramname"><span class="paramname"><em>recorder</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">native_window &amp;</td>          <td class="paramname"><span class="paramname"><em>window</em></span>&#160;)</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel explicit">explicit</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p>Answers questions about what the engine recorded; only the engine has one to pass in. </p>
+<p>Reads the input the engine recorded, and locks the cursor in the engine's window; only the engine has the recorder and the window to pass in. </p>
 
 </div>
 </div>
@@ -262,9 +266,9 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#a7b6d661987d63f90932d2bfee4af29c8">input</a> &amp; buz::input::operator= </td>
+          <td class="memname"><a class="el" href="#a18b03a78388b1ff910d569a42f268d1c">input</a> &amp; buz::input::operator= </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="#a7b6d661987d63f90932d2bfee4af29c8">input</a> &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="#a18b03a78388b1ff910d569a42f268d1c">input</a> &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -426,6 +430,83 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns how far the mouse wheel turned this frame: positive away from you, negative towards you, one "click" is 1. </p>
+
+</div>
+</div>
+<a id="a022a188429caed719f21d20d426ffaaa" name="a022a188429caed719f21d20d426ffaaa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a022a188429caed719f21d20d426ffaaa">&#9670;&#160;</a></span>get_mouse_movement()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacebuz.html#a97def2f877690e2da5aac438c7cfe9b9">vec2</a> buz::input::get_mouse_movement </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns how far the mouse moved this frame, in pixels: positive x to the right, positive y down. Unlike the position, the movement keeps changing while the cursor is locked, so it is the value to use for mouse look: </p>
+<div class="fragment"><div class="line">m_yaw -= <a class="code hl_function" href="#a18b03a78388b1ff910d569a42f268d1c">input</a>.get_mouse_movement().x * k_radians_per_pixel;</div>
+</div><!-- fragment --> 
+</div>
+</div>
+<a id="aeb3fb879eb1feebfcd68d9a3d90f5865" name="aeb3fb879eb1feebfcd68d9a3d90f5865"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb3fb879eb1feebfcd68d9a3d90f5865">&#9670;&#160;</a></span>lock_cursor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void buz::input::lock_cursor </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Hides the cursor and keeps it inside the window, so the mouse can turn a camera without the cursor hitting the edge of the screen. get_mouse_position stays where it was; read get_mouse_movement instead. Unlock it for menus. </p>
+
+</div>
+</div>
+<a id="a2267f92660998d653179b9266570a2b3" name="a2267f92660998d653179b9266570a2b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2267f92660998d653179b9266570a2b3">&#9670;&#160;</a></span>unlock_cursor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void buz::input::unlock_cursor </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Shows the cursor again and lets it leave the window. </p>
+
+</div>
+</div>
+<a id="ae2fedb339329cec31b3a2eb721fa7bb9" name="ae2fedb339329cec31b3a2eb721fa7bb9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2fedb339329cec31b3a2eb721fa7bb9">&#9670;&#160;</a></span>is_cursor_locked()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool buz::input::is_cursor_locked </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns true while the cursor is locked. </p>
 
 </div>
 </div>

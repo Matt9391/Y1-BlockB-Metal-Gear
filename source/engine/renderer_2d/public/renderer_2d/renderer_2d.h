@@ -16,6 +16,7 @@ namespace buz
 	struct render_context;
 	class sprite_pass;
 	class texture;
+	enum class texture_filter;
 
 	//--------------------------------------------------------------
 	/// @brief One sprite for draw_sprite_instances: everything draw_sprite
@@ -39,10 +40,12 @@ namespace buz
 	/// @brief The drawing functions shared by world_renderer_2d and
 	/// screen_renderer.
 	///
-	/// All geometry is a quad: a single unit quad lives in gpu memory and
-	/// every draw call renders it with its own transformation, texture and
-	/// tint color. Positions are in pixels (or world units, once the world
-	/// has a camera) with the y axis pointing down.
+	/// Sprites, rectangles, lines and text are quads: a single unit quad
+	/// lives in gpu memory and each of those draws renders it with its own
+	/// transformation, texture and tint color. Circles and triangles are
+	/// built from triangles on the cpu instead. Positions are in pixels (or
+	/// world units, once the world has a camera) with the y axis pointing
+	/// down.
 	class renderer_2d
 	{
 		//----------------------------------------------------------
@@ -147,13 +150,13 @@ namespace buz
 		//----------------------------------------------------------
 		/// @brief Returns the engine's side of this renderer
 		/// (world_renderer_2d::set_camera changes its camera). A game cannot
-		/// use it: the type lives in the module's internal headers.
+		/// use it: sprite_pass is defined in the module's internal headers.
 		sprite_pass& get_pass() const;
 
 	protected:
 		// Only world_renderer_2d and screen_renderer are made, by the game
 		// classes, which hand them to the game's render functions.
-		explicit renderer_2d(const render_context& context);
+		renderer_2d(const render_context& context, texture_filter sampler_filter);
 		~renderer_2d();
 
 		renderer_2d(const renderer_2d&) = delete;

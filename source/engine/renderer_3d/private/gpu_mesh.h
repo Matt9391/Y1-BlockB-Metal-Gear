@@ -12,7 +12,7 @@ namespace buz
 	}
 
 	//--------------------------------------------------------------
-	/// @brief The engine's side of a mesh: the gpu buffers draw_mesh draws.
+	/// @brief The engine's side of a mesh: the gpu buffers world_renderer_3d::draw draws.
 	/// Every buz::mesh a game holds is one of these.
 	class gpu_mesh final : public mesh
 	{
@@ -34,6 +34,6 @@ namespace buz
 	};
 
 	//--------------------------------------------------------------
-	/// @brief Returns the gpu side of a mesh a game handed to draw_mesh.
+	/// @brief Returns the gpu side of a mesh a game handed to world_renderer_3d::draw.
 	const gpu_mesh& to_gpu_mesh(const mesh& shape);
 }

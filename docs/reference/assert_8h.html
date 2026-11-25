@@ -189,7 +189,7 @@ Functions</h2></td></tr>
 <tr class="memdesc:a1af4776271a7f34b207955b64c212b8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reports an unrecoverable error and terminates the program.  <br /></td></tr>
 <tr class="memitem:ad25801e9838109a9796f0beef801cb03" id="r_ad25801e9838109a9796f0beef801cb03"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
 <tr class="memitem:ad25801e9838109a9796f0beef801cb03 template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="namespacebuz.html#ad25801e9838109a9796f0beef801cb03">buz::fatal_error</a> (std::format_string&lt; Args... &gt; format, Args &amp;&amp;... args)</td></tr>
-<tr class="memdesc:ad25801e9838109a9796f0beef801cb03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reports an unrecoverable error and terminates the program: logs the message, shows a message box, then exits. Works in both debug and release builds (std::format "{}" style formatting).  <br /></td></tr>
+<tr class="memdesc:ad25801e9838109a9796f0beef801cb03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reports an unrecoverable error and terminates the program: logs the message (where logging is compiled in), shows a message box on Windows, then exits. Works in both debug and release builds (std::format "{}" style formatting).  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Assertions that stop in the debugger, and fatal_error for what the engine cannot recover from. </p>
@@ -208,7 +208,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="assert_8h_source.html#l00015">15</a> of file <a class="el" href="assert_8h_source.html">assert.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="assert_8h_source.html#l00016">16</a> of file <a class="el" href="assert_8h_source.html">assert.h</a>.</p>
 
 </div>
 </div>
@@ -228,7 +228,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line">__builtin_trap()</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="assert_8h_source.html#l00022">22</a> of file <a class="el" href="assert_8h_source.html">assert.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="assert_8h_source.html#l00023">23</a> of file <a class="el" href="assert_8h_source.html">assert.h</a>.</p>
 
 </div>
 </div>
@@ -257,11 +257,11 @@ Functions</h2></td></tr>
 </div><!-- fragment -->
 <p>Halts the program in the debugger when the condition is false. </p>
 <p>Use it to document assumptions your code makes: </p><div class="fragment"><div class="line"><a class="code hl_define" href="#af79e3dad70ce3d41006ca091d16493ed">BUZ_ASSERT</a>(frame_index &lt; frame_count);</div>
-<div class="ttc" id="aassert_8h_html_af79e3dad70ce3d41006ca091d16493ed"><div class="ttname"><a href="#af79e3dad70ce3d41006ca091d16493ed">BUZ_ASSERT</a></div><div class="ttdeci">#define BUZ_ASSERT(condition)</div><div class="ttdoc">Halts the program in the debugger when the condition is false.</div><div class="ttdef"><b>Definition</b> <a href="assert_8h_source.html#l00071">assert.h:71</a></div></div>
+<div class="ttc" id="aassert_8h_html_af79e3dad70ce3d41006ca091d16493ed"><div class="ttname"><a href="#af79e3dad70ce3d41006ca091d16493ed">BUZ_ASSERT</a></div><div class="ttdeci">#define BUZ_ASSERT(condition)</div><div class="ttdoc">Halts the program in the debugger when the condition is false.</div><div class="ttdef"><b>Definition</b> <a href="assert_8h_source.html#l00073">assert.h:73</a></div></div>
 </div><!-- fragment --><p> Compiled away in release builds.</p>
 <p>A macro (instead of a function) is still needed here: only a macro can stringize the condition with the # operator, skip evaluating it entirely in release, and fire <a class="el" href="#afc0b850b9cb2a3b5009b7e2d884f5590">BUZ_DEBUG_BREAK()</a> at the call site instead of inside a helper function. </p>
 
-<p class="definition">Definition at line <a class="el" href="assert_8h_source.html#l00071">71</a> of file <a class="el" href="assert_8h_source.html">assert.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="assert_8h_source.html#l00073">73</a> of file <a class="el" href="assert_8h_source.html">assert.h</a>.</p>
 
 </div>
 </div>
@@ -294,9 +294,9 @@ Functions</h2></td></tr>
 </div><!-- fragment -->
 <p>Same as BUZ_ASSERT, with an extra message explaining the failure (std::format "{}" style formatting): </p>
 <div class="fragment"><div class="line"><a class="code hl_define" href="#a32a6f756fe08384401b8fedfc769e5d6">BUZ_ASSERT_MSG</a>(frame_index &lt; frame_count, <span class="stringliteral">&quot;frame {} out of range&quot;</span>, frame_index);</div>
-<div class="ttc" id="aassert_8h_html_a32a6f756fe08384401b8fedfc769e5d6"><div class="ttname"><a href="#a32a6f756fe08384401b8fedfc769e5d6">BUZ_ASSERT_MSG</a></div><div class="ttdeci">#define BUZ_ASSERT_MSG(condition,...)</div><div class="ttdoc">Same as BUZ_ASSERT, with an extra message explaining the failure (std::format &quot;{}&quot; style formatting):</div><div class="ttdef"><b>Definition</b> <a href="assert_8h_source.html#l00091">assert.h:91</a></div></div>
+<div class="ttc" id="aassert_8h_html_a32a6f756fe08384401b8fedfc769e5d6"><div class="ttname"><a href="#a32a6f756fe08384401b8fedfc769e5d6">BUZ_ASSERT_MSG</a></div><div class="ttdeci">#define BUZ_ASSERT_MSG(condition,...)</div><div class="ttdoc">Same as BUZ_ASSERT, with an extra message explaining the failure (std::format &quot;{}&quot; style formatting):</div><div class="ttdef"><b>Definition</b> <a href="assert_8h_source.html#l00093">assert.h:93</a></div></div>
 </div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="assert_8h_source.html#l00091">91</a> of file <a class="el" href="assert_8h_source.html">assert.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="assert_8h_source.html#l00093">93</a> of file <a class="el" href="assert_8h_source.html">assert.h</a>.</p>
 
 </div>
 </div>
@@ -306,7 +306,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a href="dir_1da1f8844cdd287afd0121ebe5ba1338.html">core</a></li><li class="navelem"><a href="assert_8h.html">assert.h</a></li>
+    <li class="navelem"><a href="dir_41f2d38fd196c32d665c833f4735cb96.html">core</a></li><li class="navelem"><a href="assert_8h.html">assert.h</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
   </ul>
 </div>

@@ -13,7 +13,8 @@ struct pixel_input
 
 // DirectX 12 finds these by register (t0, s0). Vulkan groups resources in
 // descriptor sets instead: the texture is binding 0 of set 0, the sampler
-// binding 0 of set 1 (see the Vulkan backend in source/engine/rhi).
+// binding 0 of set 1 (see the Vulkan backend in source/engine/rhi). For
+// OpenGL, shader_compiler combines the two into one texture, buz_texture.
 [[vk::binding(0, 0)]] Texture2D sprite_texture : register(t0);
 [[vk::binding(0, 1)]] SamplerState sprite_sampler : register(s0);
 

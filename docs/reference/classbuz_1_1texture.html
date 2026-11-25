@@ -152,7 +152,6 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('classbuz_1_1te
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="classbuz_1_1texture-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">buz::texture Class Reference</div></div>
 </div><!--header-->
@@ -161,32 +160,76 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('classbuz_1_1te
 <p>A 2d image living in gpu memory, ready to be drawn.  
  <a href="#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="texture_8h_source.html">rhi/texture.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="texture_8h_source.html">render_core/texture.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:ae09292d1ba3a912135cd135ec7501822" id="r_ae09292d1ba3a912135cd135ec7501822"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ae09292d1ba3a912135cd135ec7501822">texture</a> (std::unique_ptr&lt; rhi::gpu_texture &gt; image)</td></tr>
+<tr class="memdesc:ae09292d1ba3a912135cd135ec7501822"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wraps an image the engine uploaded. Games get their textures from load_texture and create_texture instead.  <br /></td></tr>
+<tr class="memitem:a1e1035835b60e64dde85b1f6f90a7076" id="r_a1e1035835b60e64dde85b1f6f90a7076"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a1e1035835b60e64dde85b1f6f90a7076">~texture</a> ()</td></tr>
 <tr class="memitem:a9e70919d9559904c43c66009c99be6e7" id="r_a9e70919d9559904c43c66009c99be6e7"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a9e70919d9559904c43c66009c99be6e7">texture</a> (const texture &amp;)=delete</td></tr>
-<tr class="memitem:aedd2fd85542d988f429d3455a31edab5" id="r_aedd2fd85542d988f429d3455a31edab5"><td class="memItemLeft"><a class="el" href="#a9e70919d9559904c43c66009c99be6e7">texture</a> &amp;&#160;</td><td class="memItemRight"><a class="el" href="#aedd2fd85542d988f429d3455a31edab5">operator=</a> (const <a class="el" href="#a9e70919d9559904c43c66009c99be6e7">texture</a> &amp;)=delete</td></tr>
+<tr class="memitem:aedd2fd85542d988f429d3455a31edab5" id="r_aedd2fd85542d988f429d3455a31edab5"><td class="memItemLeft"><a class="el" href="#ae09292d1ba3a912135cd135ec7501822">texture</a> &amp;&#160;</td><td class="memItemRight"><a class="el" href="#aedd2fd85542d988f429d3455a31edab5">operator=</a> (const <a class="el" href="#ae09292d1ba3a912135cd135ec7501822">texture</a> &amp;)=delete</td></tr>
 <tr class="memitem:a3c6ed8dec0a6497f8b77d162cb68ea49" id="r_a3c6ed8dec0a6497f8b77d162cb68ea49"><td class="memItemLeft">uint32_t&#160;</td><td class="memItemRight"><a class="el" href="#a3c6ed8dec0a6497f8b77d162cb68ea49">get_width</a> () const</td></tr>
 <tr class="memdesc:a3c6ed8dec0a6497f8b77d162cb68ea49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the width of the texture in pixels.  <br /></td></tr>
 <tr class="memitem:ab34383147045232b5fa5f522a8be52a2" id="r_ab34383147045232b5fa5f522a8be52a2"><td class="memItemLeft">uint32_t&#160;</td><td class="memItemRight"><a class="el" href="#ab34383147045232b5fa5f522a8be52a2">get_height</a> () const</td></tr>
 <tr class="memdesc:ab34383147045232b5fa5f522a8be52a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the height of the texture in pixels.  <br /></td></tr>
 <tr class="memitem:ae149a8f74e14171807812a47e6b7ef24" id="r_ae149a8f74e14171807812a47e6b7ef24"><td class="memItemLeft"><a class="el" href="namespacebuz.html#a97def2f877690e2da5aac438c7cfe9b9">vec2</a>&#160;</td><td class="memItemRight"><a class="el" href="#ae149a8f74e14171807812a47e6b7ef24">get_size</a> () const</td></tr>
 <tr class="memdesc:ae149a8f74e14171807812a47e6b7ef24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the width and height of the texture in pixels.  <br /></td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-pro-methods" class="groupheader"><a id="pro-methods" name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr class="memitem:a0f0005e8cafde97669fc9b109bd1f5b5" id="r_a0f0005e8cafde97669fc9b109bd1f5b5"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a0f0005e8cafde97669fc9b109bd1f5b5">texture</a> (uint32_t width, uint32_t height)</td></tr>
-<tr class="memitem:a1e1035835b60e64dde85b1f6f90a7076" id="r_a1e1035835b60e64dde85b1f6f90a7076"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a1e1035835b60e64dde85b1f6f90a7076">~texture</a> ()</td></tr>
+<tr class="memitem:a4012e9239df7579a2428fa466a9d7e18" id="r_a4012e9239df7579a2428fa466a9d7e18"><td class="memItemLeft">const rhi::gpu_texture &amp;&#160;</td><td class="memItemRight"><a class="el" href="#a4012e9239df7579a2428fa466a9d7e18">get_gpu_texture</a> () const</td></tr>
+<tr class="memdesc:a4012e9239df7579a2428fa466a9d7e18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the image in gpu memory, for the renderers. Only the engine can use it: everywhere else rhi::gpu_texture is an incomplete type.  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A 2d image living in gpu memory, ready to be drawn. </p>
-<p>The engine makes textures: <a class="el" href="namespacebuz.html#a6b3cf25e740b1414f033204ee67fb61f" title="Loads a texture from the content folder:">buz::load_texture</a> reads an image file, <a class="el" href="namespacebuz.html#a8229f6683078646d2f22d9ea2a954089" title="Makes a texture from pixels made in code (noise, a gradient, a sprite sheet of circles....">buz::create_texture</a> takes pixels made in code (<a class="el" href="texture__loading_8h.html" title="Loading textures from the content folder, and making them from pixels.">asset_management/texture_loading.h</a>). Both hand them out as a std::shared_ptr, so you never new/delete a texture yourself. </p>
+<p>The engine makes textures: <a class="el" href="namespacebuz.html#adaaa5d1dbfafef1c606ffcca29bb1bec" title="Loads the image a material names, an image file or one inside a model file:">buz::load_texture</a> reads an image file, <a class="el" href="namespacebuz.html#a8229f6683078646d2f22d9ea2a954089" title="Makes a texture from pixels made in code (noise, a gradient, a sprite sheet of circles....">buz::create_texture</a> takes pixels made in code (<a class="el" href="texture__loading_8h.html" title="Loading textures from the content folder, and making them from pixels.">asset_management/texture_loading.h</a>). Both hand them out as a std::shared_ptr, so you never new/delete a texture yourself. </p>
 
-<p class="definition">Definition at line <a class="el" href="texture_8h_source.html#l00019">19</a> of file <a class="el" href="texture_8h_source.html">texture.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="texture_8h_source.html#l00025">25</a> of file <a class="el" href="texture_8h_source.html">texture.h</a>.</p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ae09292d1ba3a912135cd135ec7501822" name="ae09292d1ba3a912135cd135ec7501822"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae09292d1ba3a912135cd135ec7501822">&#9670;&#160;</a></span>texture() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">buz::texture::texture </td>
+          <td>(</td>
+          <td class="paramtype">std::unique_ptr&lt; rhi::gpu_texture &gt;</td>          <td class="paramname"><span class="paramname"><em>image</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel explicit">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Wraps an image the engine uploaded. Games get their textures from load_texture and create_texture instead. </p>
+
+</div>
+</div>
+<a id="a1e1035835b60e64dde85b1f6f90a7076" name="a1e1035835b60e64dde85b1f6f90a7076"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e1035835b60e64dde85b1f6f90a7076">&#9670;&#160;</a></span>~texture()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">buz::texture::~texture </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a9e70919d9559904c43c66009c99be6e7" name="a9e70919d9559904c43c66009c99be6e7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9e70919d9559904c43c66009c99be6e7">&#9670;&#160;</a></span>texture() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e70919d9559904c43c66009c99be6e7">&#9670;&#160;</a></span>texture() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -210,60 +253,6 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a0f0005e8cafde97669fc9b109bd1f5b5" name="a0f0005e8cafde97669fc9b109bd1f5b5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0f0005e8cafde97669fc9b109bd1f5b5">&#9670;&#160;</a></span>texture() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">buz::texture::texture </td>
-          <td>(</td>
-          <td class="paramtype">uint32_t</td>          <td class="paramname"><span class="paramname"><em>width</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t</td>          <td class="paramname"><span class="paramname"><em>height</em></span>&#160;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a1e1035835b60e64dde85b1f6f90a7076" name="a1e1035835b60e64dde85b1f6f90a7076"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1e1035835b60e64dde85b1f6f90a7076">&#9670;&#160;</a></span>~texture()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">buz::texture::~texture </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
 <a id="aedd2fd85542d988f429d3455a31edab5" name="aedd2fd85542d988f429d3455a31edab5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aedd2fd85542d988f429d3455a31edab5">&#9670;&#160;</a></span>operator=()</h2>
@@ -275,9 +264,9 @@ Protected Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#a9e70919d9559904c43c66009c99be6e7">texture</a> &amp; buz::texture::operator= </td>
+          <td class="memname"><a class="el" href="#ae09292d1ba3a912135cd135ec7501822">texture</a> &amp; buz::texture::operator= </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="#a9e70919d9559904c43c66009c99be6e7">texture</a> &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="#ae09292d1ba3a912135cd135ec7501822">texture</a> &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -347,8 +336,27 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a4012e9239df7579a2428fa466a9d7e18" name="a4012e9239df7579a2428fa466a9d7e18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4012e9239df7579a2428fa466a9d7e18">&#9670;&#160;</a></span>get_gpu_texture()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const rhi::gpu_texture &amp; buz::texture::get_gpu_texture </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the image in gpu memory, for the renderers. Only the engine can use it: everywhere else rhi::gpu_texture is an incomplete type. </p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>rhi/<a class="el" href="texture_8h_source.html">texture.h</a></li>
+<li>render_core/<a class="el" href="texture_8h_source.html">texture.h</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

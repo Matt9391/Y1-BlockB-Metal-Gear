@@ -8,9 +8,10 @@
 #include <string_view>
 #include <utility>
 
-// Asserts are compiled in for debug builds only, exactly like logging. In
-// release (NDEBUG) a BUZ_ASSERT disappears completely: the condition is not
-// even evaluated, so never put code with side effects inside one.
+// Asserts are compiled in for debug builds only. Development builds keep
+// logging but drop asserts. Wherever NDEBUG is defined (Development and
+// Release) a BUZ_ASSERT disappears completely: the condition is not even
+// evaluated, so never put code with side effects inside one.
 #if !defined(NDEBUG)
 	#define BUZ_ASSERT_ENABLED
 #endif
@@ -43,8 +44,9 @@ namespace buz
 
 	//--------------------------------------------------------------
 	/// @brief Reports an unrecoverable error and terminates the program:
-	/// logs the message, shows a message box, then exits. Works in both
-	/// debug and release builds (std::format "{}" style formatting).
+	/// logs the message (where logging is compiled in), shows a message box
+	/// on Windows, then exits. Works in both debug and release builds
+	/// (std::format "{}" style formatting).
 	/// @param format Format string with "{}" placeholders, checked at compile time.
 	/// @param args Values inserted into the placeholders.
 	template<typename... Args>

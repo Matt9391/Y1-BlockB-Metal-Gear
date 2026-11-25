@@ -151,39 +151,62 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('model__loading
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">model_loading.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>Loading models and meshes from the content folder, and making meshes from triangles.  
+<p>Loading models, meshes and their textures from the content folder, and making meshes from triangles.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &quot;<a class="el" href="mesh_8h_source.html">renderer_3d/mesh.h</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="mesh__data_8h_source.html">core/mesh_data.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="texture__id_8h_source.html">core/texture_id.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="mesh_8h_source.html">renderer_3d/mesh.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="model_8h_source.html">renderer_3d/model.h</a>&quot;</code><br />
 <code>#include &lt;cstdint&gt;</code><br />
 <code>#include &lt;memory&gt;</code><br />
 <code>#include &lt;optional&gt;</code><br />
 <code>#include &lt;span&gt;</code><br />
 <code>#include &lt;string_view&gt;</code><br />
+<code>#include &lt;yes_no.h&gt;</code><br />
 </div>
 <p><a href="model__loading_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:buz_3A_3Amodel_5Fimport_5Foptions" id="r_buz_3A_3Amodel_5Fimport_5Foptions"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structbuz_1_1model__import__options.html">buz::model_import_options</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Repairs for models that look right in the viewer they came from but not in the engine, typically files saved out of a web viewer (three.js and the like), which draws both sides of every triangle and repeats textures. Everything is off by default: a model made in Blender needs none of it.  <a href="structbuz_1_1model__import__options.html#details">More...</a><br /></td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-namespaces" class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:buz" id="r_buz"><td class="memItemLeft">namespace &#160;</td><td class="memItemRight"><a class="el" href="namespacebuz.html">buz</a></td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-typedef-members" class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:aba0c3958e4dce18994ae00dd6abae984" id="r_aba0c3958e4dce18994ae00dd6abae984"><td class="memItemLeft">using&#160;</td><td class="memItemRight"><a class="el" href="namespacebuz.html#aba0c3958e4dce18994ae00dd6abae984">buz::orient_normals</a> = utl::yes_no_t&lt;struct orient_normals_tag&gt;</td></tr>
+<tr class="memdesc:aba0c3958e4dce18994ae00dd6abae984"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether vertex normals that point against their triangles are turned around (see <a class="el" href="structbuz_1_1model__import__options.html#a2fc4ac7304d852a7d04a83eb2f8ec07d" title="Turns around every vertex normal that points against the triangles it belongs to. The triangles&#39; wind...">model_import_options::normals</a>).  <br /></td></tr>
+<tr class="memitem:a671bf45b8c0ba3329243cd1c388a597d" id="r_a671bf45b8c0ba3329243cd1c388a597d"><td class="memItemLeft">using&#160;</td><td class="memItemRight"><a class="el" href="namespacebuz.html#a671bf45b8c0ba3329243cd1c388a597d">buz::wrap_uvs</a> = utl::yes_no_t&lt;struct wrap_uvs_tag&gt;</td></tr>
+<tr class="memdesc:a671bf45b8c0ba3329243cd1c388a597d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether texture coordinates outside 0..1 are moved into it (see <a class="el" href="structbuz_1_1model__import__options.html#a17ccf09e6c5a158ef110f0bad61d285f" title="Moves each primitive&#39;s texture coordinates by whole numbers so they start in 0..1....">model_import_options::uvs</a>).  <br /></td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:aa9bb58606a01b47c5c90cf40991dbb76" id="r_aa9bb58606a01b47c5c90cf40991dbb76"><td class="memItemLeft">std::optional&lt; <a class="el" href="structbuz_1_1model.html">model</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="namespacebuz.html#aa9bb58606a01b47c5c90cf40991dbb76">buz::load_model</a> (engine &amp;engine, std::string_view content_relative_path)</td></tr>
-<tr class="memdesc:aa9bb58606a01b47c5c90cf40991dbb76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads a glTF model (.gltf or .glb) from the content folder, with its parts, their hierarchy and its animations:  <br /></td></tr>
-<tr class="memitem:ac30fdbff7ce71be3b4b39956388fae5c" id="r_ac30fdbff7ce71be3b4b39956388fae5c"><td class="memItemLeft">std::shared_ptr&lt; <a class="el" href="classbuz_1_1mesh.html">mesh</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="namespacebuz.html#ac30fdbff7ce71be3b4b39956388fae5c">buz::load_mesh</a> (engine &amp;engine, std::string_view content_relative_path)</td></tr>
-<tr class="memdesc:ac30fdbff7ce71be3b4b39956388fae5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads every mesh of a glTF file as one mesh, placed as in the file: for props and level geometry that never move apart.  <br /></td></tr>
+<tr class="memitem:afee154112127ff889b272636f6b6cf33" id="r_afee154112127ff889b272636f6b6cf33"><td class="memItemLeft">std::optional&lt; <a class="el" href="structbuz_1_1model__data.html">model_data</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="namespacebuz.html#afee154112127ff889b272636f6b6cf33">buz::import_model</a> (std::string_view content_relative_path, const <a class="el" href="structbuz_1_1model__import__options.html">model_import_options</a> &amp;options={})</td></tr>
+<tr class="memdesc:afee154112127ff889b272636f6b6cf33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads a glTF model (.gltf or .glb) from the content folder onto the cpu: the nodes with their triangles and materials, and the animations. Nothing goes to the graphics card, so it needs no engine.  <br /></td></tr>
+<tr class="memitem:ab8c47850e3c2e73c4e1e0edccb6e7fa7" id="r_ab8c47850e3c2e73c4e1e0edccb6e7fa7"><td class="memItemLeft"><a class="el" href="structbuz_1_1mesh__data.html">mesh_data</a>&#160;</td><td class="memItemRight"><a class="el" href="namespacebuz.html#ab8c47850e3c2e73c4e1e0edccb6e7fa7">buz::merge_meshes</a> (const <a class="el" href="structbuz_1_1model__data.html">model_data</a> &amp;source)</td></tr>
+<tr class="memdesc:ab8c47850e3c2e73c4e1e0edccb6e7fa7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bakes every node's triangles into one <a class="el" href="structbuz_1_1mesh__data.html" title="Triangles on the cpu, before they go to the graphics card: what buz::create_mesh uploads,...">mesh_data</a>, placed as in the file (what load_mesh uploads).  <br /></td></tr>
+<tr class="memitem:a57c0b073c19408b7c7235a9e24dea3e3" id="r_a57c0b073c19408b7c7235a9e24dea3e3"><td class="memItemLeft">std::optional&lt; <a class="el" href="structbuz_1_1model.html">model</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="namespacebuz.html#a57c0b073c19408b7c7235a9e24dea3e3">buz::load_model</a> (engine &amp;engine, std::string_view content_relative_path, const <a class="el" href="structbuz_1_1model__import__options.html">model_import_options</a> &amp;options={})</td></tr>
+<tr class="memdesc:a57c0b073c19408b7c7235a9e24dea3e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads a glTF model (.gltf or .glb) from the content folder, with its parts, their hierarchy and its animations:  <br /></td></tr>
+<tr class="memitem:ab3a034cd4063e03d0bd249c56939288e" id="r_ab3a034cd4063e03d0bd249c56939288e"><td class="memItemLeft">std::shared_ptr&lt; <a class="el" href="classbuz_1_1mesh.html">mesh</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="namespacebuz.html#ab3a034cd4063e03d0bd249c56939288e">buz::load_mesh</a> (engine &amp;engine, std::string_view content_relative_path, const <a class="el" href="structbuz_1_1model__import__options.html">model_import_options</a> &amp;options={})</td></tr>
+<tr class="memdesc:ab3a034cd4063e03d0bd249c56939288e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads every mesh of a glTF file as one mesh, placed as in the file: for props and level geometry that never move apart.  <br /></td></tr>
 <tr class="memitem:a49a44ca2da1a0f4f52c7c02f3cb9cddc" id="r_a49a44ca2da1a0f4f52c7c02f3cb9cddc"><td class="memItemLeft">std::shared_ptr&lt; <a class="el" href="classbuz_1_1mesh.html">mesh</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="namespacebuz.html#a49a44ca2da1a0f4f52c7c02f3cb9cddc">buz::create_mesh</a> (engine &amp;engine, std::span&lt; const <a class="el" href="structbuz_1_1mesh__vertex.html">mesh_vertex</a> &gt; vertices, std::span&lt; const uint32_t &gt; indices)</td></tr>
 <tr class="memdesc:a49a44ca2da1a0f4f52c7c02f3cb9cddc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Makes a mesh from triangles made in code.  <br /></td></tr>
+<tr class="memitem:adaaa5d1dbfafef1c606ffcca29bb1bec" id="r_adaaa5d1dbfafef1c606ffcca29bb1bec"><td class="memItemLeft">std::shared_ptr&lt; <a class="el" href="classbuz_1_1texture.html">texture</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="namespacebuz.html#adaaa5d1dbfafef1c606ffcca29bb1bec">buz::load_texture</a> (engine &amp;engine, const <a class="el" href="classbuz_1_1texture__id.html">texture_id</a> &amp;id)</td></tr>
+<tr class="memdesc:adaaa5d1dbfafef1c606ffcca29bb1bec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the image a material names, an image file or one inside a model file:  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Loading models and meshes from the content folder, and making meshes from triangles. </p>
+<div class="textblock"><p>Loading models, meshes and their textures from the content folder, and making meshes from triangles. </p>
 
 <p class="definition">Definition in file <a class="el" href="model__loading_8h_source.html">model_loading.h</a>.</p>
 </div></div><!-- contents -->
@@ -192,7 +215,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a href="dir_c95e216642735914dec630eeb8b802ab.html">asset_management</a></li><li class="navelem"><a href="model__loading_8h.html">model_loading.h</a></li>
+    <li class="navelem"><a href="dir_faf9252ad727d6c42c5f7ead25f8792e.html">asset_management</a></li><li class="navelem"><a href="model__loading_8h.html">model_loading.h</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
   </ul>
 </div>

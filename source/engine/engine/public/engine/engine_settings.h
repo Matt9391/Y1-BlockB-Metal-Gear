@@ -5,7 +5,7 @@
 
 #include "core/math.h"
 #include "engine/input.h"
-#include "rhi/settings.h"
+#include "render_core/texture_filter.h"
 
 #include <yes_no.h>
 
@@ -17,6 +17,21 @@ namespace buz
 	//--------------------------------------------------------------
 	/// @brief Whether the stats overlay is visible.
 	using stats_overlay = utl::yes_no_t<struct stats_overlay_tag>;
+
+	//--------------------------------------------------------------
+	/// @brief Which graphics card the engine should pick when a machine has
+	/// more than one. OpenGL cannot choose: it uses the card the driver picks.
+	enum class adapter_preference
+	{
+		highest_score, // the most capable graphics card (default)
+		lowest_score,  // the least capable graphics card, useful to test low-end behavior
+		software,      // a software rasterizer (WARP, lavapipe): slow, but needs no graphics card; for automated tests
+	};
+
+	//--------------------------------------------------------------
+	/// @brief Whether presenting a frame waits for the monitor's refresh
+	/// (no tearing, frame rate capped at the refresh rate) or not.
+	using vsync = utl::yes_no_t<struct vsync_tag>;
 
 	//--------------------------------------------------------------
 	/// @brief The keys that switch the engine's debug views while the game
@@ -61,8 +76,8 @@ namespace buz
 	/// | `-gpu` | `-gpu=lowest`, or `-gpu=software` for a software rasterizer |
 	/// | `-screenshot`, `-screenshot_frame` | `-screenshot=frame.png -screenshot_frame=300` |
 	///
-	/// A setting nothing understands is logged as a warning, so a typo
-	/// shows up instead of being silently ignored.
+	/// A command line setting the engine does not recognize is logged as a
+	/// warning, so a typo is reported instead of being ignored.
 	struct engine_settings
 	{
 		/// @brief Width of the window's drawable area in pixels. The window
@@ -102,9 +117,9 @@ namespace buz
 		/// @brief When set, the engine saves frame screenshot_frame as a png
 		/// at this path and quits. Until then every frame lasts exactly
 		/// 1/60 s and the keyboard and mouse are ignored, so every run, and
-		/// every graphics api, draws the very same frame: the way to compare
-		/// two versions pixel by pixel. Relative paths end up in the game's
-		/// saved/<game> folder next to the executable.
+		/// every graphics api, draws the same frame and two versions can be
+		/// compared pixel by pixel. Relative paths end up in the game's
+		/// `saved/<game>` folder next to the executable.
 		std::string screenshot_path;
 
 		/// @brief The frame a screenshot run saves (see screenshot_path),

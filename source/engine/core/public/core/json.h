@@ -16,7 +16,7 @@ namespace buz
 	//--------------------------------------------------------------
 	/// @brief Loads and parses a json text file from the content folder.
 	/// @param content_relative_path Json file, relative to the content folder
-	/// ("levels/level_1.json").
+	/// ("my_game/levels/level_1.json").
 	/// @return The parsed json. When the file cannot be read or contains
 	/// invalid json an error is logged and the returned value reports
 	/// true for is_discarded().
@@ -27,7 +27,7 @@ namespace buz
 	/// file stays readable in a text editor. Missing directories in the
 	/// path are created.
 	/// @param output_path Where the file goes; a relative path ends up in the
-	/// game's saved/<game> folder next to the executable ("save/save.json").
+	/// game's `saved/<game>` folder next to the executable ("save/save.json").
 	/// @param data Json value to save.
 	/// @return True when the file was written successfully.
 	bool save_json(std::string_view output_path, const json& data);

@@ -2,8 +2,8 @@
 
 #include "core/paths.h"
 #include "engine/engine.h"
-#include "rhi/render_context.h"
-#include "rhi/texture_loader.h"
+#include "render_core/render_context.h"
+#include "render_core/texture_loader.h"
 
 namespace buz
 {

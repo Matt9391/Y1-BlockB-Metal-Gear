@@ -53,8 +53,8 @@
     <aside class="side" aria-label="All guides">
       <button class="side-toggle" type="button" aria-expanded="false" aria-controls="side-nav"><span>All guides</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></button>
       <nav class="side-nav" id="side-nav" aria-label="Guides">
-        <div class="side-group"><p class="side-title">Guides</p><ol><li><a href="getting-started.html">Getting started</a></li><li><a href="drawing.html">Drawing in 2D</a></li><li><a href="drawing-3d.html">Drawing in 3D</a></li><li><a href="input.html">Input</a></li><li><a href="textures-and-fonts.html">Textures &amp; fonts</a></li><li><a href="audio.html" aria-current="page">Audio</a></li><li><a href="utilities.html">Utilities</a></li><li><a href="diagnostics.html">Diagnostics</a></li><li><a href="json.html">JSON files</a></li><li><a href="models.html">Models</a></li><li><a href="under-the-hood.html">Under the hood</a></li></ol></div>
-        <div class="side-group"><p class="side-title">Guided experiences</p><ol><li><a href="guided-experiences.html">Guided experiences</a></li><li><a href="camera-2d.html">A 2D camera</a></li><li><a href="sprite-animation.html">Sprite animation</a></li><li><a href="sprite-batching.html">Sprite batching</a></li><li><a href="animation-player.html">An animation player</a></li><li><a href="collision.html">Collision</a></li><li><a href="asset-cache.html">An asset cache</a></li></ol></div>
+        <div class="side-group"><p class="side-title">Guides</p><ol><li><a href="getting-started.html">Getting started</a></li><li><a href="drawing.html">Drawing in 2D</a></li><li><a href="drawing-3d.html">Drawing in 3D</a></li><li><a href="input.html">Input</a></li><li><a href="textures-and-fonts.html">Textures &amp; fonts</a></li><li><a href="audio.html" aria-current="page">Audio</a></li><li><a href="utilities.html">Utilities</a></li><li><a href="diagnostics.html">Diagnostics</a></li><li><a href="json.html">JSON files</a></li><li><a href="models.html">Models</a></li><li><a href="under-the-hood.html">Under the hood</a></li><li><a href="changes.html">Changes</a></li></ol></div>
+        <div class="side-group"><p class="side-title">Guided experiences</p><ol><li><a href="guided-experiences.html">Guided experiences</a></li><li><a href="camera-2d.html">A 2D camera</a></li><li><a href="sprite-animation.html">Sprite animation</a></li><li><a href="sprite-batching.html">Sprite batching</a></li><li><a href="animation-player.html">An animation player</a></li><li><a href="collision.html">Collision</a></li><li><a href="asset-cache.html">An asset cache</a></li><li><a href="radar.html">A radar</a></li></ol></div>
       </nav>
     </aside>
     <div class="prose">
@@ -64,6 +64,7 @@
 <span class="tok-key">#include</span> <span class="tok-str">&quot;engine/input.h&quot;</span>
 
 my_game::<span class="tok-fn">my_game</span>(<span class="tok-type">buz</span>::engine&amp; engine)
+    : <span class="tok-type">buz</span>::<span class="tok-fn">game_2d</span>(engine)
 {
     engine.<span class="tok-fn">get_audio</span>().<span class="tok-fn">play_music</span>(<span class="tok-str">&quot;my_game/music/theme.mp3&quot;</span>, <span class="tok-type">buz</span>::looping::yes);
 }
@@ -76,7 +77,7 @@ my_game::<span class="tok-fn">my_game</span>(<span class="tok-type">buz</span>::
     }
 }</code></pre></figure>
 <p>Paths are relative to the content folder, like textures. <code>.wav</code>, <code>.mp3</code> and <code>.flac</code> files work.</p>
-<p>Unlike textures and models, sounds have no loading step: you play a file by its path. The first time a file plays, the engine reads it and decodes it completely, and it keeps the decoded sound, so playing the same file again doesn&#x27;t read it from disk a second time. That first play has to wait for the file, which you can notice with a long piece of music.</p>
+<p>Unlike textures and models, sounds have no loading step: you play a file by its path. When a file starts playing, the engine reads it and decodes it completely before the sound starts. Copies of a sound that play at the same time share the decoded data, but the engine doesn&#x27;t keep it after the last copy has finished: the next play reads the file from disk again. For a short effect you won&#x27;t notice the wait; for a long piece of music you can.</p>
 <div class="tablewrap"><table>
 <thead><tr>
 <th>function</th>
@@ -90,7 +91,7 @@ my_game::<span class="tok-fn">my_game</span>(<span class="tok-type">buz</span>::
 <p><code>play_sound</code> and <code>play_music</code> take an optional volume: 1 plays the file as it is, 0.5 half as loud.</p>
 <p>On a computer without an audio device (a build server, say) the engine plays nothing and the game still runs.</p>
 <h2 id="choosing-a-file-format">Choosing a file format<a class="anchor" href="#choosing-a-file-format" aria-label="Link to this section">#</a></h2>
-<p>Use <code>.wav</code> for short effects: they start instantly. Use <code>.mp3</code> or <code>.flac</code> for music: the files are much smaller. They take longer to decode, so a long track can take a moment to start the first time it plays.</p>
+<p>Use <code>.wav</code> for short effects: they start instantly. Use <code>.mp3</code> or <code>.flac</code> for music: the files are much smaller. They take longer to decode, so a long track can take a moment to start.</p>
     </div>
     
     </div>

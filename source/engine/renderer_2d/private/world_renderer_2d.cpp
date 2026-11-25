@@ -5,8 +5,8 @@
 namespace buz
 {
 	//--------------------------------------------------------------
-	world_renderer_2d::world_renderer_2d(const render_context& context)
-		: renderer_2d(context)
+	world_renderer_2d::world_renderer_2d(const render_context& context, texture_filter sampler_filter)
+		: renderer_2d(context, sampler_filter)
 	{
 	}
 

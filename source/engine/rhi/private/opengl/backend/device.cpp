@@ -1,6 +1,7 @@
 #include "opengl/backend/device.h"
 
 #include "common/constants.h"
+#include "common/data_slot.h"
 #include "core/assert.h"
 #include "core/log.h"
 #include "opengl/backend/buffer.h"
@@ -10,6 +11,7 @@
 #include "opengl/gl_call.h"
 #include "rhi/graphics_api.h"
 
+#include <algorithm>
 #include <cstring>
 #include <string>
 
@@ -17,13 +19,6 @@ using namespace buz::rhi::gl;
 
 namespace
 {
-	//--------------------------------------------------------------
-	/// @brief Rounds value up to a multiple of alignment (a power of two).
-	uintptr_t align_up(uintptr_t value, uint32_t alignment)
-	{
-		return (value + alignment - 1) & ~static_cast<uintptr_t>(alignment - 1);
-	}
-
 	//--------------------------------------------------------------
 	/// @brief Compiles one shader from its GLSL source.
 	/// @return The shader, or 0 when it did not compile (the reason is logged).
@@ -239,7 +234,8 @@ namespace buz::rhi
 		log::info("Selected adapter: {} ({})", reinterpret_cast<const char*>(glGetString(GL_RENDERER)), reinterpret_cast<const char*>(glGetString(GL_VERSION)));
 
 #if !defined(__EMSCRIPTEN__)
-		// In a browser the page draws once per screen refresh, always
+		// In a browser the page always draws once per screen refresh, so the
+		// swap interval is only set on the desktop
 		SDL_GL_SetSwapInterval(desc.use_vsync ? 1 : 0);
 #endif
 
@@ -284,7 +280,8 @@ namespace buz::rhi
 		BUZ_GL_CALL(glBindTexture(GL_TEXTURE_2D, texture_object));
 		BUZ_GL_CALL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, static_cast<GLsizei>(width), static_cast<GLsizei>(height), 0, GL_RGBA, GL_UNSIGNED_BYTE, rgba_pixels.data()));
 
-		// One level only: without this OpenGL waits for mipmaps that never come
+		// The texture has only level 0: without this, OpenGL expects mipmap
+		// levels 1 and up and can treat the texture as incomplete
 		BUZ_GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0));
 
 		return std::make_unique<gpu_texture>(width, height, std::make_unique<gpu_texture::native>(*this, texture_object));
@@ -339,6 +336,18 @@ namespace buz::rhi
 		if (constants_block != GL_INVALID_INDEX)
 		{
 			BUZ_GL_CALL(glUniformBlockBinding(program, constants_block, 0));
+		}
+
+		// The shader data goes to slot 1 and the frame data to slot 2
+		// (common/data_slot.h), in the order of data_slot
+		const char* const data_blocks[k_data_slot_count] = { "buz_shader_data", "buz_frame_data" };
+		for (uint32_t index = 0; index < k_data_slot_count; ++index)
+		{
+			const GLuint data_block = glGetUniformBlockIndex(program, data_blocks[index]);
+			if (data_block != GL_INVALID_INDEX)
+			{
+				BUZ_GL_CALL(glUniformBlockBinding(program, data_block, 1 + index));
+			}
 		}
 
 		const GLint texture_location = glGetUniformLocation(program, "buz_texture");
@@ -399,16 +408,13 @@ namespace buz::rhi
 	//--------------------------------------------------------------
 	std::optional<uintptr_t> device::native::write_scratch(std::span<const std::byte> data, uint32_t alignment)
 	{
-		// The allocator aligns to k_frame_scratch_alignment; reserve enough
-		// to move the start up to a bigger alignment.
-		const uint32_t padding = alignment > k_frame_scratch_alignment ? alignment : 0;
-		const std::optional<uint32_t> reserved = m_scratch.allocate(static_cast<uint32_t>(data.size()) + padding);
+		const std::optional<uint32_t> reserved = m_scratch.allocate(static_cast<uint32_t>(data.size()), std::max(alignment, k_frame_scratch_alignment));
 		if (!reserved)
 		{
 			return std::nullopt;
 		}
 
-		const uintptr_t offset = align_up(*reserved, alignment);
+		const uintptr_t offset = *reserved;
 		BUZ_GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, m_scratch_buffer));
 		BUZ_GL_CALL(glBufferSubData(GL_ARRAY_BUFFER, static_cast<GLintptr>(offset), static_cast<GLsizeiptr>(data.size()), data.data()));
 		return offset;
@@ -494,9 +500,9 @@ namespace buz::rhi
 	}
 
 	//--------------------------------------------------------------
-	GLuint device::native::get_sampler(texture_filter filter) const
+	GLuint device::native::get_sampler(sampler_filter filter) const
 	{
-		return m_samplers[filter == texture_filter::nearest ? 1 : 0];
+		return m_samplers[filter == sampler_filter::nearest ? 1 : 0];
 	}
 
 	//--------------------------------------------------------------

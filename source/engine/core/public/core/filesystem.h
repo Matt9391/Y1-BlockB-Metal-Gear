@@ -3,6 +3,9 @@
 
 #pragma once
 
+#include <string>
+#include <string_view>
+#include <vector>
 #include <version>
 
 // Each platform picks its path type here, in one place. Use buz::fs::path
@@ -42,5 +45,19 @@ namespace buz
 		/// @brief Deletes a file, or an empty directory.
 		/// @return True when nothing exists at the path afterwards.
 		bool remove(const path& file);
+
+		//----------------------------------------------------------
+		/// @brief Lists every file in a folder of the content folder and
+		/// all of its subfolders:
+		/// @code{.cpp}
+		/// for (const std::string& file : buz::fs::list_content_files("shared"))
+		/// @endcode
+		/// gives "shared/textures/checker.png" and so on.
+		/// @param content_relative_directory Folder, relative to the content
+		/// folder, with / between folders.
+		/// @return The files, relative to the content folder with / between
+		/// folders, sorted. Empty (and an error logged) when the folder does
+		/// not exist.
+		std::vector<std::string> list_content_files(std::string_view content_relative_directory);
 	}
 }

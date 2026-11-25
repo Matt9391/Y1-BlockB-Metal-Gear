@@ -1,5 +1,6 @@
 #pragma once
 
+#include "common/data_slot.h"
 #include "rhi/buffer.h"
 #include "rhi/command_list.h"
 #include "rhi/device.h"
@@ -34,6 +35,7 @@ namespace buz::rhi
 		bool set_vertex_data(vertex_rate rate, std::span<const std::byte> data, uint32_t stride);
 		void set_index_buffer(const buffer::native& indices);
 		void set_constants(std::span<const std::byte> constants);
+		bool set_data(data_slot slot, std::span<const std::byte> data);
 		void set_texture(const gpu_texture::native& sampled_texture);
 		void draw(uint32_t vertex_count, uint32_t instance_count);
 		void draw_indexed(uint32_t index_count, uint32_t instance_count);
@@ -45,6 +47,10 @@ namespace buz::rhi
 	private:
 		device::native* m_owner;                   // not owned; set by begin
 		ID3D12GraphicsCommandList* m_command_list; // not owned: the frame's command list
+		bool m_has_pipeline;                       // whether a root signature is set yet
 		frame_stats m_stats;                       // what was recorded since begin
+
+		// Set by set_data, indexed by data_slot; 0 before
+		D3D12_GPU_VIRTUAL_ADDRESS m_data[k_data_slot_count];
 	};
 }

@@ -9,7 +9,7 @@
 #                          content folder. SDL is linked statically, so that
 #                          is the whole game.
 #   web                    <game>-web.zip: a page with the game compiled to
-#                          WebAssembly, for itch.io or a portfolio site.
+#                          WebAssembly, for itch.io or your own website.
 #
 #   shipping (the default) the Release build: -O3 and link-time
 #                          optimization, no logging.

@@ -4,15 +4,12 @@
 #pragma once
 
 #include "core/math.h"
+#include "core/texture_id.h"
 
 #include <yes_no.h>
 
-#include <memory>
-
 namespace buz
 {
-	class texture;
-
 	//--------------------------------------------------------------
 	/// @brief Whether a surface is lit by the scene's light, or shows its
 	/// color as is.
@@ -22,14 +19,17 @@ namespace buz
 	/// @brief How a mesh looks: a color, optionally times a texture, lit or
 	/// not, optionally with see-through holes.
 	///
-	/// That is all on purpose: the Block B project is about the game, not
-	/// about shaders.
+	/// These are the only options the engine's shaders read; a surface that
+	/// needs anything else needs shaders of its own.
 	struct material
 	{
 		/// @brief The color, multiplied with the texture.
 		color base_color;
-		/// @brief The texture; none means the plain color.
-		std::shared_ptr<texture> base_texture;
+		/// @brief The image the texture shows; none means the plain color.
+		/// A model's materials name the image in the file: load it with
+		/// buz::load_texture(engine, id) and hand the texture to
+		/// world_renderer_3d::draw, which draws with the texture it is given.
+		texture_id base_texture;
 		/// @brief Whether the scene's light shades the surface.
 		lighting lit = lighting::yes;
 		/// @brief Pixels whose alpha (texture times color) is below this are

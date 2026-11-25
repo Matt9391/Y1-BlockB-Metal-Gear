@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en" data-root="../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Changes &middot; BuzEngine guides</title>
+<meta name="description" content="What to change in a game written for an earlier version.">
+<meta name="theme-color" content="#1d222d">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="../assets/fonts/nunito-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/montserrat.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/site.css">
+<script>document.documentElement.classList.add('js')</script>
+<script src="../assets/search-index.js" defer></script>
+<script src="../assets/site.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="../index.html"><span class="mark" aria-hidden="true">//</span>Buz<span class="thin">Engine</span></a>
+    <nav class="site-nav" aria-label="Main">
+      <ul>
+        <li><a href="../guides/getting-started.html" aria-current="page">Guides</a></li>
+        <li><a href="../reference/index.html">Reference</a></li>
+        <li><a href="../about.html">About</a></li>
+      </ul>
+    </nav>
+    <div class="tools">
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-controls="search"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.75"/><path d="m10.5 10.5 3.5 3.5"/></svg><span class="label-text">Search</span><kbd>/</kbd></button>
+    </div>
+  </div>
+</header>
+<dialog class="search-dialog" id="search" aria-label="Search the guides and the reference">
+  <div class="search-field">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.75"/><path d="m10.5 10.5 3.5 3.5"/></svg>
+    <label class="visually-hidden" for="search-input">Search the guides and the reference</label>
+    <input id="search-input" type="search" placeholder="Search guides and API" autocomplete="off" spellcheck="false"
+           role="combobox" aria-autocomplete="list" aria-expanded="true" aria-controls="search-results">
+    <span class="esc" aria-hidden="true">Esc</span>
+  </div>
+  <ul class="search-results" id="search-results" role="listbox" aria-label="Results"></ul>
+  <p class="search-hint">Arrow keys to move, Enter to open, Esc to close.</p>
+</dialog>
+<main id="main" tabindex="-1">
+  <article>
+    <header class="wrap page-head">
+      
+      <h1>Changes</h1>
+      <p class="lede">What to change in a game written for an earlier version.</p>
+    </header>
+    <div class="doc">
+    <aside class="side" aria-label="All guides">
+      <button class="side-toggle" type="button" aria-expanded="false" aria-controls="side-nav"><span>All guides</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></button>
+      <nav class="side-nav" id="side-nav" aria-label="Guides">
+        <div class="side-group"><p class="side-title">Guides</p><ol><li><a href="getting-started.html">Getting started</a></li><li><a href="drawing.html">Drawing in 2D</a></li><li><a href="drawing-3d.html">Drawing in 3D</a></li><li><a href="input.html">Input</a></li><li><a href="textures-and-fonts.html">Textures &amp; fonts</a></li><li><a href="audio.html">Audio</a></li><li><a href="utilities.html">Utilities</a></li><li><a href="diagnostics.html">Diagnostics</a></li><li><a href="json.html">JSON files</a></li><li><a href="models.html">Models</a></li><li><a href="under-the-hood.html">Under the hood</a></li><li><a href="changes.html" aria-current="page">Changes</a></li></ol></div>
+        <div class="side-group"><p class="side-title">Guided experiences</p><ol><li><a href="guided-experiences.html">Guided experiences</a></li><li><a href="camera-2d.html">A 2D camera</a></li><li><a href="sprite-animation.html">Sprite animation</a></li><li><a href="sprite-batching.html">Sprite batching</a></li><li><a href="animation-player.html">An animation player</a></li><li><a href="collision.html">Collision</a></li><li><a href="asset-cache.html">An asset cache</a></li><li><a href="radar.html">A radar</a></li></ol></div>
+      </nav>
+    </aside>
+    <div class="prose">
+<p>A game written for an earlier version of the engine doesn&#x27;t always build with a newer one, because the engine&#x27;s headers and classes change between versions. Most of those changes show up as compile errors at the line to fix. The exception is the change to textures in 5.0: after the update, models still load and draw without any error, but without their textures.</p>
+<p>You can tell which version a game was written for from the class it derives from:</p>
+<div class="tablewrap"><table>
+<thead><tr>
+<th>your game</th>
+<th>written for</th>
+</tr></thead><tbody>
+<tr><td>derives from <a href="../reference/classbuz_1_1game.html"><code><span class="ns">buz::</span>game</code></a>, and a 3D game has a <code>world_renderer_3d</code> member of its own</td><td>3.0</td></tr>
+<tr><td>derives from <a href="../reference/classbuz_1_1game__2d.html"><code><span class="ns">buz::</span>game_2d</code></a> or <a href="../reference/classbuz_1_1game__3d.html"><code><span class="ns">buz::</span>game_3d</code></a>, from <code>engine/game_2d.h</code> or <code>engine/game_3d.h</code></td><td>4.1</td></tr>
+<tr><td>derives from <a href="../reference/classbuz_1_1game__2d.html"><code><span class="ns">buz::</span>game_2d</code></a> or <a href="../reference/classbuz_1_1game__3d.html"><code><span class="ns">buz::</span>game_3d</code></a>, from <code>game_framework/game_2d.h</code> or <code>game_framework/game_3d.h</code></td><td>5.0, 5.1, 5.1.1 or 5.1.2</td></tr>
+</tbody></table></div>
+<p>The newest changes come first. A game written for an older version needs every section from its version on, starting at the bottom: a game written for 3.0 needs all of them, starting with <em>From 3.0 to 4.1</em>.</p>
+<h2 id="from-5-1-1-to-5-1-2">From 5.1.1 to 5.1.2<a class="anchor" href="#from-5-1-1-to-5-1-2" aria-label="Link to this section">#</a></h2>
+<p>Nothing in your game has to change. 5.1.2 only rewords parts of the documentation; the engine&#x27;s code is the same as in 5.1.1.</p>
+<h2 id="from-5-1-to-5-1-1">From 5.1 to 5.1.1<a class="anchor" href="#from-5-1-to-5-1-1" aria-label="Link to this section">#</a></h2>
+<p>Nothing in your game has to change. 5.1.1 adds <a href="../reference/structbuz_1_1model__import__options.html"><code><span class="ns">buz::</span>model_import_options</code></a>: <code><span class="ns">buz::</span>load_model</code>, <code><span class="ns">buz::</span>load_mesh</code> and <code><span class="ns">buz::</span>import_model</code> can repair a model whose normals point inward or whose texture coordinates lie outside 0..1, which happens with files saved out of a web viewer. <a href="models.html">Models</a> explains when you need it.</p>
+<p>If you used the patch for this that was sent around for 5.1, the option is now called <code><span class="ns">buz::</span>orient_normals</code> instead of <code><span class="ns">buz::</span>repair_normals</code>.</p>
+<h2 id="from-5-0-to-5-1">From 5.0 to 5.1<a class="anchor" href="#from-5-0-to-5-1" aria-label="Link to this section">#</a></h2>
+<h3 id="include-core-filesystem-h-where-you-use-buz-fs">Include core/filesystem.h where you use <code><span class="ns">buz::</span>fs</code><a class="anchor" href="#include-core-filesystem-h-where-you-use-buz-fs" aria-label="Link to this section">#</a></h3>
+<p>In 5.0, <code>engine/audio.h</code> included <code>core/filesystem.h</code> without using it, so a file that included <code>engine/audio.h</code> could also use <code><span class="ns">buz::</span>fs</code> and <code>std::filesystem</code> without including anything for them. In 5.1 an engine header only includes <code>core/filesystem.h</code> when its own declarations use it, so a file of yours that relied on getting it from <code>engine/audio.h</code> stops compiling. Visual Studio then says &quot;&#x27;fs&#x27;: the symbol to the left of a &#x27;::&#x27; must be a type&quot; and &quot;&#x27;list_content_files&#x27;: is not a member of &#x27;buz&#x27;&quot;, or &quot;&#x27;filesystem&#x27;: is not a member of &#x27;std&#x27;&quot;.</p>
+<p>Include it yourself, at the top of the file that uses it:</p>
+<figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">C++</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-key">#include</span> <span class="tok-str">&quot;core/filesystem.h&quot;</span></code></pre></figure>
+<p>That header gives you <code><span class="ns">buz::</span>fs::list_content_files</code> and <code><span class="ns">buz::</span>fs::path</code>, which is <code>std::filesystem::path</code>. The engine&#x27;s own functions, such as <code><span class="ns">buz::</span>load_texture</code> and <a href="../reference/classbuz_1_1audio.html"><code><span class="ns">buz::</span>audio::play_sound</code></a>, take paths as text and don&#x27;t need it.</p>
+<h2 id="from-4-1-to-5-0">From 4.1 to 5.0<a class="anchor" href="#from-4-1-to-5-0" aria-label="Link to this section">#</a></h2>
+<h3 id="models-are-drawn-without-textures-until-you-load-them">Models are drawn without textures until you load them<a class="anchor" href="#models-are-drawn-without-textures-until-you-load-them" aria-label="Link to this section">#</a></h3>
+<p>The compiler doesn&#x27;t report this change. In 4.1 <code><span class="ns">buz::</span>load_model</code> loaded every image the model file uses and stored it in each node&#x27;s material, and <code>world.draw(*node.shape, node.look, transform)</code> drew the node with it. Every call to <code>load_model</code> loaded those images again, so ten guards that each loaded the soldier had ten copies of his textures on the graphics card.</p>
+<p>In 5.0 <code>load_model</code> loads no textures. A node&#x27;s <code>look.base_texture</code> is now a <a href="../reference/classbuz_1_1texture__id.html"><code><span class="ns">buz::</span>texture_id</code></a>: it names the image (a file next to the model, or an image inside a <code>.glb</code>) without loading it, and two ids that name the same image are equal, so your game can decide to load each image once. The three-argument <code>draw</code> draws the mesh in the material&#x27;s plain color. A game that only updated the engine therefore still builds and runs, and draws every model in flat colors.</p>
+<p>To get the textures back, load each node&#x27;s image with <code><span class="ns">buz::</span>load_texture</code>(engine, id), which is declared in <code>asset_management/model_loading.h</code>, and pass the texture to the four-argument <code>draw</code>. Before, in <code>on_render_world</code>:</p>
+<figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">C++</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-com">// node is a buz::model_node of m_soldier; node_transform places it in the world</span>
+world.<span class="tok-fn">draw</span>(*node.shape, node.look, node_transform);</code></pre></figure>
+<p>After:</p>
+<figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">C++</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-com">// in the constructor, after load_model; m_soldier_textures is a</span>
+<span class="tok-com">// std::vector&lt;std::shared_ptr&lt;buz::texture&gt;&gt; with one entry per node</span>
+<span class="tok-key">for</span> (<span class="tok-key">const</span> <span class="tok-type">buz</span>::model_node&amp; node : m_soldier-&gt;nodes)
+{
+    <span class="tok-key">if</span> (node.look.base_texture.<span class="tok-fn">has_image</span>())
+    {
+        m_soldier_textures.<span class="tok-fn">push_back</span>(<span class="tok-type">buz</span>::<span class="tok-fn">load_texture</span>(engine, node.look.base_texture));
+    }
+    <span class="tok-key">else</span>
+    {
+        m_soldier_textures.<span class="tok-fn">push_back</span>(<span class="tok-key">nullptr</span>);
+    }
+}
+
+<span class="tok-com">// in on_render_world, for node number i</span>
+<span class="tok-key">if</span> (m_soldier_textures[i])
+{
+    world.<span class="tok-fn">draw</span>(*node.shape, node.look, *m_soldier_textures[i], node_transform);
+}
+<span class="tok-key">else</span>
+{
+    world.<span class="tok-fn">draw</span>(*node.shape, node.look, node_transform);
+}</code></pre></figure>
+<p>The <code>*</code> before <code>m_soldier_textures[i]</code> is there because textures are handed out as <code>std::shared_ptr</code>, and <code>draw</code> takes the texture itself. <a href="models.html">Models</a> shows the same for a single node.</p>
+<h3 id="materials-no-longer-hold-a-texture">Materials no longer hold a texture<a class="anchor" href="#materials-no-longer-hold-a-texture" aria-label="Link to this section">#</a></h3>
+<p>Because <code>base_texture</code> is a <a href="../reference/classbuz_1_1texture__id.html"><code><span class="ns">buz::</span>texture_id</code></a> and no longer a <code>std::shared_ptr&lt;buz::texture&gt;</code>, two things that compiled in 4.1 are now errors.</p>
+<p>A texture you loaded yourself can&#x27;t be stored in the material. Keep it in a member of its own and pass it to <code>draw</code>:</p>
+<figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">C++</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-com">// before, in the constructor</span>
+m_crate_look.base_texture = <span class="tok-type">buz</span>::<span class="tok-fn">load_texture</span>(engine, <span class="tok-str">&quot;models/crate.png&quot;</span>);
+<span class="tok-com">// and in on_render_world</span>
+world.<span class="tok-fn">draw</span>(*m_crate_mesh, m_crate_look, transform);
+
+<span class="tok-com">// after; m_crate_texture is a std::shared_ptr&lt;buz::texture&gt;</span>
+m_crate_texture = <span class="tok-type">buz</span>::<span class="tok-fn">load_texture</span>(engine, <span class="tok-str">&quot;my_game/models/crate.png&quot;</span>);
+world.<span class="tok-fn">draw</span>(*m_crate_mesh, m_crate_look, *m_crate_texture, transform);</code></pre></figure>
+<p>A material you write out in code leaves the texture empty with <code>{}</code> instead of <code>nullptr</code>:</p>
+<figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">C++</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-com">// before</span>
+<span class="tok-key">const</span> <span class="tok-type">buz</span>::material pickup_look = { { <span class="tok-num">0.3f</span>, <span class="tok-num">1.0f</span>, <span class="tok-num">0.5f</span>, <span class="tok-num">1.0f</span> }, <span class="tok-key">nullptr</span>, <span class="tok-type">buz</span>::lighting::no };
+
+<span class="tok-com">// after</span>
+<span class="tok-key">const</span> <span class="tok-type">buz</span>::material pickup_look = { { <span class="tok-num">0.3f</span>, <span class="tok-num">1.0f</span>, <span class="tok-num">0.5f</span>, <span class="tok-num">1.0f</span> }, {}, <span class="tok-type">buz</span>::lighting::no };</code></pre></figure>
+<p>The built-in shapes (<code>draw_box</code>, <code>draw_sphere</code> and the others) always draw without a texture now. A textured box is a mesh built from <code><span class="ns">buz::</span>make_primitive</code>, which <a href="drawing-3d.html">Drawing in 3D</a> shows.</p>
+<h3 id="the-game-classes-moved-to-game-framework">The game classes moved to game_framework<a class="anchor" href="#the-game-classes-moved-to-game-framework" aria-label="Link to this section">#</a></h3>
+<p><a href="../reference/classbuz_1_1game.html"><code><span class="ns">buz::</span>game</code></a>, <a href="../reference/classbuz_1_1game__2d.html"><code><span class="ns">buz::</span>game_2d</code></a> and <a href="../reference/classbuz_1_1game__3d.html"><code><span class="ns">buz::</span>game_3d</code></a> moved out of the engine module into a module of their own, <code>game_framework</code>. The engine itself now runs a <a href="../reference/classbuz_1_1playable.html"><code><span class="ns">buz::</span>playable</code></a>, an interface that <a href="../reference/classbuz_1_1game.html"><code><span class="ns">buz::</span>game</code></a> implements; <code>main</code> and <code>engine.run(game)</code> stay the same, and your game still derives from game_2d or game_3d. Change the include:</p>
+<figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">C++</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-com">// before</span>
+<span class="tok-key">#include</span> <span class="tok-str">&quot;engine/game_3d.h&quot;</span>
+
+<span class="tok-com">// after</span>
+<span class="tok-key">#include</span> <span class="tok-str">&quot;game_framework/game_3d.h&quot;</span></code></pre></figure>
+<p>and link the new module in your game&#x27;s <code>CMakeLists.txt</code>:</p>
+<figure class="excerpt" data-kind="cmake"><figcaption><span><span class="file">CMake</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cmake"><span class="tok-com"># before</span>
+<span class="tok-fn">BUZ_GAME</span>(my_game
+         LINKS buz_engine buz_renderer_3d buz_asset_management)
+
+<span class="tok-com"># after</span>
+<span class="tok-fn">BUZ_GAME</span>(my_game
+         LINKS buz_engine buz_game_framework buz_renderer_3d buz_asset_management)</code></pre></figure>
+<p>A 2D game makes the same changes with <code>game_2d.h</code> and without <code>buz_renderer_3d</code>.</p>
+<h3 id="textures-moved-to-render-core">Textures moved to render_core<a class="anchor" href="#textures-moved-to-render-core" aria-label="Link to this section">#</a></h3>
+<p><a href="../reference/classbuz_1_1texture.html"><code><span class="ns">buz::</span>texture</code></a> moved from <code>rhi/texture.h</code> to <code>render_core/texture.h</code>. The <code>rhi</code> module, the layer that talks to the graphics api, is now for the engine only: a game can&#x27;t include its headers, and configuring fails when a game links it. <code>rhi/settings.h</code> is gone with it. <code><span class="ns">buz::</span>adapter_preference</code> and <code><span class="ns">buz::</span>vsync</code> are now declared in <code>engine/engine_settings.h</code>, and <code><span class="ns">buz::</span>texture_filter</code> in <code>render_core/texture_filter.h</code>, which <code>engine_settings.h</code> includes, so a game that sets them in its engine settings needs no include of its own.</p>
+<h3 id="one-content-folder-with-a-folder-per-game">One content folder, with a folder per game<a class="anchor" href="#one-content-folder-with-a-folder-per-game" aria-label="Link to this section">#</a></h3>
+<p>In 4.1 the files the samples used were at the top of the <code>content</code> folder (<code>fonts/</code>, <code>textures/</code>, <code>models/</code>), and a game could also have a <code>content</code> folder of its own in <code>source/games/&lt;game&gt;</code>. In 5.0 there is one content folder, <code>content</code> at the top of your template, with a folder per game in it: the files of <code>sample_3d</code> are in <code>content/sample_3d</code>, and the files that every game may use are in <code>content/shared</code>. A game that still has a <code>source/games/&lt;game&gt;/content</code> folder stops the configure step with a message that says where to move it.</p>
+<p>That changes these paths:</p>
+<div class="tablewrap"><table>
+<thead><tr>
+<th>4.1</th>
+<th>5.0</th>
+</tr></thead><tbody>
+<tr><td><code>&quot;fonts/font_8x8.png&quot;</code></td><td><code>&quot;shared/fonts/font_8x8.png&quot;</code></td></tr>
+<tr><td><code>&quot;textures/checker.png&quot;</code></td><td><code>&quot;shared/textures/checker.png&quot;</code></td></tr>
+<tr><td><code>&quot;models/crate.gltf&quot;</code>, <code>&quot;models/soldier.glb&quot;</code> and the other sample files</td><td><code>&quot;sample_3d/models/crate.gltf&quot;</code>, and so on; the 2D sample&#x27;s in <code>&quot;sample_2d/...&quot;</code></td></tr>
+</tbody></table></div>
+<p>Both samples load the font, so most games need the first change. Move your own files into <code>content/&lt;game&gt;</code>, where <code>&lt;game&gt;</code> is your game&#x27;s folder name, and put that folder name at the front of each path: <code>&quot;textures/player.png&quot;</code> becomes <code>&quot;my_game/textures/player.png&quot;</code>. If they were in <code>source/games/&lt;game&gt;/content</code>, move what is inside that folder to the top <code>content</code> folder.</p>
+<p>A wrong path doesn&#x27;t stop the build. <code><span class="ns">buz::</span>load_texture</code> logs the error and returns a magenta placeholder, and <code><span class="ns">buz::</span>load_model</code> logs it and returns an empty <code>std::optional</code>, so check the console after the first run.</p>
+<h3 id="smaller-changes">Smaller changes<a class="anchor" href="#smaller-changes" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><code>joint_pose</code> is now <a href="../reference/structbuz_1_1node__transform.html"><code><span class="ns">buz::</span>node_transform</code></a>, and <code>model_node::local_pose</code> is now <code>local_transform</code>; <code>keyframe_clip::frames</code> and <code>get_rest_pose</code> use the new type. The type is the same, only its name changed: it describes the place of any node, not only of a joint. Find and replace both names.</li>
+<li>The built-in mesh shaders <code>shaders/mesh_vs.hlsl</code> and <code>mesh_ps.hlsl</code> are now <code>diffuse_vs.hlsl</code> and <code>diffuse_ps.hlsl</code>. This only matters if you changed them: your changes are in files the engine no longer reads. In 5.0 you don&#x27;t need to change the engine&#x27;s shaders, because a game can draw its meshes with shaders of its own (see <a href="drawing-3d.html">Drawing in 3D</a>).</li>
+<li>A renderer draws only while the render function that received it runs. A game that kept a pointer to a renderer and drew with it from <code>on_update</code> stops at an assert.</li>
+</ul>
+<h3 id="new-in-5-0">New in 5.0<a class="anchor" href="#new-in-5-0" aria-label="Link to this section">#</a></h3>
+<p>These don&#x27;t require changes to your game:</p>
+<ul>
+<li><a href="../reference/classbuz_1_1input.html"><code><span class="ns">buz::</span>input::lock_cursor</code></a> and <a href="../reference/classbuz_1_1input.html"><code><span class="ns">buz::</span>input::get_mouse_movement</code></a>, for mouse look in a first-person or third-person game (<a href="input.html">Input</a>).</li>
+<li><code><span class="ns">buz::</span>import_model</code> reads a model onto the cpu without uploading anything, and <code><span class="ns">buz::</span>make_primitive</code> builds the triangles of the built-in shapes (<a href="models.html">Models</a>, <a href="drawing-3d.html">Drawing in 3D</a>).</li>
+<li><code><span class="ns">buz::</span>set_surface_shading</code> draws a world&#x27;s meshes with your own shaders, and <a href="../reference/classbuz_1_1world__renderer__3d.html"><code><span class="ns">buz::</span>world_renderer_3d::set_shader_data</code></a> hands them data (<a href="drawing-3d.html">Drawing in 3D</a>). Besides that data, the shaders receive each mesh&#x27;s world matrix and the camera&#x27;s position, so they can light or fog a surface by where it is in the world.</li>
+<li><code><span class="ns">buz::</span>fs::list_content_files</code> lists the files in a folder of the content folder, and <a href="../reference/classbuz_1_1engine.html"><code><span class="ns">buz::</span>engine::get_settings</code></a> returns the settings the engine runs with, including those from the command line.</li>
+</ul>
+<h2 id="from-3-0-to-4-1">From 3.0 to 4.1<a class="anchor" href="#from-3-0-to-4-1" aria-label="Link to this section">#</a></h2>
+<h3 id="the-game-class-owns-its-renderers">The game class owns its renderers<a class="anchor" href="#the-game-class-owns-its-renderers" aria-label="Link to this section">#</a></h3>
+<p>In 3.0 every game derived from <a href="../reference/classbuz_1_1game.html"><code><span class="ns">buz::</span>game</code></a>, and <code>on_render_world</code> received a <a href="../reference/classbuz_1_1world__renderer__2d.html"><code><span class="ns">buz::</span>world_renderer_2d</code></a>, also in a 3D game, which didn&#x27;t use it. A 3D game made its own <a href="../reference/classbuz_1_1world__renderer__3d.html"><code><span class="ns">buz::</span>world_renderer_3d</code></a> as a member and drew with that.</p>
+<p>In 4.1 the base class owns the world renderer and hands the right one to <code>on_render_world</code>. A 2D game derives from <a href="../reference/classbuz_1_1game__2d.html"><code><span class="ns">buz::</span>game_2d</code></a> and gets a <a href="../reference/classbuz_1_1world__renderer__2d.html"><code><span class="ns">buz::</span>world_renderer_2d</code></a>; a 3D game derives from <a href="../reference/classbuz_1_1game__3d.html"><code><span class="ns">buz::</span>game_3d</code></a> and gets a <a href="../reference/classbuz_1_1world__renderer__3d.html"><code><span class="ns">buz::</span>world_renderer_3d</code></a>. The base class creates its renderers on the graphics card in its constructor, so it needs the engine, and your constructor has to pass it on. For a 3D game, before:</p>
+<figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">C++</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-key">#include</span> <span class="tok-str">&quot;engine/game.h&quot;</span>
+<span class="tok-key">#include</span> <span class="tok-str">&quot;renderer_3d/world_renderer_3d.h&quot;</span>
+
+<span class="tok-key">class</span> my_game : <span class="tok-key">public</span> <span class="tok-type">buz</span>::game
+{
+    <span class="tok-com">// ...</span>
+    <span class="tok-key">void</span> <span class="tok-fn">on_render_world</span>(<span class="tok-type">buz</span>::engine&amp; engine, <span class="tok-type">buz</span>::world_renderer_2d&amp; world) <span class="tok-key">override</span>;
+
+    <span class="tok-type">buz</span>::world_renderer_3d m_world_3d;
+};
+
+my_game::<span class="tok-fn">my_game</span>(<span class="tok-type">buz</span>::engine&amp; engine)
+    : <span class="tok-fn">m_world_3d</span>(engine)
+{
+}
+
+<span class="tok-key">void</span> my_game::<span class="tok-fn">on_render_world</span>(<span class="tok-type">buz</span>::engine&amp; engine, <span class="tok-type">buz</span>::world_renderer_2d&amp; world)
+{
+    m_world_3d.<span class="tok-fn">draw_box</span>({ <span class="tok-num">0.0f</span>, <span class="tok-num">0.5f</span>, <span class="tok-num">0.0f</span> }, { <span class="tok-num">1.0f</span>, <span class="tok-num">1.0f</span>, <span class="tok-num">1.0f</span> }, m_crate_look);
+}</code></pre></figure>
+<p>After:</p>
+<figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">C++</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-key">#include</span> <span class="tok-str">&quot;engine/game_3d.h&quot;</span>
+
+<span class="tok-key">class</span> my_game : <span class="tok-key">public</span> <span class="tok-type">buz</span>::game_3d
+{
+    <span class="tok-com">// ...</span>
+    <span class="tok-key">void</span> <span class="tok-fn">on_render_world</span>(<span class="tok-type">buz</span>::engine&amp; engine, <span class="tok-type">buz</span>::world_renderer_3d&amp; world) <span class="tok-key">override</span>;
+};
+
+my_game::<span class="tok-fn">my_game</span>(<span class="tok-type">buz</span>::engine&amp; engine)
+    : <span class="tok-type">buz</span>::<span class="tok-fn">game_3d</span>(engine)
+{
+}
+
+<span class="tok-key">void</span> my_game::<span class="tok-fn">on_render_world</span>(<span class="tok-type">buz</span>::engine&amp; engine, <span class="tok-type">buz</span>::world_renderer_3d&amp; world)
+{
+    world.<span class="tok-fn">draw_box</span>({ <span class="tok-num">0.0f</span>, <span class="tok-num">0.5f</span>, <span class="tok-num">0.0f</span> }, { <span class="tok-num">1.0f</span>, <span class="tok-num">1.0f</span>, <span class="tok-num">1.0f</span> }, m_crate_look);
+}</code></pre></figure>
+<p>The <code>m_world_3d</code> member is gone, so every function of yours that drew with it now takes the renderer as a parameter: a <code>draw_level()</code> becomes <code>draw_level(buz::world_renderer_3d&amp; world)</code>, called from <code>on_render_world</code> with its <code>world</code>.</p>
+<p>A 2D game changes the same way: derive from <a href="../reference/classbuz_1_1game__2d.html"><code><span class="ns">buz::</span>game_2d</code></a> (include <code>engine/game_2d.h</code>) and put <code><span class="ns">buz::</span>game_2d(engine)</code> first in the constructor&#x27;s initializer list, before your own members.</p>
+<h3 id="loading-moved-to-asset-management">Loading moved to asset_management<a class="anchor" href="#loading-moved-to-asset-management" aria-label="Link to this section">#</a></h3>
+<p>The functions that load files, and <code>create_mesh</code>, moved to a new module, <code>asset_management</code>. The types they return stay where they were, so <code>renderer_3d/model.h</code> and <code>renderer_3d/mesh.h</code> still declare <a href="../reference/structbuz_1_1model.html"><code><span class="ns">buz::</span>model</code></a> and <a href="../reference/classbuz_1_1mesh.html"><code><span class="ns">buz::</span>mesh</code></a>. Change the includes:</p>
+<div class="tablewrap"><table>
+<thead><tr>
+<th>3.0</th>
+<th>4.1</th>
+</tr></thead><tbody>
+<tr><td><code>engine/texture_loading.h</code></td><td><code>asset_management/texture_loading.h</code></td></tr>
+<tr><td><code>renderer_3d/model.h</code>, for <code><span class="ns">buz::</span>load_model</code> and <code><span class="ns">buz::</span>load_mesh</code></td><td><code>asset_management/model_loading.h</code></td></tr>
+<tr><td><code>renderer_3d/mesh.h</code>, for <code><span class="ns">buz::</span>create_mesh</code></td><td><code>asset_management/model_loading.h</code></td></tr>
+</tbody></table></div>
+<p>A game can only include the headers of the modules it links, so add <code>buz_asset_management</code> to <code>LINKS</code> in your game&#x27;s <code>CMakeLists.txt</code>:</p>
+<figure class="excerpt" data-kind="cmake"><figcaption><span><span class="file">CMake</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cmake"><span class="tok-com"># before</span>
+<span class="tok-fn">BUZ_GAME</span>(my_game
+         LINKS buz_engine buz_renderer_3d)
+
+<span class="tok-com"># after</span>
+<span class="tok-fn">BUZ_GAME</span>(my_game
+         LINKS buz_engine buz_renderer_3d buz_asset_management)</code></pre></figure>
+<p>A 2D game has no <code>buz_renderer_3d</code> in that list.</p>
+<h3 id="the-engine-handles-the-debug-keys">The engine handles the debug keys<a class="anchor" href="#the-engine-handles-the-debug-keys" aria-label="Link to this section">#</a></h3>
+<p>In 3.0 a 3D game switched the debug views itself, usually in <code>on_update</code>:</p>
+<figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">C++</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-key">const</span> <span class="tok-type">buz</span>::input&amp; input = engine.<span class="tok-fn">get_input</span>();
+<span class="tok-key">if</span> (input.<span class="tok-fn">was_key_pressed</span>(<span class="tok-type">buz</span>::key::f1)) { m_world_3d.<span class="tok-fn">toggle_wireframe</span>(); }
+<span class="tok-key">if</span> (input.<span class="tok-fn">was_key_pressed</span>(<span class="tok-type">buz</span>::key::f2)) { m_world_3d.<span class="tok-fn">toggle_lighting</span>(); }
+<span class="tok-key">if</span> (input.<span class="tok-fn">was_key_pressed</span>(<span class="tok-type">buz</span>::key::f4)) { m_world_3d.<span class="tok-fn">toggle_debug_lines</span>(); }</code></pre></figure>
+<p>In 4.1 <code>toggle_wireframe</code>, <code>toggle_lighting</code> and <code>toggle_debug_lines</code> no longer exist. The engine switches the views in every 3D game, with the same keys: F1 for the wireframe, F2 for the lighting and F4 for the debug lines, next to F3 for the stats overlay, which already worked that way. Delete these lines. If your game needs one of those keys for something else, give the view another key in <code>main.cpp</code>:</p>
+<figure class="excerpt" data-kind="cpp"><figcaption><span><span class="file">C++</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-cpp"><span class="tok-type">buz</span>::engine <span class="tok-fn">engine</span>(argc, argv, { .debug_controls = { .wireframe = <span class="tok-type">buz</span>::key::f5 } });</code></pre></figure>
+<h3 id="see-through-pixels">See-through pixels<a class="anchor" href="#see-through-pixels" aria-label="Link to this section">#</a></h3>
+<p>This needs no change to your game: 4.1 added <code>alpha_cutoff</code> to <a href="../reference/structbuz_1_1material.html"><code><span class="ns">buz::</span>material</code></a>. Pixels whose alpha is below it are not drawn at all, which is how a flat quad becomes a railing or a fence. <a href="drawing-3d.html">Drawing in 3D</a> explains it.</p>
+    </div>
+    <nav class="toc" aria-labelledby="toc-title"><p class="toc-title" id="toc-title">On this page</p><ol><li><a href="#from-5-1-1-to-5-1-2">From 5.1.1 to 5.1.2</a></li><li><a href="#from-5-1-to-5-1-1">From 5.1 to 5.1.1</a></li><li><a href="#from-5-0-to-5-1">From 5.0 to 5.1</a><ol><li><a href="#include-core-filesystem-h-where-you-use-buz-fs">Include core/filesystem.h where you use buz::fs</a></li></ol></li><li><a href="#from-4-1-to-5-0">From 4.1 to 5.0</a><ol><li><a href="#models-are-drawn-without-textures-until-you-load-them">Models are drawn without textures until you load them</a></li><li><a href="#materials-no-longer-hold-a-texture">Materials no longer hold a texture</a></li><li><a href="#the-game-classes-moved-to-game-framework">The game classes moved to game_framework</a></li><li><a href="#textures-moved-to-render-core">Textures moved to render_core</a></li><li><a href="#one-content-folder-with-a-folder-per-game">One content folder, with a folder per game</a></li><li><a href="#smaller-changes">Smaller changes</a></li><li><a href="#new-in-5-0">New in 5.0</a></li></ol></li><li><a href="#from-3-0-to-4-1">From 3.0 to 4.1</a><ol><li><a href="#the-game-class-owns-its-renderers">The game class owns its renderers</a></li><li><a href="#loading-moved-to-asset-management">Loading moved to asset_management</a></li><li><a href="#the-engine-handles-the-debug-keys">The engine handles the debug keys</a></li><li><a href="#see-through-pixels">See-through pixels</a></li></ol></li></ol></nav>
+    </div>
+    <nav class="wrap pager" aria-label="Previous and next guide"><a href="../index.html#guides" class="back">&larr; All guides</a><a href="under-the-hood.html" class="p" rel="prev"><span class="meta">&larr; Previous</span>Under the hood</a><a href="guided-experiences.html" class="n" rel="next"><span class="meta">Next &rarr;</span>Guided experiences</a></nav>
+  </article>
+</main>
+<footer class="site-footer">
+  <div class="wrap row">
+    <a href="../index.html" class="mark" aria-label="BuzEngine home">//</a>
+    <p class="who">BuzEngine &middot; Breda University of Applied Sciences &middot; MIT licensed</p>
+    <ul>
+      <li><a href="../guides/getting-started.html">Guides</a></li>
+      <li><a href="../reference/index.html">Reference</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>

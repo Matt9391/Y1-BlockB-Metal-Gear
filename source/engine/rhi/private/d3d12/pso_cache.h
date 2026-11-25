@@ -14,7 +14,7 @@ namespace buz::d3d12
 	/// @brief Caches pipeline state objects (psos) on disk between runs.
 	///
 	/// Creating a pso makes the driver compile our shader bytecode into
-	/// real gpu instructions, which is slow. Directx 12 offers the
+	/// real gpu instructions, which is slow. DirectX 12 offers the
 	/// ID3D12PipelineLibrary to avoid paying that cost every run: created
 	/// pipelines are stored in the library, the library is saved to disk on
 	/// shutdown and loaded again on the next start.

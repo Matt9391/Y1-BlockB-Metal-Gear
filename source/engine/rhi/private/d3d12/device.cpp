@@ -10,12 +10,12 @@ using Microsoft::WRL::ComPtr;
 namespace
 {
 	//--------------------------------------------------------------
-	/// @brief Enables the directx 12 debug layer in debug builds.
+	/// @brief Enables the DirectX 12 debug layer in debug builds.
 	///
 	/// The debug layer validates every api call and prints readable error
-	/// messages to the visual studio output window. It is invaluable while
-	/// learning directx, but it slows rendering down, so release builds
-	/// leave it off.
+	/// messages to the Visual Studio output window, which helps a lot while
+	/// learning DirectX. It slows rendering down, so release builds leave
+	/// it off.
 	void enable_debug_layer()
 	{
 #if defined(_DEBUG)
@@ -23,13 +23,13 @@ namespace
 		if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debug_interface))))
 		{
 			debug_interface->EnableDebugLayer();
-			buz::log::info("Directx 12 debug layer enabled");
+			buz::log::info("DirectX 12 debug layer enabled");
 		}
 #endif
 	}
 
 	//--------------------------------------------------------------
-	/// @brief Makes the debugger break on directx errors in debug builds.
+	/// @brief Makes the debugger break on DirectX errors in debug builds.
 	void enable_debug_breaks([[maybe_unused]] ID3D12Device* d3d_device)
 	{
 #if defined(_DEBUG)
@@ -46,7 +46,7 @@ namespace
 namespace buz::d3d12
 {
 	//--------------------------------------------------------------
-	bool device::initialize(adapter_preference preference)
+	bool device::initialize(rhi::adapter_preference preference)
 	{
 		enable_debug_layer();
 
@@ -66,7 +66,7 @@ namespace buz::d3d12
 		const adapter_info* selected = rhi::select_adapter(adapters, preference);
 		if (selected == nullptr)
 		{
-			log::error("{}", preference == adapter_preference::software ? "No software rasterizer found" : "No directx 12 capable graphics card found");
+			log::error("{}", preference == rhi::adapter_preference::software ? "No software rasterizer found" : "No DirectX 12 capable graphics card found");
 			return false;
 		}
 

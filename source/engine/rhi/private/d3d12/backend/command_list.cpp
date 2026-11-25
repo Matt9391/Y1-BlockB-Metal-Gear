@@ -7,6 +7,7 @@
 #include "d3d12/backend/pipeline.h"
 #include "d3d12/descriptor_heap.h"
 
+#include <algorithm>
 #include <cstring>
 #include <optional>
 
@@ -57,6 +58,18 @@ namespace buz::rhi
 	}
 
 	//--------------------------------------------------------------
+	bool command_list::set_shader_data(std::span<const std::byte> data)
+	{
+		return m_native->set_data(data_slot::shader_data, data);
+	}
+
+	//--------------------------------------------------------------
+	bool command_list::set_frame_data(std::span<const std::byte> data)
+	{
+		return m_native->set_data(data_slot::frame_data, data);
+	}
+
+	//--------------------------------------------------------------
 	void command_list::set_texture(const gpu_texture& sampled_texture)
 	{
 		m_native->set_texture(sampled_texture.get_native());
@@ -90,6 +103,8 @@ namespace buz::rhi
 	command_list::native::native()
 		: m_owner(nullptr)
 		, m_command_list(nullptr)
+		, m_has_pipeline(false)
+		, m_data{}
 	{
 	}
 
@@ -98,7 +113,9 @@ namespace buz::rhi
 	{
 		m_owner = &owner;
 		m_command_list = d3d_command_list;
+		m_has_pipeline = false;
 		m_stats = {};
+		std::ranges::fill(m_data, 0);
 	}
 
 	//--------------------------------------------------------------
@@ -107,6 +124,24 @@ namespace buz::rhi
 		m_command_list->SetGraphicsRootSignature(active_pipeline.get_root_signature());
 		m_command_list->SetPipelineState(active_pipeline.get_state());
 		m_command_list->IASetPrimitiveTopology(active_pipeline.get_topology());
+
+		// A new root signature forgets the root arguments, so the shader
+		// data and the frame data are passed again. A shader that reads
+		// either before the frame set it reads zeros, rather than an
+		// address that isn't there (which a software rasterizer answers by
+		// removing the device).
+		m_has_pipeline = true;
+		for (uint32_t index = 0; index < k_data_slot_count; ++index)
+		{
+			if (m_data[index] != 0)
+			{
+				m_command_list->SetGraphicsRootConstantBufferView(2 + index, m_data[index]);
+			}
+			else
+			{
+				set_data(static_cast<data_slot>(index), {});
+			}
+		}
 	}
 
 	//--------------------------------------------------------------
@@ -145,6 +180,33 @@ namespace buz::rhi
 	{
 		// Root parameter 0: the constants, as 32 bit values
 		m_command_list->SetGraphicsRoot32BitConstants(0, static_cast<UINT>(constants.size() / 4), constants.data(), 0);
+	}
+
+	//--------------------------------------------------------------
+	bool command_list::native::set_data(data_slot slot, std::span<const std::byte> data)
+	{
+		const uint32_t size = get_data_size(slot);
+		BUZ_ASSERT_MSG(data.size() <= size, "this data must be at most {} bytes, not {}", size, data.size());
+
+		// Always the full size (see get_data_size)
+		const std::optional<device::native::scratch_allocation> scratch = m_owner->allocate_scratch(size, k_data_alignment);
+		if (!scratch)
+		{
+			return false;
+		}
+
+		std::memcpy(scratch->data, data.data(), data.size());
+		std::memset(scratch->data + data.size(), 0, size - data.size());
+
+		// Root parameter 2 + slot: the data's gpu address. Before the first
+		// set_pipeline there is no root signature yet; set_pipeline passes it.
+		const uint32_t index = static_cast<uint32_t>(slot);
+		m_data[index] = scratch->gpu_address;
+		if (m_has_pipeline)
+		{
+			m_command_list->SetGraphicsRootConstantBufferView(2 + index, m_data[index]);
+		}
+		return true;
 	}
 
 	//--------------------------------------------------------------

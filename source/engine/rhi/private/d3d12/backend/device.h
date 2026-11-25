@@ -3,8 +3,9 @@
 // The DirectX 12 implementation of the rhi: the `native` half of every rhi
 // class, one file per class in this folder. Its layout mirrors the Vulkan
 // backend (vulkan/backend/) on purpose: the same classes, the same frame loop
-// and the same resource lifetime rules, so reading one explains the other and
-// a fix in one shows where the other needs it too.
+// and the same resource lifetime rules, so each piece of one backend has its
+// counterpart in the same place in the other, and a fix in one shows where
+// the other needs it too.
 
 #include "common/constants.h"
 #include "common/frame_scratch.h"
@@ -82,8 +83,9 @@ namespace buz::rhi
 
 		//----------------------------------------------------------
 		/// @brief Reserves scratch memory in the frame being recorded.
+		/// @param alignment The offset is a multiple of this (see frame_scratch::allocate).
 		/// @return The allocation, or nothing when the frame's scratch is full.
-		std::optional<scratch_allocation> allocate_scratch(uint32_t size);
+		std::optional<scratch_allocation> allocate_scratch(uint32_t size, uint32_t alignment = k_frame_scratch_alignment);
 
 	private:
 		//----------------------------------------------------------
@@ -104,9 +106,10 @@ namespace buz::rhi
 		};
 
 		//----------------------------------------------------------
-		/// @brief Creates the root signature every pipeline shares the
-		/// layout of: constants in b0, one texture in t0, a sampler in s0.
-		Microsoft::WRL::ComPtr<ID3D12RootSignature> create_root_signature(uint32_t constants_size, texture_filter sampler_filter);
+		/// @brief Creates the root signature of a pipeline. Every pipeline
+		/// has the same layout: constants in b0, shader data in b1, frame
+		/// data in b2, one texture in t0 and a sampler in s0.
+		Microsoft::WRL::ComPtr<ID3D12RootSignature> create_root_signature(uint32_t constants_size, sampler_filter filter);
 
 		// Qualified: inside rhi::device, a plain "device" names rhi::device
 		d3d12::device m_device;

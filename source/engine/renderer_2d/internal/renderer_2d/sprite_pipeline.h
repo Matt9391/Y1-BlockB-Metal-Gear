@@ -1,6 +1,6 @@
 #pragma once
 
-#include "rhi/settings.h"
+#include "render_core/texture_filter.h"
 
 #include <memory>
 
@@ -19,12 +19,13 @@ namespace buz
 	class texture_loader;
 
 	//--------------------------------------------------------------
-	/// @brief The gpu resources both 2d renderers draw with: the sprite
-	/// shaders, the unit quad every sprite is drawn on, and a white texture
-	/// that turns the quad into plain colored rectangles and lines.
+	/// @brief The gpu resources world_renderer_2d and screen_renderer
+	/// draw with: the sprite shaders, the unit quad every sprite is drawn
+	/// on, and a white texture that turns the quad into plain colored
+	/// rectangles and lines.
 	///
-	/// The engine creates one and hands it to the renderers every frame;
-	/// game code never needs it.
+	/// Every sprite_pass creates and owns one, so each 2D renderer has its
+	/// own; game code never needs it.
 	class sprite_pipeline
 	{
 	public:

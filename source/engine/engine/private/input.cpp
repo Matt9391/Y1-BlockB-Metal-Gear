@@ -1,12 +1,14 @@
 #include "engine/input.h"
 
 #include "input_recorder.h"
+#include "native_window.h"
 
 namespace buz
 {
 	//--------------------------------------------------------------
-	input::input(const input_recorder& recorder)
+	input::input(const input_recorder& recorder, native_window& window)
 		: m_recorder(recorder)
+		, m_window(window)
 	{
 	}
 
@@ -56,5 +58,29 @@ namespace buz
 	float input::get_mouse_wheel_delta() const
 	{
 		return m_recorder.get_mouse_wheel_delta();
+	}
+
+	//--------------------------------------------------------------
+	vec2 input::get_mouse_movement() const
+	{
+		return m_recorder.get_mouse_movement();
+	}
+
+	//--------------------------------------------------------------
+	void input::lock_cursor()
+	{
+		m_window.lock_cursor();
+	}
+
+	//--------------------------------------------------------------
+	void input::unlock_cursor()
+	{
+		m_window.unlock_cursor();
+	}
+
+	//--------------------------------------------------------------
+	bool input::is_cursor_locked() const
+	{
+		return m_window.is_cursor_locked();
 	}
 }

@@ -53,14 +53,14 @@
     <aside class="side" aria-label="All guides">
       <button class="side-toggle" type="button" aria-expanded="false" aria-controls="side-nav"><span>All guides</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></button>
       <nav class="side-nav" id="side-nav" aria-label="Guides">
-        <div class="side-group"><p class="side-title">Guides</p><ol><li><a href="getting-started.html">Getting started</a></li><li><a href="drawing.html">Drawing in 2D</a></li><li><a href="drawing-3d.html">Drawing in 3D</a></li><li><a href="input.html">Input</a></li><li><a href="textures-and-fonts.html">Textures &amp; fonts</a></li><li><a href="audio.html">Audio</a></li><li><a href="utilities.html">Utilities</a></li><li><a href="diagnostics.html">Diagnostics</a></li><li><a href="json.html">JSON files</a></li><li><a href="models.html">Models</a></li><li><a href="under-the-hood.html">Under the hood</a></li></ol></div>
-        <div class="side-group"><p class="side-title">Guided experiences</p><ol><li><a href="guided-experiences.html">Guided experiences</a></li><li><a href="camera-2d.html">A 2D camera</a></li><li><a href="sprite-animation.html">Sprite animation</a></li><li><a href="sprite-batching.html">Sprite batching</a></li><li><a href="animation-player.html">An animation player</a></li><li><a href="collision.html">Collision</a></li><li><a href="asset-cache.html" aria-current="page">An asset cache</a></li></ol></div>
+        <div class="side-group"><p class="side-title">Guides</p><ol><li><a href="getting-started.html">Getting started</a></li><li><a href="drawing.html">Drawing in 2D</a></li><li><a href="drawing-3d.html">Drawing in 3D</a></li><li><a href="input.html">Input</a></li><li><a href="textures-and-fonts.html">Textures &amp; fonts</a></li><li><a href="audio.html">Audio</a></li><li><a href="utilities.html">Utilities</a></li><li><a href="diagnostics.html">Diagnostics</a></li><li><a href="json.html">JSON files</a></li><li><a href="models.html">Models</a></li><li><a href="under-the-hood.html">Under the hood</a></li><li><a href="changes.html">Changes</a></li></ol></div>
+        <div class="side-group"><p class="side-title">Guided experiences</p><ol><li><a href="guided-experiences.html">Guided experiences</a></li><li><a href="camera-2d.html">A 2D camera</a></li><li><a href="sprite-animation.html">Sprite animation</a></li><li><a href="sprite-batching.html">Sprite batching</a></li><li><a href="animation-player.html">An animation player</a></li><li><a href="collision.html">Collision</a></li><li><a href="asset-cache.html" aria-current="page">An asset cache</a></li><li><a href="radar.html">A radar</a></li></ol></div>
       </nav>
     </aside>
     <div class="prose">
 <blockquote class="note"><p><strong>Guided exercise:</strong> Use the 3D template and write the asset cache yourself (see <a href="guided-experiences.html">Guided experiences</a>). The functions in <code>asset_management</code> load an asset each time you call them. Your cache will let several objects share an asset that has already been loaded.</p></blockquote>
 <h2 id="what-you-will-build">What you will build<a class="anchor" href="#what-you-will-build" aria-label="Link to this section">#</a></h2>
-<p>Suppose ten guards use <code>models/soldier.glb</code>. If every guard calls <code><span class="ns">buz::</span>load_model</code>, the game repeats the file loading, decoding and mesh uploads for each guard. The guards need separate positions and animation state, but they can share the same model data.</p>
+<p>Suppose ten guards use <code>my_game/models/soldier.glb</code>. If every guard calls <code><span class="ns">buz::</span>load_model</code>, the game repeats the file loading, decoding and mesh uploads for each guard. The guards need separate positions and animation state, but they can share the same model data.</p>
 <p>An <strong>asset cache</strong> stores loaded assets so the game can reuse them. The first request for the soldier loads its model. Later requests return the model already in the cache.</p>
 <p>You will first cache models by path, then decide who keeps them alive and how to handle failed loads. The examples below are pseudocode.</p>
 <h2 id="step-1-look-up-a-model-by-its-path">Step 1: look up a model by its path<a class="anchor" href="#step-1-look-up-a-model-by-its-path" aria-label="Link to this section">#</a></h2>
@@ -74,7 +74,7 @@
     model = load_model(key)
     models[key] = model
     return model</code></pre></figure>
-<p>The lookup must recognize equivalent paths. For example, <code>models/soldier.glb</code> and <code>models/./soldier.glb</code> should use the same entry. Normalize the path before both the lookup and the insertion.</p>
+<p>The lookup must recognize equivalent paths. For example, <code>my_game/models/soldier.glb</code> and <code>my_game/models/./soldier.glb</code> should use the same entry. Normalize the path before both the lookup and the insertion.</p>
 <p><code>std::filesystem::path::lexically_normal()</code> can remove redundant path components such as <code>.</code>. Decide on one asset root and one separator format for your keys. Lexical normalization alone does not resolve every way two paths can name the same file, such as symbolic links.</p>
 <p>The input can be a <code>std::string_view</code>, as it is for <code><span class="ns">buz::</span>load_model</code>, but the stored key must own its text. Use a <code>std::string</code>; a stored <code>std::string_view</code> could point at text that no longer exists. If you use <code>generic_u8string()</code> to produce a key, account for its <code>std::u8string</code> return type in C++20 and later rather than assuming it returns <code>std::string</code>.</p>
 <p><strong>Check:</strong> Request the same model twice and compare the returned pointers. Then repeat with the two path spellings above. Both requests should refer to the same object.</p>
@@ -96,7 +96,7 @@
 <p>Choose one approach and write down why it suits your game.</p>
 <h3 id="keep-shared-model-data-separate-from-character-state">Keep shared model data separate from character state<a class="anchor" href="#keep-shared-model-data-separate-from-character-state" aria-label="Link to this section">#</a></h3>
 <p>Returning a pointer to a <code>const</code> model prevents a guard from directly editing that shared model through the returned pointer. Keep each guard&#x27;s position and animation playback state outside it.</p>
-<p>For changes such as per-character colors, copy the model and change the copy&#x27;s per-model settings. Its mesh pointers still refer to the shared meshes, so copying the model does not duplicate the mesh data. Do not modify shared mesh or texture objects expecting the change to affect only one character; <code>const</code> on the model is not deep immutability.</p>
+<p>For changes such as per-character colors, copy the model and change the copy&#x27;s per-model settings. Its mesh pointers still refer to the shared meshes, so copying the model does not duplicate the mesh data. Do not modify shared mesh or texture objects expecting the change to affect only one character: the <code>const</code> applies to the model itself, not to the meshes and textures its pointers refer to.</p>
 <p><strong>Check:</strong> Release one guard&#x27;s model pointer while another guard still uses the model. The remaining guard must still be able to draw. Then verify that your cache releases or retains the unused model as intended.</p>
 <h2 id="step-3-remember-failed-loads">Step 3: remember failed loads<a class="anchor" href="#step-3-remember-failed-loads" aria-label="Link to this section">#</a></h2>
 <p>A missing file can be requested repeatedly, perhaps once per update. Without a record of the failure, each request repeats the load attempt and may print the same error again.</p>
@@ -106,8 +106,21 @@
 <p><strong>Check:</strong> Request a missing file several times. There should be one load attempt and one error report until you explicitly allow another attempt.</p>
 <h2 id="step-4-cache-other-asset-types">Step 4: cache other asset types<a class="anchor" href="#step-4-cache-other-asset-types" aria-label="Link to this section">#</a></h2>
 <p>Apply the same lookup and ownership rules to textures and meshes. Separate maps and functions for each type are fine. Once they work, consider whether a template would remove useful duplication without making the code harder to follow.</p>
-<p>Show counters on screen with <code>draw_text</code>, or log them. State what each counter measures: cached entries, assets still alive or successful loads, for example. Those numbers are not necessarily the same, especially with weak pointers or cached failures.</p>
-<p><strong>Check:</strong> Repeated requests should reuse each asset type. Watch the counters while entering and leaving a level.</p>
+<p>The textures of a model need one more step. <code><span class="ns">buz::</span>load_model</code> loads no textures: each node&#x27;s material only names its image, in <code>material::base_texture</code>, which is a <a href="../reference/classbuz_1_1texture__id.html"><code><span class="ns">buz::</span>texture_id</code></a>. Your game loads that image with <code><span class="ns">buz::</span>load_texture(engine, id)</code>, and that call loads it again every time, like the other loaders. So loading a model&#x27;s textures should go through the cache too.</p>
+<p>A texture_id can be the key of the texture map. Two ids are equal when their images have the same bytes, whichever file they came from, and texture_id can be compared and hashed, so it works in a <code>std::map</code> and in a <code>std::unordered_map</code>. When three models carry the same brick image, their three ids are equal and the cache loads the bricks once. For a texture you load by its path, <code><span class="ns">buz::</span>texture_id(&quot;my_game/textures/bricks.png&quot;)</code> names that image file, so it shares an entry with the same image inside a model. Making that id reads the file to compare its bytes, so make it once, not on every request.</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">get_texture(id):
+    if id names no image:
+        decide what the caller gets: nothing, or a placeholder
+
+    if id is in textures:
+        return textures[id]
+
+    texture = load_texture(id)
+    textures[id] = texture
+    return texture</code></pre></figure>
+<p>Think about where the textures are looked up. The cache could fetch them when it loads the model and keep them next to it, or the game could fetch them when it creates an object that draws the model. Either way, drawing a node needs a loaded texture, and the model only holds its id.</p>
+<p>Show counters on screen with <code>draw_text</code>, or log them, and label what each counter measures: cached entries, assets still alive or successful loads, for example. Those numbers are not necessarily the same, especially with weak pointers or cached failures.</p>
+<p><strong>Check:</strong> Repeated requests should reuse each asset type. Load two models that use the same image and compare the texture pointers of their nodes. Watch the counters while entering and leaving a level.</p>
 <h2 id="levels">Levels<a class="anchor" href="#levels" aria-label="Link to this section">#</a></h2>
 <p>Complete the basic level before adding the intermediate and hard features.</p>
 <p><strong>Basic</strong></p>
@@ -131,7 +144,7 @@
     </div>
     <nav class="toc" aria-labelledby="toc-title"><p class="toc-title" id="toc-title">On this page</p><ol><li><a href="#what-you-will-build">What you will build</a></li><li><a href="#step-1-look-up-a-model-by-its-path">Step 1: look up a model by its path</a></li><li><a href="#step-2-decide-who-keeps-the-model-alive">Step 2: decide who keeps the model alive</a><ol><li><a href="#keep-shared-model-data-separate-from-character-state">Keep shared model data separate from character state</a></li></ol></li><li><a href="#step-3-remember-failed-loads">Step 3: remember failed loads</a></li><li><a href="#step-4-cache-other-asset-types">Step 4: cache other asset types</a></li><li><a href="#levels">Levels</a></li></ol></nav>
     </div>
-    <nav class="wrap pager" aria-label="Previous and next guide"><a href="../index.html#guides" class="back">&larr; All guides</a><a href="collision.html" class="p" rel="prev"><span class="meta">&larr; Previous</span>Collision</a></nav>
+    <nav class="wrap pager" aria-label="Previous and next guide"><a href="../index.html#guides" class="back">&larr; All guides</a><a href="collision.html" class="p" rel="prev"><span class="meta">&larr; Previous</span>Collision</a><a href="radar.html" class="n" rel="next"><span class="meta">Next &rarr;</span>A radar</a></nav>
   </article>
 </main>
 <footer class="site-footer">

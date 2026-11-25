@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('screen__render
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="comment">    /// Every game has one, owned by buz::game and handed to on_render_screen</span></div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="comment">    /// every frame, after on_render_world.</span></div>
 <div class="foldopen" id="foldopen00017" data-start="{" data-end="};">
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="classbuz_1_1screen__renderer.html">   17</a></span>    <span class="keyword">class </span><a class="code hl_function" href="classbuz_1_1screen__renderer.html#a3530d62e8859cdeaaf78858fd56fae33">screen_renderer</a> : <span class="keyword">public</span> <a class="code hl_function" href="classbuz_1_1renderer__2d.html#ab31e5136e0b26a7f5257ea074a591965">renderer_2d</a></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="classbuz_1_1screen__renderer.html">   17</a></span>    <span class="keyword">class </span><a class="code hl_function" href="classbuz_1_1screen__renderer.html#a9c20e234a338c8fbfcf6346c8c09aa6e">screen_renderer</a> : <span class="keyword">public</span> <a class="code hl_function" href="classbuz_1_1renderer__2d.html#ac6064d84c693a49d6bbeadcbe781d93d">renderer_2d</a></div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    {</div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="keyword">public</span>:</div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>        <span class="comment">//----------------------------------------------------------</span><span class="comment"></span></div>
@@ -178,13 +178,16 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('screen__render
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment">        /// graphics card; buz::game makes one for your game.</span></div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment">        /// @param context The engine&#39;s render context</span></div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment">        /// (engine::get_render_context).</span></div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="classbuz_1_1screen__renderer.html#a3530d62e8859cdeaaf78858fd56fae33">   25</a></span>        <span class="keyword">explicit</span> <a class="code hl_function" href="classbuz_1_1screen__renderer.html#a3530d62e8859cdeaaf78858fd56fae33">screen_renderer</a>(<span class="keyword">const</span> render_context&amp; context);</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    };</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment">        /// @param sampler_filter How its textures are filtered when scaled</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment">        /// on screen (engine_settings::sampler_filter).</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="classbuz_1_1screen__renderer.html#a9c20e234a338c8fbfcf6346c8c09aa6e">   27</a></span>        <a class="code hl_function" href="classbuz_1_1screen__renderer.html#a9c20e234a338c8fbfcf6346c8c09aa6e">screen_renderer</a>(<span class="keyword">const</span> render_context&amp; context, <a class="code hl_enumeration" href="namespacebuz.html#a5e0429f08408e32e673a381a6e82a96c">texture_filter</a> sampler_filter);</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    };</div>
 </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>}</div>
-<div class="ttc" id="aclassbuz_1_1renderer__2d_html_ab31e5136e0b26a7f5257ea074a591965"><div class="ttname"><a href="classbuz_1_1renderer__2d.html#ab31e5136e0b26a7f5257ea074a591965">buz::renderer_2d::renderer_2d</a></div><div class="ttdeci">renderer_2d(const render_context &amp;context)</div></div>
-<div class="ttc" id="aclassbuz_1_1screen__renderer_html_a3530d62e8859cdeaaf78858fd56fae33"><div class="ttname"><a href="classbuz_1_1screen__renderer.html#a3530d62e8859cdeaaf78858fd56fae33">buz::screen_renderer::screen_renderer</a></div><div class="ttdeci">screen_renderer(const render_context &amp;context)</div><div class="ttdoc">Creates the renderer and its pipeline on the engine&#39;s graphics card; buz::game makes one for your gam...</div></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>}</div>
+<div class="ttc" id="aclassbuz_1_1renderer__2d_html_ac6064d84c693a49d6bbeadcbe781d93d"><div class="ttname"><a href="classbuz_1_1renderer__2d.html#ac6064d84c693a49d6bbeadcbe781d93d">buz::renderer_2d::renderer_2d</a></div><div class="ttdeci">renderer_2d(const render_context &amp;context, texture_filter sampler_filter)</div></div>
+<div class="ttc" id="aclassbuz_1_1screen__renderer_html_a9c20e234a338c8fbfcf6346c8c09aa6e"><div class="ttname"><a href="classbuz_1_1screen__renderer.html#a9c20e234a338c8fbfcf6346c8c09aa6e">buz::screen_renderer::screen_renderer</a></div><div class="ttdeci">screen_renderer(const render_context &amp;context, texture_filter sampler_filter)</div><div class="ttdoc">Creates the renderer and its pipeline on the engine&#39;s graphics card; buz::game makes one for your gam...</div></div>
 <div class="ttc" id="anamespacebuz_html"><div class="ttname"><a href="namespacebuz.html">buz</a></div><div class="ttdef"><b>Definition</b> <a href="aabb_8h_source.html#l00008">aabb.h:9</a></div></div>
+<div class="ttc" id="anamespacebuz_html_a5e0429f08408e32e673a381a6e82a96c"><div class="ttname"><a href="namespacebuz.html#a5e0429f08408e32e673a381a6e82a96c">buz::texture_filter</a></div><div class="ttdeci">texture_filter</div><div class="ttdoc">How sampled textures are filtered when scaled on screen.</div><div class="ttdef"><b>Definition</b> <a href="texture__filter_8h_source.html#l00010">texture_filter.h:11</a></div></div>
 <div class="ttc" id="arenderer__2d_8h_html"><div class="ttname"><a href="renderer__2d_8h.html">renderer_2d.h</a></div><div class="ttdoc">The drawing functions the world and screen renderers share: sprites, shapes and text.</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
@@ -192,7 +195,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('screen__render
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a href="dir_6f9ba63c1e6703776d3763c2ff46adb4.html">renderer_2d</a></li><li class="navelem"><a href="screen__renderer_8h.html">screen_renderer.h</a></li>
+    <li class="navelem"><a href="dir_4eb240cf58aabfdc4f5151186b6d1658.html">renderer_2d</a></li><li class="navelem"><a href="screen__renderer_8h.html">screen_renderer.h</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
   </ul>
 </div>

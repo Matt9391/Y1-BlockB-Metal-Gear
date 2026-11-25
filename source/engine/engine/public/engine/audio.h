@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include "core/filesystem.h"
-
 #include <yes_no.h>
 
 #include <string_view>
@@ -24,8 +22,8 @@ namespace buz
 	/// The engine owns one instance (engine::get_audio). Paths are relative to
 	/// the content folder, with / between folders:
 	/// @code{.cpp}
-	/// audio.play_music("music/theme.mp3", buz::looping::yes);
-	/// audio.play_sound("sounds/jump.wav");
+	/// audio.play_music("my_game/music/theme.mp3", buz::looping::yes);
+	/// audio.play_sound("my_game/sounds/jump.wav");
 	/// @endcode
 	///
 	/// When the computer has no audio device, every call does nothing, so the

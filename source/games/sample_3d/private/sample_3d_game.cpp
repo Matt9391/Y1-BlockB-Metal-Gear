@@ -21,7 +21,7 @@ namespace
 	const buz::material k_fatigues = { { 0.36f, 0.40f, 0.30f, 1.0f } };
 
 	// Unlit: a pickup glows the same color from every side
-	const buz::material k_pickup = { { 0.30f, 1.00f, 0.50f, 1.0f }, nullptr, buz::lighting::no };
+	const buz::material k_pickup = { { 0.30f, 1.00f, 0.50f, 1.0f }, {}, buz::lighting::no };
 }
 
 //--------------------------------------------------------------
@@ -29,18 +29,18 @@ sample_3d_game::sample_3d_game(buz::engine& engine)
 	: buz::game_3d(engine)
 	, m_soldier_position{ 0.0f, 0.0f, 2.0f }
 {
-	m_font.atlas = buz::load_texture(engine, "fonts/font_8x8.png");
+	m_font.atlas = buz::load_texture(engine, "shared/fonts/font_8x8.png");
 
 	// load_mesh gives the triangles only; the texture is loaded separately
-	// so the same mesh can be drawn with other materials too.
-	m_crate_mesh = buz::load_mesh(engine, "models/crate.gltf");
-	m_crate_material.base_texture = buz::load_texture(engine, "models/crate.png");
+	// so the same mesh can be drawn with other textures too.
+	m_crate_mesh = buz::load_mesh(engine, "sample_3d/models/crate.gltf");
+	m_crate_texture = buz::load_texture(engine, "sample_3d/models/crate.png");
 	m_crate_positions = { { 3.0f, 0.0f, -1.0f }, { 4.1f, 0.0f, -1.2f }, { 3.5f, 1.0f, -1.1f }, { -4.0f, 0.0f, 3.0f } };
 
 	// load_mesh merges the soldier's parts into one statue, as they stand in
 	// the file. To animate him, load_model keeps the parts, their hierarchy
 	// and the walk and idle clips apart (see the Models guide).
-	m_soldier_mesh = buz::load_mesh(engine, "models/soldier.glb");
+	m_soldier_mesh = buz::load_mesh(engine, "sample_3d/models/soldier.glb");
 }
 
 //--------------------------------------------------------------
@@ -52,7 +52,7 @@ void sample_3d_game::on_render_world(buz::engine& /*engine*/, buz::world_rendere
 
 	for (const buz::vec3& position : m_crate_positions)
 	{
-		world.draw(*m_crate_mesh, m_crate_material, glm::translate(buz::mat4(1.0f), position));
+		world.draw(*m_crate_mesh, m_crate_material, *m_crate_texture, glm::translate(buz::mat4(1.0f), position));
 	}
 
 	if (m_soldier_mesh)
@@ -91,7 +91,8 @@ void sample_3d_game::draw_harbour(buz::world_renderer_3d& world) const
 //--------------------------------------------------------------
 void sample_3d_game::draw_debug_shapes(buz::world_renderer_3d& world) const
 {
-	// What the game "knows" about the world
+	// The collision boxes the game logic works with: one per crate, and one
+	// around the container
 	const buz::color collider_color = { 0.2f, 1.0f, 0.2f, 1.0f };
 	for (const buz::vec3& position : m_crate_positions)
 	{

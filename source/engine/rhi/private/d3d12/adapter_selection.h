@@ -29,15 +29,16 @@ namespace buz::d3d12
 	};
 
 	//--------------------------------------------------------------
-	/// @brief Enumerates all directx 12 capable adapters on this machine and scores them.
+	/// @brief Enumerates all DirectX 12 capable adapters on this machine and scores them.
 	///
-	/// Similar to how unreal picks its gpu: every adapter gets a score based
+	/// Similar to how Unreal picks its gpu: every adapter gets a score based
 	/// on its dedicated video memory, maximum feature level and highest
 	/// supported shader model. Software adapters (warp) are listed but score
 	/// zero; rhi::select_adapter (common/adapter_scoring.h) only picks them
-	/// when no real graphics card is present.
+	/// when no real graphics card is present, or when the software
+	/// preference asks for one.
 	///
 	/// @param factory Factory used to enumerate the adapters.
-	/// @return All directx 12 capable adapters, in enumeration order.
+	/// @return All DirectX 12 capable adapters, in enumeration order.
 	std::vector<adapter_info> enumerate_and_score_adapters(IDXGIFactory1* factory);
 }

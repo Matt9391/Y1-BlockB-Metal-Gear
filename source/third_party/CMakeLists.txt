@@ -72,11 +72,15 @@ IF(BUZ_RHI STREQUAL "vulkan")
     TARGET_LINK_LIBRARIES(volk PUBLIC vulkan_headers ${CMAKE_DL_LIBS})
     SET_TARGET_PROPERTIES(volk PROPERTIES FOLDER "third-party")
 
-    # vma is a single header; its implementation is compiled once, inside the
-    # Vulkan backend.
-    ADD_LIBRARY(vma INTERFACE)
-    TARGET_INCLUDE_DIRECTORIES(vma INTERFACE ${SOURCE_THIRDPARTY_DIRECTORY}/vma/include)
-    TARGET_LINK_LIBRARIES(vma INTERFACE vulkan_headers)
+    # vma is a single header; src/vma.cpp compiles its implementation. volk
+    # loads the Vulkan functions at runtime, so vma fetches them itself
+    # (dynamic) instead of expecting them linked in (static). PUBLIC, so
+    # every file that includes vk_mem_alloc.h sees the same settings.
+    ADD_LIBRARY(vma STATIC ${SOURCE_THIRDPARTY_DIRECTORY}/vma/src/vma.cpp)
+    TARGET_INCLUDE_DIRECTORIES(vma PUBLIC ${SOURCE_THIRDPARTY_DIRECTORY}/vma/include)
+    TARGET_COMPILE_DEFINITIONS(vma PUBLIC VMA_STATIC_VULKAN_FUNCTIONS=0 VMA_DYNAMIC_VULKAN_FUNCTIONS=1)
+    TARGET_LINK_LIBRARIES(vma PUBLIC volk)
+    SET_TARGET_PROPERTIES(vma PROPERTIES FOLDER "third-party")
 ENDIF()
 
 # -------------------------------
@@ -101,18 +105,26 @@ IF(BUZ_RHI STREQUAL "opengl" AND NOT EMSCRIPTEN)
 ENDIF()
 
 # -------------------------------
-# miniaudio (0.11.25): sound effects and music. A single header; its
-# implementation is compiled once, in the audio module.
+# miniaudio (0.11.25): sound effects and music. A single header;
+# src/miniaudio.cpp compiles its implementation.
 # -------------------------------
-ADD_LIBRARY(miniaudio INTERFACE)
-TARGET_INCLUDE_DIRECTORIES(miniaudio INTERFACE ${SOURCE_THIRDPARTY_DIRECTORY}/miniaudio)
+ADD_LIBRARY(miniaudio STATIC ${SOURCE_THIRDPARTY_DIRECTORY}/miniaudio/src/miniaudio.cpp)
+TARGET_INCLUDE_DIRECTORIES(miniaudio PUBLIC ${SOURCE_THIRDPARTY_DIRECTORY}/miniaudio)
+SET_TARGET_PROPERTIES(miniaudio PROPERTIES FOLDER "third-party")
+IF(NOT WIN32)
+    # miniaudio talks to the audio device from a thread of its own, and
+    # loads the Linux audio libraries (ALSA, PulseAudio) at runtime.
+    FIND_PACKAGE(Threads REQUIRED)
+    TARGET_LINK_LIBRARIES(miniaudio PUBLIC Threads::Threads ${CMAKE_DL_LIBS} m)
+ENDIF()
 
 # -------------------------------
-# cgltf: reads glTF 2.0 models (.gltf and .glb). A single header; its
-# implementation is compiled once, in the scene module.
+# cgltf: reads glTF 2.0 models (.gltf and .glb). A single header;
+# src/cgltf.cpp compiles its implementation.
 # -------------------------------
-ADD_LIBRARY(cgltf INTERFACE)
-TARGET_INCLUDE_DIRECTORIES(cgltf INTERFACE ${SOURCE_THIRDPARTY_DIRECTORY}/cgltf)
+ADD_LIBRARY(cgltf STATIC ${SOURCE_THIRDPARTY_DIRECTORY}/cgltf/src/cgltf.cpp)
+TARGET_INCLUDE_DIRECTORIES(cgltf PUBLIC ${SOURCE_THIRDPARTY_DIRECTORY}/cgltf)
+SET_TARGET_PROPERTIES(cgltf PROPERTIES FOLDER "third-party")
 
 # -------------------------------
 # Catch2 (3.16.0, the two-file amalgamated build): the unit tests in

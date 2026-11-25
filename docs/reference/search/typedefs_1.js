@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['json_0',['json',['../namespacebuz.html#a125dcd6bd62883cd94626244a6207671',1,'buz']]]
+  ['ivec2_0',['ivec2',['../namespacebuz.html#afb4b686a46530f2b1a6bdc6fa1ec58d3',1,'buz']]]
 ];

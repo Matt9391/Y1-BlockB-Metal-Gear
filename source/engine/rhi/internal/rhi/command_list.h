@@ -50,6 +50,26 @@ namespace buz::rhi
 		void set_constants(std::span<const std::byte> constants);
 
 		//----------------------------------------------------------
+		/// @brief Copies data the shaders share between draws into the
+		/// frame's scratch memory (cbuffer register(b1); in HLSL also
+		/// [[vk::binding(0, 2)]] for Vulkan). It stays selected for the rest
+		/// of the frame, across pipeline changes, until it is set again.
+		/// Until the frame sets it, shaders read zeros.
+		/// @param data At most k_max_shader_data_size bytes.
+		/// @return False when the frame's scratch memory is full.
+		bool set_shader_data(std::span<const std::byte> data);
+
+		//----------------------------------------------------------
+		/// @brief Copies data that changes once a frame, such as the
+		/// camera, into the frame's scratch memory (cbuffer register(b2);
+		/// in HLSL also [[vk::binding(0, 3)]] for Vulkan). Like the shader
+		/// data, it stays selected for the rest of the frame, and shaders
+		/// read zeros until the frame sets it.
+		/// @param data At most k_max_frame_data_size bytes.
+		/// @return False when the frame's scratch memory is full.
+		bool set_frame_data(std::span<const std::byte> data);
+
+		//----------------------------------------------------------
 		/// @brief Sets the texture the pixel shader samples (register(t0)).
 		void set_texture(const gpu_texture& sampled_texture);
 

@@ -22,6 +22,8 @@ namespace buz
 		/// graphics card; buz::game makes one for your game.
 		/// @param context The engine's render context
 		/// (engine::get_render_context).
-		explicit screen_renderer(const render_context& context);
+		/// @param sampler_filter How its textures are filtered when scaled
+		/// on screen (engine_settings::sampler_filter).
+		screen_renderer(const render_context& context, texture_filter sampler_filter);
 	};
 }

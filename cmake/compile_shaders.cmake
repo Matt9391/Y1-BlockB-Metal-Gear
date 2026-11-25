@@ -2,15 +2,13 @@
 # Function that hooks shader compilation into the build.
 #
 # Every *.hlsl file inside the /shaders folder, and in the shaders/ folder of
-# an engine module that brings its own (the staff ps1_look), is compiled into
-# the runtime output folder (content/shaders) using our own shader_compiler
-# tool: to a
-# *.cso file (DXIL) when the build draws with DirectX 12, a *.spv file
-# (SPIR-V) when it draws with Vulkan, or a *.glsl file when it draws with
-# OpenGL (BUZ_RHI). CMake tracks the
-# dependencies for us: a shader is only recompiled when its source file
-# changed or when it has not been compiled yet, exactly like regular C++
-# files.
+# a module that brings its own (the staff ps1_look in source/solutions), is
+# compiled into the runtime output folder (content/shaders) by our own
+# shader_compiler tool: to a *.cso file (DXIL) when the build draws with
+# DirectX 12, a *.spv file (SPIR-V) when it draws with Vulkan, or a *.glsl
+# file when it draws with OpenGL (BUZ_RHI). CMake tracks the dependencies
+# for us: a shader is only recompiled when its source file changed or when
+# it has not been compiled yet, as with regular C++ files.
 #
 # The shader profile is derived from the file name suffix:
 #     my_shader_vs.hlsl -> vertex shader  (vs_6_0)
@@ -24,7 +22,7 @@ FUNCTION(BUZ_COMPILE_SHADERS target_name)
              "${SOURCE_SHADER_DIRECTORY}/*.hlsl"
              "${SOURCE_ENGINE_DIRECTORY}/*/shaders/*.hlsl")
 
-        # Stop visual studio from compiling the hlsl files with its own built-in
+        # Stop Visual Studio from compiling the hlsl files with its own built-in
         # shader compiler; our shader_compiler tool does the compiling.
         SET_SOURCE_FILES_PROPERTIES(${shader_sources} PROPERTIES VS_TOOL_OVERRIDE "None")
 

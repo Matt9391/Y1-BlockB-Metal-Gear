@@ -5,20 +5,31 @@
 # CMakeLists.txt is a single call:
 #
 #   BUZ_GAME(sample_2d
-#            LINKS buz_engine buz_asset_management)
+#            LINKS buz_engine buz_game_framework buz_asset_management)
 #
-# LINKS are the engine modules the game uses: buz_engine for every game,
+# LINKS are the engine modules the game uses: buz_engine and
+# buz_game_framework (game_2d, game_3d) for every game,
 # buz_asset_management to load textures (and models), plus the 3D modules
 # for a 3D one (see the 3D sample's CMakeLists.txt).
 #
 # What it sets up, so no game has to repeat it:
 # - Sources: every .cpp/.h/.hpp file under the game's private/ folder. You
 #   never edit CMakeLists.txt to add code: create the new file inside
-#   source/games/<game>/private (NOT inside the build/ folder!) and build.
+#   source/games/<game>/private (not inside the build/ folder, which is
+#   regenerated) and build.
 #   CMake notices it and Visual Studio asks to reload.
-# - The shaders in /shaders are compiled, and the shared /content folder is
-#   copied next to the executable.
-# - A game with a content/ folder of its own gets that copied too.
+# - The shaders in /shaders are compiled, and the /content folder is copied
+#   next to the executable.
+# - There is one content folder: /content. A game's own files go in
+#   /content/<game> (loaded as "<game>/..."), the files every game uses in
+#   /content/shared. A content/ folder inside source/games/<game> is refused
+#   when configuring, so content never lives in two places.
+#   Why not next to the game's code: games used to have that folder, copied
+#   by a POST_BUILD step. That step only runs when the game links, so a
+#   changed texture did not reach the build until the code changed too.
+#   /content is copied by its own target (copy-content) on every build, the
+#   guides point there, and the web build, the install package and the
+#   template export only have to look in one place.
 # - Every build warns about source files accidentally created in build/.
 # - Package targets for the IDE, in its "package" folder: build
 #   package_<game> to package the game for this OS, package_<game>_web for
@@ -53,10 +64,9 @@ FUNCTION(BUZ_GAME name)
     ADD_DEPENDENCIES(${name} copy-content check_stray_sources)
 
     IF(EXISTS ${CMAKE_CURRENT_LIST_DIR}/content)
-        ADD_CUSTOM_COMMAND(TARGET ${name} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_LIST_DIR}/content" "$<TARGET_FILE_DIR:${name}>/content"
-            COMMENT "Copying the ${name} content next to the executable"
-            VERBATIM)
+        MESSAGE(FATAL_ERROR "${CMAKE_CURRENT_LIST_DIR}/content: a game's content goes in "
+                            "${CMAKE_SOURCE_DIR}/content/${name}, the one content folder every build copies. "
+                            "Move the files there; the game loads them as \"${name}/...\".")
     ENDIF()
 
     # In a browser the game is a page: the executable becomes WebAssembly
@@ -68,9 +78,6 @@ FUNCTION(BUZ_GAME name)
         SET(web_content
             "${CMAKE_SOURCE_DIR}/content"
             "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/content/shaders@/content/shaders")
-        IF(EXISTS ${CMAKE_CURRENT_LIST_DIR}/content)
-            LIST(APPEND web_content "${CMAKE_CURRENT_LIST_DIR}/content")
-        ENDIF()
         SET(web_link_options
             -sMIN_WEBGL_VERSION=2 -sMAX_WEBGL_VERSION=2
             -sGL_ENABLE_GET_PROC_ADDRESS=1
@@ -88,7 +95,7 @@ FUNCTION(BUZ_GAME name)
         SET_TARGET_PROPERTIES(${name} PROPERTIES SUFFIX ".html")
 
         # The content is linked in, so a changed file means linking again
-        FILE(GLOB_RECURSE web_content_files CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/content/*" "${CMAKE_CURRENT_LIST_DIR}/content/*")
+        FILE(GLOB_RECURSE web_content_files CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/content/*")
         SET_TARGET_PROPERTIES(${name} PROPERTIES LINK_DEPENDS "${web_content_files}")
     ENDIF()
 

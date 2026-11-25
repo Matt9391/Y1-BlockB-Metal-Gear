@@ -4,7 +4,6 @@
 #include "renderer_2d/renderer_2d.h"
 #include "renderer_2d/sprite_pipeline.h"
 
-#include <cstdint>
 #include <span>
 #include <vector>
 
@@ -26,20 +25,31 @@ namespace buz
 	/// the next draw needs another one. Games draw through world_renderer_2d
 	/// and screen_renderer, which turn their shapes into these calls.
 	///
-	/// Like the 3D renderer, the pass keeps the engine's render_context and
-	/// starts itself: its first draw of a frame takes the frame's command
-	/// list and goes back to window pixels (see set_view_projection).
+	/// The game class that owns the renderer starts the pass with the
+	/// frame's command list (begin_frame) before handing the renderer to the
+	/// game, and ends it after.
 	class sprite_pass
 	{
 	public:
 		//----------------------------------------------------------
 		/// @brief Creates the pass and the sprite pipeline it draws with.
 		/// @param context The engine's render context.
-		explicit sprite_pass(const render_context& context);
+		/// @param sampler_filter How its textures are filtered when scaled
+		/// on screen.
+		sprite_pass(const render_context& context, texture_filter sampler_filter);
 		~sprite_pass();
 
 		sprite_pass(const sprite_pass&) = delete;
 		sprite_pass& operator=(const sprite_pass&) = delete;
+
+		//----------------------------------------------------------
+		/// @brief Draws into this command list until end_frame, starting in
+		/// window pixels (see set_view_projection).
+		void begin_frame(rhi::command_list& commands);
+
+		//----------------------------------------------------------
+		/// @brief Stops drawing into the frame begin_frame started.
+		void end_frame();
 
 		//----------------------------------------------------------
 		/// @brief Draws one quad with the given texture, uv rect (offset xy +
@@ -66,10 +76,10 @@ namespace buz
 
 	private:
 		//----------------------------------------------------------
-		/// @brief Starts the pass when the engine has started a new frame
-		/// since the last draw: takes the frame's command list and goes back
-		/// to window pixels.
-		void start_frame_if_new();
+		/// @brief Asserts that the pass was started: the game draws only in
+		/// the render function that gets the renderer.
+		void assert_started() const;
+
 		//----------------------------------------------------------
 		/// @brief What the command list is set up for; switching costs a
 		/// few commands, so it only happens when the next draw needs it.
@@ -86,10 +96,9 @@ namespace buz
 		/// unless it still is.
 		void bind(bound_state state);
 
-		const render_context& m_context;       // the engine's: the device, and the frame being drawn
+		const render_context& m_context;       // the engine's: the device
 		sprite_pipeline m_pipeline;            // what the pass draws with
-		uint64_t m_frame;                      // the frame the pass was started for
-		rhi::command_list* m_commands;         // not owned: the frame being drawn
+		rhi::command_list* m_commands;         // not owned: the frame being drawn, nullptr outside it
 		bound_state m_bound;                   // what m_commands is set up for
 		const rhi::pipeline* m_bound_pipeline; // the pipeline bind set, to see whether another renderer replaced it
 

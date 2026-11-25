@@ -79,7 +79,7 @@ namespace buz
 		/// @brief How triangles are filled.
 		enum class fill_mode
 		{
-			solid,
+			solid,     // the whole triangle
 			wireframe, // only the edges: a debug view
 		};
 
@@ -89,8 +89,12 @@ namespace buz
 		/// Every pipeline has the same, fixed resource layout, which keeps
 		/// the backends small:
 		/// - constants_size bytes of per-draw constants, cbuffer register(b0)
+		/// - the shader data shared between draws, cbuffer register(b1)
+		///   (command_list::set_shader_data)
+		/// - the data that changes once a frame, cbuffer register(b2)
+		///   (command_list::set_frame_data)
 		/// - one texture, register(t0), read by the pixel shader
-		/// - one sampler, register(s0), filtering as sampler_filter says
+		/// - one sampler, register(s0), filtering as filter says
 		struct pipeline_desc
 		{
 			std::string name; // unique; also the key in the pipeline cache
@@ -102,7 +106,7 @@ namespace buz
 
 			uint32_t constants_size = 0; // at most k_max_constants_size bytes
 
-			texture_filter sampler_filter = texture_filter::linear; // how the texture is filtered when scaled
+			sampler_filter filter = sampler_filter::linear; // how the texture is filtered when scaled
 			alpha_blending blending = alpha_blending::yes;          // whether alpha blends with what is drawn
 
 			rhi::topology primitive_topology = rhi::topology::triangles; // what the vertices form
@@ -115,6 +119,18 @@ namespace buz
 		/// @brief Per-draw constants may not be bigger than this: 128 bytes is
 		/// what every Vulkan implementation guarantees for push constants.
 		inline constexpr uint32_t k_max_constants_size = 128;
+
+		//----------------------------------------------------------
+		/// @brief Shader data (command_list::set_shader_data) may not be
+		/// bigger than this. Every backend reserves the full size each time,
+		/// so a shader may declare a block of any size up to it.
+		inline constexpr uint32_t k_max_shader_data_size = 4096;
+
+		//----------------------------------------------------------
+		/// @brief Frame data (command_list::set_frame_data) may not be
+		/// bigger than this. Every backend reserves the full size, like it
+		/// does for the shader data; a camera's matrix and position take 80.
+		inline constexpr uint32_t k_max_frame_data_size = 256;
 
 		//----------------------------------------------------------
 		/// @brief A compiled shader pair plus all fixed state for drawing.

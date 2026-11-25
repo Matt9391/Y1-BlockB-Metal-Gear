@@ -1,8 +1,8 @@
 # -------------------------------
 # Copy the content folder (textures, ...) next to the executable so the
 # engine can load assets with paths relative to the executable. Defined
-# before the games are added, so each game's own CMakeLists.txt can
-# depend on it directly with ADD_DEPENDENCIES(<target> copy-content).
+# before the games are added, so BUZ_GAME (cmake/buz_game.cmake) can make
+# every game depend on it.
 # -------------------------------
 FILE(GLOB_RECURSE CONTENT_FILES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/content/*")
 SOURCE_GROUP(TREE "${CMAKE_SOURCE_DIR}/content" PREFIX "content" FILES ${CONTENT_FILES})

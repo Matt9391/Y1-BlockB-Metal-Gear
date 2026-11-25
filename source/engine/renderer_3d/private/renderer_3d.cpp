@@ -4,13 +4,15 @@
 
 #include "core/assert.h"
 #include "core/log.h"
+#include "render_core/sampler_filter.h"
+#include "render_core/shader_library.h"
+#include "render_core/texture_loader.h"
 #include "renderer_3d/mesh.h"
+#include "renderer_3d/mesh_creation.h"
 #include "rhi/command_list.h"
 #include "rhi/device.h"
 #include "rhi/gpu_texture.h"
 #include "rhi/pipeline.h"
-#include "rhi/shader_library.h"
-#include "rhi/texture_loader.h"
 
 #include <cstddef>
 
@@ -18,11 +20,11 @@ namespace
 {
 	//--------------------------------------------------------------
 	/// @brief Constants sent to the mesh shaders for every draw (must match
-	/// mesh_vs.hlsl and mesh_ps.hlsl): exactly the 128 bytes every backend
-	/// guarantees.
+	/// diffuse_vs.hlsl and diffuse_ps.hlsl): exactly the 128 bytes every backend
+	/// guarantees. The camera is in frame_data.
 	struct mesh_constants
 	{
-		buz::mat4 world_view_projection; // object space to the screen
+		buz::mat4 world; // object space to world space
 
 		// Rows of the normal matrix. Shaders read constants in rows of four
 		// floats, so each row shares its four floats with one setting.
@@ -40,14 +42,35 @@ namespace
 	static_assert(offsetof(mesh_constants, base_color) == 112, "every normal row and its setting must fill 16 bytes, as the shaders read them");
 
 	//--------------------------------------------------------------
+	/// @brief The camera, sent to the mesh shaders once a frame and again
+	/// when it changes (register(b2); must match diffuse_vs.hlsl and
+	/// diffuse_ps.hlsl).
+	struct frame_data
+	{
+		buz::mat4 view_projection; // world space to the screen
+		buz::vec4 camera_position; // in world space; w is 1 and fills the row
+	};
+
+	static_assert(sizeof(frame_data) <= buz::rhi::k_max_frame_data_size, "the frame data no longer fits");
+	static_assert(offsetof(frame_data, camera_position) == 64, "the camera position must start a row of four floats, as the shaders read it");
+
+	//--------------------------------------------------------------
+	/// @brief The two matrices of a camera (see world_renderer_3d::set_camera).
+	struct camera_matrices
+	{
+		buz::mat4 view;       // world space to camera space
+		buz::mat4 projection; // camera space to the screen
+	};
+
+	//--------------------------------------------------------------
 	/// @brief The camera a world is seen through until the game sets one:
 	/// up, behind and to the side of the origin, looking at it.
-	buz::mat4 make_default_camera(const buz::rhi::device& device)
+	camera_matrices make_default_camera(const buz::rhi::device& device)
 	{
 		const float aspect_ratio = static_cast<float>(device.get_width()) / static_cast<float>(device.get_height());
 		const buz::mat4 view = glm::lookAtRH(buz::vec3(8.0f, 10.0f, 13.0f), buz::vec3(0.0f, 0.0f, 0.0f), buz::vec3(0.0f, 1.0f, 0.0f));
 		const buz::mat4 projection = glm::perspectiveRH_ZO(buz::radians(60.0f), aspect_ratio, 0.1f, 200.0f);
-		return projection * view;
+		return { view, projection };
 	}
 
 	//--------------------------------------------------------------
@@ -63,10 +86,17 @@ namespace buz
 	//--------------------------------------------------------------
 	renderer_3d::renderer_3d(const render_context& context)
 		: m_context(context)
-		, m_view_projection(make_default_camera(*context.device))
+		, m_commands(nullptr)
+		, m_view_projection(1.0f)
+		, m_camera_position(0.0f)
+		, m_camera_uploaded(false)
+		, m_shader_data_uploaded(false)
 	{
+		const camera_matrices default_camera = make_default_camera(*context.device);
+		set_camera(default_camera.view, default_camera.projection);
+
 		shader_library& shaders = *context.shaders;
-		set_mesh_shading(mesh_shading{});
+		set_surface_shading(surface_shading{});
 
 		rhi::pipeline_desc line_desc;
 		line_desc.name = "debug_line_pipeline";
@@ -84,7 +114,7 @@ namespace buz
 		for (size_t shape = 0; shape < m_primitives.size(); ++shape)
 		{
 			const mesh_data data = make_primitive(static_cast<primitive>(shape));
-			m_primitives[shape] = upload_mesh(context, data.vertices, data.indices);
+			m_primitives[shape] = create_mesh(context, data.vertices, data.indices);
 		}
 
 		const uint8_t white_pixel[4] = { 255, 255, 255, 255 };
@@ -97,14 +127,44 @@ namespace buz
 	renderer_3d::~renderer_3d() = default;
 
 	//--------------------------------------------------------------
-	void renderer_3d::set_mesh_shading(const mesh_shading& shading)
+	void renderer_3d::begin_frame(rhi::command_list& commands)
 	{
-		// Building pipelines is slow: only when the shading changes
-		if (m_mesh_pipelines[0] != nullptr && shading == m_mesh_shading)
+		m_commands = &commands;
+
+		// A new frame selects no shader data and no camera until a mesh
+		// draw copies them in
+		m_shader_data_uploaded = false;
+		m_camera_uploaded = false;
+	}
+
+	//--------------------------------------------------------------
+	void renderer_3d::end_frame()
+	{
+		m_commands = nullptr;
+	}
+
+	//--------------------------------------------------------------
+	void renderer_3d::set_debug_views(const debug_views& views)
+	{
+		m_debug_views = views;
+	}
+
+	//--------------------------------------------------------------
+	const debug_views& renderer_3d::get_debug_views() const
+	{
+		return m_debug_views;
+	}
+
+	//--------------------------------------------------------------
+	void renderer_3d::set_surface_shading(const surface_shading& shading)
+	{
+		// Building pipelines is slow, so it only happens when the shading
+		// changes
+		if (m_mesh_pipelines[0] != nullptr && shading == m_surface_shading)
 		{
 			return;
 		}
-		m_mesh_shading = shading;
+		m_surface_shading = shading;
 
 		// The same shaders and layout in two pipelines: solid, and wireframe
 		// (a debug view that changes fixed state)
@@ -118,7 +178,7 @@ namespace buz
 		};
 		desc.constants_size = sizeof(mesh_constants);
 		desc.depth = depth_test::yes;
-		desc.sampler_filter = shading.filter;
+		desc.filter = to_sampler_filter(shading.filter);
 
 		for (int wireframe = 0; wireframe < 2; ++wireframe)
 		{
@@ -130,32 +190,75 @@ namespace buz
 	}
 
 	//--------------------------------------------------------------
-	void renderer_3d::set_view_projection(const mat4& view_projection)
+	void renderer_3d::set_shader_data(std::span<const std::byte> data)
 	{
-		m_view_projection = view_projection;
+		BUZ_ASSERT_MSG(data.size() <= rhi::k_max_shader_data_size, "shader data must be at most {} bytes, not {}", rhi::k_max_shader_data_size, data.size());
+		m_shader_data.assign(data.begin(), data.end());
+		m_shader_data_uploaded = false;
+	}
+
+	//--------------------------------------------------------------
+	void renderer_3d::upload_shader_data(rhi::command_list& commands)
+	{
+		// The command list keeps it selected for the rest of the frame,
+		// whatever pipelines the 2D side sets in between
+		if (m_shader_data.empty() || m_shader_data_uploaded)
+		{
+			return;
+		}
+
+		m_shader_data_uploaded = commands.set_shader_data(m_shader_data);
+	}
+
+	//--------------------------------------------------------------
+	void renderer_3d::set_camera(const mat4& view, const mat4& projection)
+	{
+		// Column-vector convention: the view applies first, then the
+		// projection, so the projection comes first in the product. The
+		// view moves the camera to the origin, so its inverse moves the
+		// origin to the camera.
+		m_view_projection = projection * view;
+		m_camera_position = vec3(inverse(view)[3]);
+		m_camera_uploaded = false;
+	}
+
+	//--------------------------------------------------------------
+	void renderer_3d::upload_frame_data(rhi::command_list& commands)
+	{
+		// Like the shader data, it stays selected for the rest of the frame
+		if (m_camera_uploaded)
+		{
+			return;
+		}
+
+		const frame_data camera = { m_view_projection, vec4(m_camera_position, 1.0f) };
+		m_camera_uploaded = commands.set_frame_data(std::as_bytes(std::span(&camera, 1)));
 	}
 
 	//--------------------------------------------------------------
 	rhi::command_list& renderer_3d::get_commands() const
 	{
-		// The world pass only records while game::on_render_world runs
-		BUZ_ASSERT(m_context.commands != nullptr);
-		return *m_context.commands;
+		// The frame's command list is only set while the game draws the
+		// world (game_3d::on_render_world)
+		BUZ_ASSERT_MSG(m_commands != nullptr, "the 3D world can only be drawn while on_render_world runs");
+		return *m_commands;
 	}
 
 	//--------------------------------------------------------------
 	const rhi::pipeline& renderer_3d::select_mesh_pipeline() const
 	{
-		return *m_mesh_pipelines[m_context.views.wireframe ? 1 : 0];
+		return *m_mesh_pipelines[m_debug_views.wireframe ? 1 : 0];
 	}
 
 	//--------------------------------------------------------------
-	void renderer_3d::draw(const mesh& shape, const material& look, const mat4& transform)
+	void renderer_3d::draw(const mesh& shape, const material& look, const texture* surface, const mat4& transform)
 	{
-		// The sprites' pipeline is replaced below; the next sprite notices
-		// (rhi::command_list::get_pipeline) and sets it again
+		// The sprites' pipeline is replaced below; the next sprite draw sees
+		// the change (rhi::command_list::get_pipeline) and sets it again
 		rhi::command_list& commands = get_commands();
 		commands.set_pipeline(select_mesh_pipeline());
+		upload_shader_data(commands);
+		upload_frame_data(commands);
 		const gpu_mesh& buffers = to_gpu_mesh(shape);
 		commands.set_vertex_buffer(buffers.get_vertex_buffer());
 		commands.set_index_buffer(buffers.get_index_buffer());
@@ -165,10 +268,10 @@ namespace buz
 		// The rows of that transpose are the columns of the inverse, and glm
 		// stores a matrix as its columns.
 		const mat3 inverse_world = inverse(mat3(transform));
-		const bool lit = look.lit && m_context.views.lighting;
+		const bool lit = look.lit && m_debug_views.lighting;
 
 		mesh_constants constants;
-		constants.world_view_projection = m_view_projection * transform;
+		constants.world = transform;
 		constants.normal_row_0 = inverse_world[0];
 		constants.lit = lit ? 1.0f : 0.0f;
 		constants.normal_row_1 = inverse_world[1];
@@ -178,20 +281,20 @@ namespace buz
 		constants.base_color = look.base_color;
 
 		commands.set_constants(std::as_bytes(std::span(&constants, 1)));
-		commands.set_texture(rhi::to_gpu_texture(look.base_texture != nullptr ? *look.base_texture : *m_white_texture));
+		commands.set_texture((surface != nullptr ? *surface : *m_white_texture).get_gpu_texture());
 		commands.draw_indexed(shape.get_index_count());
 	}
 
 	//--------------------------------------------------------------
 	void renderer_3d::draw(primitive shape, const material& look, const mat4& transform)
 	{
-		draw(*m_primitives[static_cast<size_t>(shape)], look, transform);
+		draw(*m_primitives[static_cast<size_t>(shape)], look, nullptr, transform);
 	}
 
 	//--------------------------------------------------------------
 	void renderer_3d::draw_lines(std::span<const line_vertex> vertices)
 	{
-		if (!m_context.views.debug_lines || vertices.empty())
+		if (!m_debug_views.debug_lines || vertices.empty())
 		{
 			return;
 		}

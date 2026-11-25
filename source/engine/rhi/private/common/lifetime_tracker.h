@@ -15,7 +15,7 @@ namespace buz::rhi
 	/// both leave it to the application to wait. So a destroyed resource is
 	/// not freed right away: its api objects move into a release that runs
 	/// once the gpu passed the fence value of the last frame that could use
-	/// them. Both backends use this same class, in the same places.
+	/// them. Every backend uses this same class, in the same places.
 	class lifetime_tracker
 	{
 	public:

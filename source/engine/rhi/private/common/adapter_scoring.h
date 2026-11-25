@@ -12,12 +12,14 @@ namespace buz::rhi
 	/// @brief Picks a graphics card from a scored list; the same rule for
 	/// every backend.
 	///
-	/// Each backend describes its graphics cards in its own adapter_info
-	/// (what DirectX or Vulkan can tell about a card differs), but both
-	/// have a score and know whether a card is a software rasterizer.
+	/// The DirectX 12 and Vulkan backends each describe their graphics cards
+	/// in their own adapter_info (what the two apis can tell about a card
+	/// differs), but both versions have a score and know whether a card is a
+	/// software rasterizer. OpenGL cannot choose a card, so it has neither.
 	/// Software adapters only take part when there is no real graphics card,
-	/// or when they are asked for: tests pick one on purpose, so a machine
-	/// without one fails instead of quietly drawing on a real card.
+	/// or when they are asked for. Tests ask for one on purpose, so a machine
+	/// without a software rasterizer fails the test instead of quietly
+	/// drawing on a real card.
 	/// @param adapters Scored adapters.
 	/// @param preference Which adapter to pick.
 	/// @return The selected adapter, or nullptr when there is none to pick.
@@ -30,8 +32,8 @@ namespace buz::rhi
 			return software != adapters.end() ? &*software : nullptr;
 		}
 
-		// any_of asks "does at least one element satisfy the predicate?";
-		// the predicate is a lambda, a small unnamed function written in place.
+		// any_of returns true when at least one element satisfies the
+		// predicate; the predicate is a lambda, a small unnamed function written in place.
 		const bool ignore_software = std::ranges::any_of(adapters, [](const adapter_info& info) { return !info.is_software; });
 
 		// A lazy view over the adapters that are allowed to compete; nothing

@@ -1,11 +1,12 @@
 #include "renderer_2d/sprite_pass.h"
 
 #include "core/assert.h"
+#include "render_core/render_context.h"
+#include "render_core/texture.h"
 #include "rhi/command_list.h"
 #include "rhi/device.h"
 #include "rhi/gpu_texture.h"
 #include "rhi/pipeline.h"
-#include "rhi/render_context.h"
 #include "sprite_layout.h"
 
 #include <cstddef>
@@ -37,15 +38,14 @@ namespace
 namespace buz
 {
 	//--------------------------------------------------------------
-	sprite_pass::sprite_pass(const render_context& context)
+	sprite_pass::sprite_pass(const render_context& context, texture_filter sampler_filter)
 		: m_context(context)
-		, m_frame(0)
 		, m_commands(nullptr)
 		, m_bound(bound_state::nothing)
 		, m_bound_pipeline(nullptr)
 		, m_view_projection(1.0f)
 	{
-		if (!m_pipeline.initialize(*context.device, *context.shaders, *context.textures, context.sampler_filter))
+		if (!m_pipeline.initialize(*context.device, *context.shaders, *context.textures, sampler_filter))
 		{
 			fatal_error("Could not create the sprite pipeline. The console says why.");
 		}
@@ -55,16 +55,9 @@ namespace buz
 	sprite_pass::~sprite_pass() = default;
 
 	//--------------------------------------------------------------
-	void sprite_pass::start_frame_if_new()
+	void sprite_pass::begin_frame(rhi::command_list& commands)
 	{
-		if (m_frame == m_context.frame)
-		{
-			return;
-		}
-
-		BUZ_ASSERT(m_context.commands != nullptr);
-		m_frame = m_context.frame;
-		m_commands = m_context.commands;
+		m_commands = &commands;
 
 		// Every frame starts in window pixels, (0, 0) in the top-left
 		// corner, until a camera is set
@@ -74,6 +67,18 @@ namespace buz
 
 		// Nothing is bound yet: the first draw sets up what it needs
 		m_bound = bound_state::nothing;
+	}
+
+	//--------------------------------------------------------------
+	void sprite_pass::end_frame()
+	{
+		m_commands = nullptr;
+	}
+
+	//--------------------------------------------------------------
+	void sprite_pass::assert_started() const
+	{
+		BUZ_ASSERT_MSG(m_commands != nullptr, "a 2D renderer can only draw while the render function that got it runs");
 	}
 
 	//--------------------------------------------------------------
@@ -101,7 +106,7 @@ namespace buz
 	//--------------------------------------------------------------
 	void sprite_pass::submit_quad(const texture& quad_texture, vec4 uv_rect, vec2 position, vec2 size, float rotation_radians, color tint)
 	{
-		start_frame_if_new();
+		assert_started();
 
 		// Combine the quad transformation with the camera (column-vector
 		// convention: the view projection is applied last, so it comes
@@ -113,14 +118,14 @@ namespace buz
 
 		bind(bound_state::sprite_quad);
 		m_commands->set_constants(std::as_bytes(std::span(&constants, 1)));
-		m_commands->set_texture(rhi::to_gpu_texture(quad_texture));
+		m_commands->set_texture(quad_texture.get_gpu_texture());
 		m_commands->draw_indexed(6);
 	}
 
 	//--------------------------------------------------------------
 	void sprite_pass::submit_triangles(std::span<const vec2> corners, color fill_color)
 	{
-		start_frame_if_new();
+		assert_started();
 
 		// The sprite shader draws these too: with the white texture and the
 		// camera as the only transformation, a vertex lands exactly where
@@ -145,7 +150,7 @@ namespace buz
 		constants.uv_rect = { 0.0f, 0.0f, 1.0f, 1.0f };
 
 		m_commands->set_constants(std::as_bytes(std::span(&constants, 1)));
-		m_commands->set_texture(rhi::to_gpu_texture(m_pipeline.get_white_texture()));
+		m_commands->set_texture(m_pipeline.get_white_texture().get_gpu_texture());
 		m_commands->draw(static_cast<uint32_t>(vertices.size()));
 	}
 
@@ -157,7 +162,7 @@ namespace buz
 			return;
 		}
 
-		start_frame_if_new();
+		assert_started();
 
 		// Convert every sprite into what the shader reads: source rects in
 		// texture pixels become 0..1 texture space here, once per sprite.
@@ -184,7 +189,7 @@ namespace buz
 
 		const instanced_constants constants = { m_view_projection };
 		m_commands->set_constants(std::as_bytes(std::span(&constants, 1)));
-		m_commands->set_texture(rhi::to_gpu_texture(sprite_texture));
+		m_commands->set_texture(sprite_texture.get_gpu_texture());
 		m_commands->draw_indexed(6, static_cast<uint32_t>(instances.size()));
 	}
 
@@ -197,8 +202,6 @@ namespace buz
 	//--------------------------------------------------------------
 	void sprite_pass::set_view_projection(const mat4& view_projection)
 	{
-		// Start first, so starting doesn't undo the camera
-		start_frame_if_new();
 		m_view_projection = view_projection;
 	}
 }

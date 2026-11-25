@@ -1,9 +1,9 @@
 #pragma once
 
 #include "core/math.h"
-#include "engine/game_2d.h"
+#include "game_framework/game_2d.h"
+#include "render_core/texture.h"
 #include "renderer_2d/font.h"
-#include "rhi/texture.h"
 
 #include <memory>
 
@@ -11,8 +11,9 @@
 /// @brief A tiny "catch the ball" game, meant as a first project.
 ///
 /// A ball falls from the top of the screen; slide the paddle left and right
-/// to catch it and the score goes up. Read on_update(), on_render_world() and
-/// on_render_screen() in sample_2d_game.cpp from top to bottom - that is the whole game.
+/// to catch it and the score goes up. The whole game is in on_update(),
+/// on_render_world() and on_render_screen() in sample_2d_game.cpp; read them
+/// from top to bottom.
 ///
 /// This is the simplest game in the repo: a good place to start reading.
 class sample_2d_game : public buz::game_2d
@@ -40,8 +41,9 @@ private:
 	/// @brief Drops a fresh ball from just above the top at a random x.
 	void respawn_ball();
 
-	// The engine hands textures back as a shared_ptr; you never new/delete
-	// them yourself. Just store it and pass it to draw_sprite every frame.
+	// The engine hands textures back as a shared_ptr, so you never new or
+	// delete them yourself: store the pointer and pass the texture to
+	// draw_sprite every frame.
 	std::shared_ptr<buz::texture> m_ball;
 	buz::font m_font;
 

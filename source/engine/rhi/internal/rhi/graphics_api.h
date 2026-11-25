@@ -8,7 +8,7 @@ namespace buz::rhi
 	{
 		d3d12,  // Windows only
 		vulkan, // Windows and Linux
-		opengl, // Windows and Linux (OpenGL 3.3)
+		opengl, // every platform, the browser too (OpenGL 3.3, OpenGL ES 3.0)
 	};
 
 	//--------------------------------------------------------------

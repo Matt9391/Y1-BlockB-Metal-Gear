@@ -11,7 +11,7 @@ namespace buz
 	// after set_random_seed with the same value it always produces the same
 	// sequence, which makes bugs reproducible.
 	//
-	// The actual algorithm (xorshift) lives in source/third_party/rnd.
+	// The algorithm (xorshift) is implemented in source/third_party/rnd.
 
 	//--------------------------------------------------------------
 	/// @brief Seeds the global generator; the same seed gives the same sequence.

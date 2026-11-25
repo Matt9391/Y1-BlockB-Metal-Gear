@@ -10,8 +10,7 @@ namespace buz
 	class screenshot;
 
 	//--------------------------------------------------------------
-	/// @brief Saves the frame being drawn as a png once it is finished,
-	/// e.g. for your learning log.
+	/// @brief Saves the frame being drawn as a png once it is finished.
 	///
 	/// The engine owns one instance (engine::get_screenshots):
 	/// @code{.cpp}
@@ -24,8 +23,8 @@ namespace buz
 	{
 	public:
 		//----------------------------------------------------------
-		/// @brief Asks the engine's screenshot for frames; only the engine
-		/// has one to pass in.
+		/// @brief Captures frames through the engine's screenshot object;
+		/// only the engine has one to pass in.
 		explicit screenshot_saver(screenshot& capture);
 
 		screenshot_saver(const screenshot_saver&) = delete;
@@ -34,7 +33,7 @@ namespace buz
 		//----------------------------------------------------------
 		/// @brief Saves this frame once it is drawn.
 		/// @param path Where the png goes; a relative path ends up in the
-		/// game's saved/<game> folder next to the executable.
+		/// game's `saved/<game>` folder next to the executable.
 		void take(std::string_view path);
 
 	private:

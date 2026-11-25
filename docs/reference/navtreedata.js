@@ -41,7 +41,7 @@ var NAVTREE =
       [ "Class Index", "classes.html", null ],
       [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
       [ "Class Members", "functions.html", [
-        [ "All", "functions.html", null ],
+        [ "All", "functions.html", "functions_dup" ],
         [ "Functions", "functions_func.html", null ],
         [ "Variables", "functions_vars.html", null ]
       ] ]
@@ -59,8 +59,9 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "aabb_8h.html",
-"font_8h.html",
-"structbuz_1_1font.html#a4daa27de7eeaabf167d0dd74e9261e06"
+"classbuz_1_1world__renderer__2d.html#a810d2ed9eda5a29f48ddeb2408ee3598",
+"namespacebuz_1_1internal.html",
+"texture__id_8h_source.html"
 ];
 
 const SYNCONMSG = 'click to disable panel synchronization';

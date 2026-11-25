@@ -44,7 +44,8 @@ namespace
 		log_output();
 
 		//----------------------------------------------------------
-		/// @brief Writes one line everywhere.
+		/// @brief Writes one line to the console, the debugger output (on
+		/// Windows) and the log file.
 		void write(const char* name, const char* color, std::string_view text);
 
 	private:

@@ -18,10 +18,10 @@ namespace buz
 {
 	//--------------------------------------------------------------
 	// The render hardware interface (rhi): the small graphics api the
-	// renderers are written against. It offers exactly what buz needs and
-	// nothing more; every graphics api buz runs on (DirectX 12, Vulkan and
-	// OpenGL) implements it once in its own backend folder, so the renderers
-	// work on all of them unchanged.
+	// renderers are written against. It offers only what buz needs; every
+	// graphics api buz runs on (DirectX 12, Vulkan and OpenGL) implements it
+	// once in its own backend folder, so the renderers work on all of them
+	// unchanged.
 	//
 	// A build compiles exactly one backend, picked by CMake's BUZ_RHI
 	// option. A game never switches graphics api while it runs, so there is
@@ -94,7 +94,8 @@ namespace buz
 			std::unique_ptr<buffer> create_buffer(buffer_usage usage, std::span<const std::byte> data, uint32_t stride);
 
 			//------------------------------------------------------
-			/// @brief Creates a pipeline, from the pipeline cache when possible.
+			/// @brief Creates a pipeline, from the pipeline cache when possible
+			/// (DirectX 12 and Vulkan).
 			/// @return The pipeline, or nullptr when creating it failed.
 			std::unique_ptr<pipeline> create_pipeline(const pipeline_desc& desc);
 
@@ -116,10 +117,12 @@ namespace buz
 
 			//------------------------------------------------------
 			/// @brief Blocks until the gpu finished all submitted work, frees
-			/// what was waiting for that, and stores the pipeline cache.
-			/// Called once before the device is destroyed; every texture,
-			/// buffer and pipeline must have been destroyed by then (the
-			/// device logs an error for the ones that were not).
+			/// what was waiting for that, and stores the pipeline cache
+			/// (DirectX 12 and Vulkan).
+			/// Called once before the device is destroyed. Every texture,
+			/// buffer and pipeline must have been destroyed by then: the
+			/// device stops the program with a fatal error when one is
+			/// still alive.
 			void shutdown();
 
 			//------------------------------------------------------

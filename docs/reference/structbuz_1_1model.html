@@ -169,8 +169,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a9e347310d4e3563d0e6e719a049e2bde"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the index of the first node with this name, or -1.  <br /></td></tr>
 <tr class="memitem:a4a2ed225fdb4aaa575eb8caf1a762220" id="r_a4a2ed225fdb4aaa575eb8caf1a762220"><td class="memItemLeft">const <a class="el" href="structbuz_1_1keyframe__clip.html">keyframe_clip</a> *&#160;</td><td class="memItemRight"><a class="el" href="#a4a2ed225fdb4aaa575eb8caf1a762220">find_clip</a> (const std::string &amp;name) const</td></tr>
 <tr class="memdesc:a4a2ed225fdb4aaa575eb8caf1a762220"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the clip with this name, or nullptr.  <br /></td></tr>
-<tr class="memitem:ac53b702309abc9c483b9f57e388b6836" id="r_ac53b702309abc9c483b9f57e388b6836"><td class="memItemLeft">std::vector&lt; <a class="el" href="structbuz_1_1joint__pose.html">joint_pose</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#ac53b702309abc9c483b9f57e388b6836">get_rest_pose</a> () const</td></tr>
-<tr class="memdesc:ac53b702309abc9c483b9f57e388b6836"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns every node's pose as placed in the file.  <br /></td></tr>
+<tr class="memitem:a8b2add9ae9810b35bd83efe8b8816912" id="r_a8b2add9ae9810b35bd83efe8b8816912"><td class="memItemLeft">std::vector&lt; <a class="el" href="structbuz_1_1node__transform.html">node_transform</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a8b2add9ae9810b35bd83efe8b8816912">get_rest_pose</a> () const</td></tr>
+<tr class="memdesc:a8b2add9ae9810b35bd83efe8b8816912"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns every node's pose as placed in the file.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -182,7 +182,7 @@ Public Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Everything in a glTF file: the nodes and the animations. </p>
 
-<p class="definition">Definition at line <a class="el" href="model_8h_source.html#l00073">73</a> of file <a class="el" href="model_8h_source.html">model.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="model_8h_source.html#l00105">105</a> of file <a class="el" href="model_8h_source.html">model.h</a>.</p>
 </div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
 <a id="a9e347310d4e3563d0e6e719a049e2bde" name="a9e347310d4e3563d0e6e719a049e2bde"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9e347310d4e3563d0e6e719a049e2bde">&#9670;&#160;</a></span>find_node()</h2>
@@ -222,14 +222,14 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ac53b702309abc9c483b9f57e388b6836" name="ac53b702309abc9c483b9f57e388b6836"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac53b702309abc9c483b9f57e388b6836">&#9670;&#160;</a></span>get_rest_pose()</h2>
+<a id="a8b2add9ae9810b35bd83efe8b8816912" name="a8b2add9ae9810b35bd83efe8b8816912"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b2add9ae9810b35bd83efe8b8816912">&#9670;&#160;</a></span>get_rest_pose()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt; <a class="el" href="structbuz_1_1joint__pose.html">joint_pose</a> &gt; buz::model::get_rest_pose </td>
+          <td class="memname">std::vector&lt; <a class="el" href="structbuz_1_1node__transform.html">node_transform</a> &gt; buz::model::get_rest_pose </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td> const</td>
@@ -256,7 +256,7 @@ Public Attributes</h2></td></tr>
 
 <p>Every node; parents always come before their children. </p>
 
-<p class="definition">Definition at line <a class="el" href="model_8h_source.html#l00076">76</a> of file <a class="el" href="model_8h_source.html">model.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="model_8h_source.html#l00108">108</a> of file <a class="el" href="model_8h_source.html">model.h</a>.</p>
 
 </div>
 </div>
@@ -274,7 +274,7 @@ Public Attributes</h2></td></tr>
 
 <p>Every animation. </p>
 
-<p class="definition">Definition at line <a class="el" href="model_8h_source.html#l00078">78</a> of file <a class="el" href="model_8h_source.html">model.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="model_8h_source.html#l00110">110</a> of file <a class="el" href="model_8h_source.html">model.h</a>.</p>
 
 </div>
 </div>

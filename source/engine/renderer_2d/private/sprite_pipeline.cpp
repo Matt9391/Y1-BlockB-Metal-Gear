@@ -1,11 +1,12 @@
 #include "renderer_2d/sprite_pipeline.h"
 
+#include "render_core/sampler_filter.h"
+#include "render_core/shader_library.h"
+#include "render_core/texture_loader.h"
 #include "rhi/buffer.h"
 #include "rhi/command_list.h"
 #include "rhi/device.h"
 #include "rhi/pipeline.h"
-#include "rhi/shader_library.h"
-#include "rhi/texture_loader.h"
 #include "sprite_layout.h"
 
 #include <cstddef>
@@ -31,7 +32,7 @@ namespace buz
 			{ .semantic = "TEXCOORD", .format = rhi::vertex_format::float2, .offset = offsetof(sprite_vertex, uv) },
 		};
 		desc.constants_size = sizeof(sprite_constants);
-		desc.sampler_filter = sampler_filter;
+		desc.filter = to_sampler_filter(sampler_filter);
 		desc.blending = alpha_blending::yes; // sprites with transparency
 
 		m_pipeline = graphics_device.create_pipeline(desc);

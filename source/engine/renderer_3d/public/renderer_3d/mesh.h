@@ -5,26 +5,14 @@
 #pragma once
 
 #include "core/aabb.h"
-#include "core/math.h"
+#include "core/mesh_data.h"
 
 #include <cstdint>
 
 namespace buz
 {
 	//--------------------------------------------------------------
-	/// @brief One corner of a triangle of a mesh.
-	struct mesh_vertex
-	{
-		/// @brief Where the corner is.
-		vec3 position = { 0.0f, 0.0f, 0.0f };
-		/// @brief The direction the surface faces, for lighting.
-		vec3 normal = { 0.0f, 1.0f, 0.0f };
-		/// @brief Where on the texture this corner is, 0..1.
-		vec2 uv = { 0.0f, 0.0f };
-	};
-
-	//--------------------------------------------------------------
-	/// @brief Triangles in gpu memory, ready to be drawn with draw_mesh.
+	/// @brief Triangles in gpu memory, ready to be drawn with world_renderer_3d::draw.
 	///
 	/// Create one with create_mesh from vertices and indices, or load one
 	/// with load_mesh (both in asset_management/model_loading.h). Like

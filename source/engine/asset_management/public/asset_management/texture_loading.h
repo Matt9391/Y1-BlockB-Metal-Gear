@@ -16,9 +16,9 @@ namespace buz
 	//--------------------------------------------------------------
 	/// @brief Loads a texture from the content folder:
 	/// @code{.cpp}
-	/// std::shared_ptr<buz::texture> ball = buz::load_texture(engine, "textures/ball.png");
+	/// std::shared_ptr<buz::texture> ball = buz::load_texture(engine, "my_game/textures/ball.png");
 	/// @endcode
-	/// loads @c content/textures/ball.png next to the executable.
+	/// loads @c content/my_game/textures/ball.png next to the executable.
 	///
 	/// A failed load is logged and returns a magenta placeholder rather than
 	/// nullptr, so a wrong path shows up on screen instead of crashing the

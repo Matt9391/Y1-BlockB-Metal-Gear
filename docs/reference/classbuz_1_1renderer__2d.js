@@ -1,6 +1,6 @@
 var classbuz_1_1renderer__2d =
 [
-    [ "renderer_2d", "classbuz_1_1renderer__2d.html#ab31e5136e0b26a7f5257ea074a591965", null ],
+    [ "renderer_2d", "classbuz_1_1renderer__2d.html#ac6064d84c693a49d6bbeadcbe781d93d", null ],
     [ "~renderer_2d", "classbuz_1_1renderer__2d.html#acee5d771e67c06f7ec886dd7bcb0f1ba", null ],
     [ "renderer_2d", "classbuz_1_1renderer__2d.html#a0d1628a2a3fd66cfabc07a4442151c33", null ],
     [ "draw_sprite", "classbuz_1_1renderer__2d.html#adeabc2cb1904823c1d67ca8911f70b42", null ],

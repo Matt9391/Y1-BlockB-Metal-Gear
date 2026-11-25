@@ -9,8 +9,9 @@ namespace buz
 {
 	//--------------------------------------------------------------
 	/// @brief 3D axis aligned box: the 3D version of rect, for collision
-	/// checks. Stored as its two extreme corners. The checks themselves are
-	/// yours to write (see the collision guide).
+	/// checks. It is stored as its two extreme corners. The engine has no
+	/// collision checks for it; the game writes them (see the collision
+	/// guide).
 	struct aabb
 	{
 		/// @brief The corner with the smallest x, y and z.

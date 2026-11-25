@@ -16,7 +16,7 @@ struct vertex_input
     float2 position : POSITION;
     float2 uv : TEXCOORD0;
 
-    // Per instance: one sprite (must match gpu_sprite_instance in renderer_2d.cpp)
+    // Per instance: one sprite (must match gpu_sprite_instance in renderer_2d/private/sprite_layout.h)
     float4 position_size : TEXCOORD1; // center in xy, size in zw
     float4 uv_rect : TEXCOORD2;       // offset in xy, scale in zw (0..1 texture space)
     float4 tint : TEXCOORD3;

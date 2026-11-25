@@ -173,8 +173,8 @@ Inheritance diagram for buz::world_renderer_2d:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a39a098efc0178115158d116ad63eebfe" id="r_a39a098efc0178115158d116ad63eebfe"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a39a098efc0178115158d116ad63eebfe">world_renderer_2d</a> (const render_context &amp;context)</td></tr>
-<tr class="memdesc:a39a098efc0178115158d116ad63eebfe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the renderer and its pipeline on the engine's graphics card; <a class="el" href="classbuz_1_1game__2d.html" title="The base class of a game with a 2D world: derive your game from it.">buz::game_2d</a> makes one for your game.  <br /></td></tr>
+<tr class="memitem:a752484e1894deda0c639499201114505" id="r_a752484e1894deda0c639499201114505"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a752484e1894deda0c639499201114505">world_renderer_2d</a> (const render_context &amp;context, <a class="el" href="namespacebuz.html#a5e0429f08408e32e673a381a6e82a96c">texture_filter</a> sampler_filter)</td></tr>
+<tr class="memdesc:a752484e1894deda0c639499201114505"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the renderer and its pipeline on the engine's graphics card; <a class="el" href="classbuz_1_1game__2d.html" title="The base class of a game with a 2D world: derive your game from it.">buz::game_2d</a> makes one for your game.  <br /></td></tr>
 <tr class="memitem:a810d2ed9eda5a29f48ddeb2408ee3598" id="r_a810d2ed9eda5a29f48ddeb2408ee3598"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a810d2ed9eda5a29f48ddeb2408ee3598">set_camera</a> (const <a class="el" href="namespacebuz.html#acdb2c70a0426fc209337d5bcdf33333c">mat4</a> &amp;view, const <a class="el" href="namespacebuz.html#acdb2c70a0426fc209337d5bcdf33333c">mat4</a> &amp;projection)</td></tr>
 <tr class="memdesc:a810d2ed9eda5a29f48ddeb2408ee3598"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the camera for the rest of this frame.  <br /></td></tr>
 <tr class="inherit_header pub_methods_classbuz_1_1renderer__2d"><td colspan="2">Public Member Functions inherited from <a class="el" href="classbuz_1_1renderer__2d.html">buz::renderer_2d</a></td></tr>
@@ -197,55 +197,52 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a987b38d9baba4203bdc93e8bf9331053 pub_methods_classbuz_1_1renderer__2d" id="r_a987b38d9baba4203bdc93e8bf9331053"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="classbuz_1_1renderer__2d.html#a987b38d9baba4203bdc93e8bf9331053">draw_text</a> (const <a class="el" href="structbuz_1_1font.html">font</a> &amp;text_font, std::string_view text, <a class="el" href="namespacebuz.html#a97def2f877690e2da5aac438c7cfe9b9">vec2</a> position, float pixel_height, <a class="el" href="structbuz_1_1color.html">color</a> tint=<a class="el" href="structbuz_1_1color.html">color</a>{})</td></tr>
 <tr class="memdesc:a987b38d9baba4203bdc93e8bf9331053 pub_methods_classbuz_1_1renderer__2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a line of text with a bitmap font. Newlines (<span class="tt">'\n'</span>) continue on the next line.  <br /></td></tr>
 <tr class="memitem:a6a9099128736ff7c2449218044b69130 pub_methods_classbuz_1_1renderer__2d" id="r_a6a9099128736ff7c2449218044b69130"><td class="memItemLeft">sprite_pass &amp;&#160;</td><td class="memItemRight"><a class="el" href="classbuz_1_1renderer__2d.html#a6a9099128736ff7c2449218044b69130">get_pass</a> () const</td></tr>
-<tr class="memdesc:a6a9099128736ff7c2449218044b69130 pub_methods_classbuz_1_1renderer__2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the engine's side of this renderer (<a class="el" href="#a810d2ed9eda5a29f48ddeb2408ee3598" title="Sets the camera for the rest of this frame.">world_renderer_2d::set_camera</a> changes its camera). A game cannot use it: the type lives in the module's internal headers.  <br /></td></tr>
+<tr class="memdesc:a6a9099128736ff7c2449218044b69130 pub_methods_classbuz_1_1renderer__2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the engine's side of this renderer (<a class="el" href="#a810d2ed9eda5a29f48ddeb2408ee3598" title="Sets the camera for the rest of this frame.">world_renderer_2d::set_camera</a> changes its camera). A game cannot use it: sprite_pass is defined in the module's internal headers.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-inherited" class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pro_methods_classbuz_1_1renderer__2d"><td colspan="2">Protected Member Functions inherited from <a class="el" href="classbuz_1_1renderer__2d.html">buz::renderer_2d</a></td></tr>
-<tr class="memitem:ab31e5136e0b26a7f5257ea074a591965 pro_methods_classbuz_1_1renderer__2d" id="r_ab31e5136e0b26a7f5257ea074a591965"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="classbuz_1_1renderer__2d.html#ab31e5136e0b26a7f5257ea074a591965">renderer_2d</a> (const render_context &amp;context)</td></tr>
+<tr class="memitem:ac6064d84c693a49d6bbeadcbe781d93d pro_methods_classbuz_1_1renderer__2d" id="r_ac6064d84c693a49d6bbeadcbe781d93d"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="classbuz_1_1renderer__2d.html#ac6064d84c693a49d6bbeadcbe781d93d">renderer_2d</a> (const render_context &amp;context, <a class="el" href="namespacebuz.html#a5e0429f08408e32e673a381a6e82a96c">texture_filter</a> sampler_filter)</td></tr>
 <tr class="memitem:acee5d771e67c06f7ec886dd7bcb0f1ba pro_methods_classbuz_1_1renderer__2d" id="r_acee5d771e67c06f7ec886dd7bcb0f1ba"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="classbuz_1_1renderer__2d.html#acee5d771e67c06f7ec886dd7bcb0f1ba">~renderer_2d</a> ()</td></tr>
 <tr class="memitem:a0d1628a2a3fd66cfabc07a4442151c33 pro_methods_classbuz_1_1renderer__2d" id="r_a0d1628a2a3fd66cfabc07a4442151c33"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="classbuz_1_1renderer__2d.html#a0d1628a2a3fd66cfabc07a4442151c33">renderer_2d</a> (const renderer_2d &amp;)=delete</td></tr>
-<tr class="memitem:a2dbd71eff9e0c2fd53ae1775ba1b90c8 pro_methods_classbuz_1_1renderer__2d" id="r_a2dbd71eff9e0c2fd53ae1775ba1b90c8"><td class="memItemLeft"><a class="el" href="classbuz_1_1renderer__2d.html#ab31e5136e0b26a7f5257ea074a591965">renderer_2d</a> &amp;&#160;</td><td class="memItemRight"><a class="el" href="classbuz_1_1renderer__2d.html#a2dbd71eff9e0c2fd53ae1775ba1b90c8">operator=</a> (const <a class="el" href="classbuz_1_1renderer__2d.html#ab31e5136e0b26a7f5257ea074a591965">renderer_2d</a> &amp;)=delete</td></tr>
+<tr class="memitem:a2dbd71eff9e0c2fd53ae1775ba1b90c8 pro_methods_classbuz_1_1renderer__2d" id="r_a2dbd71eff9e0c2fd53ae1775ba1b90c8"><td class="memItemLeft"><a class="el" href="classbuz_1_1renderer__2d.html#ac6064d84c693a49d6bbeadcbe781d93d">renderer_2d</a> &amp;&#160;</td><td class="memItemRight"><a class="el" href="classbuz_1_1renderer__2d.html#a2dbd71eff9e0c2fd53ae1775ba1b90c8">operator=</a> (const <a class="el" href="classbuz_1_1renderer__2d.html#ac6064d84c693a49d6bbeadcbe781d93d">renderer_2d</a> &amp;)=delete</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Draws the 2D game world: everything that lives in the level and moves when the camera moves. </p>
 <p>Owned by <a class="el" href="classbuz_1_1game__2d.html" title="The base class of a game with a 2D world: derive your game from it.">buz::game_2d</a> and handed to on_render_world every frame. Until you call set_camera, world positions are plain window pixels, with (0, 0) in the top-left corner. A camera is two matrices: the view (where the camera is) and the projection (how the world maps onto the window). Scrolling a level to follow the player is a view that moves: </p><div class="fragment"><div class="line"><span class="keyword">const</span> <a class="code hl_typedef" href="namespacebuz.html#acdb2c70a0426fc209337d5bcdf33333c">buz::mat4</a> view = glm::translate(<a class="code hl_typedef" href="namespacebuz.html#acdb2c70a0426fc209337d5bcdf33333c">buz::mat4</a>(1.0f), <a class="code hl_typedef" href="namespacebuz.html#aa15b1d11eb74450ffdda877acb81cb1c">buz::vec3</a>(-scroll_x, 0.0f, 0.0f));</div>
 <div class="line"><span class="keyword">const</span> <a class="code hl_typedef" href="namespacebuz.html#acdb2c70a0426fc209337d5bcdf33333c">buz::mat4</a> projection = <a class="code hl_function" href="namespacebuz.html#ae4898674f328ab84f05982e76571c978">buz::make_orthographic_projection</a>(1280.0f, 720.0f);</div>
 <div class="line">world.set_camera(view, projection);</div>
-<div class="ttc" id="anamespacebuz_html_aa15b1d11eb74450ffdda877acb81cb1c"><div class="ttname"><a href="namespacebuz.html#aa15b1d11eb74450ffdda877acb81cb1c">buz::vec3</a></div><div class="ttdeci">glm::vec3 vec3</div><div class="ttdef"><b>Definition</b> <a href="math_8h_source.html#l00023">math.h:23</a></div></div>
-<div class="ttc" id="anamespacebuz_html_acdb2c70a0426fc209337d5bcdf33333c"><div class="ttname"><a href="namespacebuz.html#acdb2c70a0426fc209337d5bcdf33333c">buz::mat4</a></div><div class="ttdeci">glm::mat4 mat4</div><div class="ttdef"><b>Definition</b> <a href="math_8h_source.html#l00028">math.h:28</a></div></div>
+<div class="ttc" id="anamespacebuz_html_aa15b1d11eb74450ffdda877acb81cb1c"><div class="ttname"><a href="namespacebuz.html#aa15b1d11eb74450ffdda877acb81cb1c">buz::vec3</a></div><div class="ttdeci">glm::vec3 vec3</div><div class="ttdef"><b>Definition</b> <a href="math_8h_source.html#l00024">math.h:24</a></div></div>
+<div class="ttc" id="anamespacebuz_html_acdb2c70a0426fc209337d5bcdf33333c"><div class="ttname"><a href="namespacebuz.html#acdb2c70a0426fc209337d5bcdf33333c">buz::mat4</a></div><div class="ttdeci">glm::mat4 mat4</div><div class="ttdef"><b>Definition</b> <a href="math_8h_source.html#l00029">math.h:29</a></div></div>
 <div class="ttc" id="anamespacebuz_html_ae4898674f328ab84f05982e76571c978"><div class="ttname"><a href="namespacebuz.html#ae4898674f328ab84f05982e76571c978">buz::make_orthographic_projection</a></div><div class="ttdeci">mat4 make_orthographic_projection(float width, float height)</div><div class="ttdoc">Builds an orthographic projection for 2D rendering.</div></div>
 </div><!-- fragment --><p>A 3D game draws its world with a <a class="el" href="classbuz_1_1world__renderer__3d.html" title="Draws the 3D game world, through a camera.">buz::world_renderer_3d</a> instead (<a class="el" href="world__renderer__3d_8h.html" title="Draws the 3D game world: meshes, the built-in shapes and debug lines.">renderer_3d/world_renderer_3d.h</a>). </p>
 
-<p class="definition">Definition at line <a class="el" href="world__renderer__2d_8h_source.html#l00028">28</a> of file <a class="el" href="world__renderer__2d_8h_source.html">world_renderer_2d.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="world__renderer__2d_8h_source.html#l00027">27</a> of file <a class="el" href="world__renderer__2d_8h_source.html">world_renderer_2d.h</a>.</p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a39a098efc0178115158d116ad63eebfe" name="a39a098efc0178115158d116ad63eebfe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a39a098efc0178115158d116ad63eebfe">&#9670;&#160;</a></span>world_renderer_2d()</h2>
+<a id="a752484e1894deda0c639499201114505" name="a752484e1894deda0c639499201114505"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a752484e1894deda0c639499201114505">&#9670;&#160;</a></span>world_renderer_2d()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">buz::world_renderer_2d::world_renderer_2d </td>
           <td>(</td>
-          <td class="paramtype">const render_context &amp;</td>          <td class="paramname"><span class="paramname"><em>context</em></span></td><td>)</td>
+          <td class="paramtype">const render_context &amp;</td>          <td class="paramname"><span class="paramname"><em>context</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="namespacebuz.html#a5e0429f08408e32e673a381a6e82a96c">texture_filter</a></td>          <td class="paramname"><span class="paramname"><em>sampler_filter</em></span>&#160;)</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel explicit">explicit</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Creates the renderer and its pipeline on the engine's graphics card; <a class="el" href="classbuz_1_1game__2d.html" title="The base class of a game with a 2D world: derive your game from it.">buz::game_2d</a> makes one for your game. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">context</td><td>The engine's render context (<a class="el" href="classbuz_1_1engine.html#a2067b8ba0193298894a30cd5f86c533d" title="Returns what engine modules (the 3D renderer, model loading) create gpu resources with....">engine::get_render_context</a>). </td></tr>
+    <tr><td class="paramname">context</td><td>The engine's render context (<a class="el" href="classbuz_1_1engine.html#a2067b8ba0193298894a30cd5f86c533d" title="Returns what engine modules (the game framework&#39;s renderers, asset loading) create gpu resources with...">engine::get_render_context</a>). </td></tr>
+    <tr><td class="paramname">sampler_filter</td><td>How its textures are filtered when scaled on screen (<a class="el" href="structbuz_1_1engine__settings.html#a13354e3951c31175f99b3c0260b70c0c" title="How textures are filtered when scaled on screen; nearest keeps pixel art crisp instead of blurring it...">engine_settings::sampler_filter</a>). </td></tr>
   </table>
   </dd>
 </dl>

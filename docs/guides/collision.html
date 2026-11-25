@@ -53,8 +53,8 @@
     <aside class="side" aria-label="All guides">
       <button class="side-toggle" type="button" aria-expanded="false" aria-controls="side-nav"><span>All guides</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></button>
       <nav class="side-nav" id="side-nav" aria-label="Guides">
-        <div class="side-group"><p class="side-title">Guides</p><ol><li><a href="getting-started.html">Getting started</a></li><li><a href="drawing.html">Drawing in 2D</a></li><li><a href="drawing-3d.html">Drawing in 3D</a></li><li><a href="input.html">Input</a></li><li><a href="textures-and-fonts.html">Textures &amp; fonts</a></li><li><a href="audio.html">Audio</a></li><li><a href="utilities.html">Utilities</a></li><li><a href="diagnostics.html">Diagnostics</a></li><li><a href="json.html">JSON files</a></li><li><a href="models.html">Models</a></li><li><a href="under-the-hood.html">Under the hood</a></li></ol></div>
-        <div class="side-group"><p class="side-title">Guided experiences</p><ol><li><a href="guided-experiences.html">Guided experiences</a></li><li><a href="camera-2d.html">A 2D camera</a></li><li><a href="sprite-animation.html">Sprite animation</a></li><li><a href="sprite-batching.html">Sprite batching</a></li><li><a href="animation-player.html">An animation player</a></li><li><a href="collision.html" aria-current="page">Collision</a></li><li><a href="asset-cache.html">An asset cache</a></li></ol></div>
+        <div class="side-group"><p class="side-title">Guides</p><ol><li><a href="getting-started.html">Getting started</a></li><li><a href="drawing.html">Drawing in 2D</a></li><li><a href="drawing-3d.html">Drawing in 3D</a></li><li><a href="input.html">Input</a></li><li><a href="textures-and-fonts.html">Textures &amp; fonts</a></li><li><a href="audio.html">Audio</a></li><li><a href="utilities.html">Utilities</a></li><li><a href="diagnostics.html">Diagnostics</a></li><li><a href="json.html">JSON files</a></li><li><a href="models.html">Models</a></li><li><a href="under-the-hood.html">Under the hood</a></li><li><a href="changes.html">Changes</a></li></ol></div>
+        <div class="side-group"><p class="side-title">Guided experiences</p><ol><li><a href="guided-experiences.html">Guided experiences</a></li><li><a href="camera-2d.html">A 2D camera</a></li><li><a href="sprite-animation.html">Sprite animation</a></li><li><a href="sprite-batching.html">Sprite batching</a></li><li><a href="animation-player.html">An animation player</a></li><li><a href="collision.html" aria-current="page">Collision</a></li><li><a href="asset-cache.html">An asset cache</a></li><li><a href="radar.html">A radar</a></li></ol></div>
       </nav>
     </aside>
     <div class="prose">
@@ -71,8 +71,8 @@
     return a.min.x &lt; b.max.x and b.min.x &lt; a.max.x
        and a.min.y &lt; b.max.y and b.min.y &lt; a.max.y
        and a.min.z &lt; b.max.z and b.min.z &lt; a.max.z</code></pre></figure>
-<p>Use <code>&lt;</code> here. Two boxes whose faces only touch should not count as overlapping. This lets the player rest against a wall without being treated as inside it.</p>
-<p><strong>Check:</strong> Test overlapping boxes, separated boxes and boxes that just touch. Also test boxes that overlap on two axes but are separated on the third.</p>
+<p>Use <code>&lt;</code> rather than <code>&lt;=</code>, so two boxes whose faces only touch don&#x27;t count as overlapping: the player can then rest against a wall without being treated as inside it.</p>
+<p><strong>Check:</strong> Test overlapping boxes, separated boxes and boxes that only touch. Also test boxes that overlap on two axes but are separated on the third.</p>
 <h2 id="step-2-stop-the-player-at-walls">Step 2: stop the player at walls<a class="anchor" href="#step-2-stop-the-player-at-walls" aria-label="Link to this section">#</a></h2>
 <p>For a first version, move the player&#x27;s box and test it against the walls. If it overlaps a wall, restore its previous position. This stops the player from entering walls, but it also cancels movement along a wall when the player approaches diagonally.</p>
 <p>To allow sliding, resolve one axis at a time. Move along x and correct any overlap, then do the same for y and z.</p>
@@ -117,7 +117,7 @@
             return no hit
 
     return hit at distance enter</code></pre></figure>
-<p>If the ray is parallel to an axis&#x27;s boundary planes, there is no division to perform on that axis. Its origin must already lie within that range. A ray starting inside the box reports distance 0 with this implementation.</p>
+<p>When the ray is parallel to an axis&#x27;s boundary planes, <code>direction[axis]</code> is 0 and there is nothing to divide by. The ray can then only hit the box if its origin already lies within that axis&#x27;s range. A ray starting inside the box reports distance 0 with this implementation.</p>
 <p>Draw the ray with <code><span class="ns">buz::</span>debug_draw::line</code>. Draw a small <code><span class="ns">buz::</span>debug_draw::sphere</code> at <code>origin + direction * enter</code> when it hits.</p>
 <p><strong>Check:</strong> Test a hit, a miss, a ray parallel to a face and a ray starting inside the box. A box beyond <code>max_distance</code> should not produce a hit.</p>
 <h2 id="step-4-check-line-of-sight">Step 4: check line of sight<a class="anchor" href="#step-4-check-line-of-sight" aria-label="Link to this section">#</a></h2>

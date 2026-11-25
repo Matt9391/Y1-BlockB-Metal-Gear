@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" data-root="../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A radar &middot; BuzEngine guides</title>
+<meta name="description" content="Show the guards around the player on a minimap in the hud.">
+<meta name="theme-color" content="#1d222d">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="../assets/fonts/nunito-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/montserrat.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/site.css">
+<script>document.documentElement.classList.add('js')</script>
+<script src="../assets/search-index.js" defer></script>
+<script src="../assets/site.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="../index.html"><span class="mark" aria-hidden="true">//</span>Buz<span class="thin">Engine</span></a>
+    <nav class="site-nav" aria-label="Main">
+      <ul>
+        <li><a href="../guides/getting-started.html" aria-current="page">Guides</a></li>
+        <li><a href="../reference/index.html">Reference</a></li>
+        <li><a href="../about.html">About</a></li>
+      </ul>
+    </nav>
+    <div class="tools">
+      <button class="search-open" type="button" aria-haspopup="dialog" aria-controls="search"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.75"/><path d="m10.5 10.5 3.5 3.5"/></svg><span class="label-text">Search</span><kbd>/</kbd></button>
+    </div>
+  </div>
+</header>
+<dialog class="search-dialog" id="search" aria-label="Search the guides and the reference">
+  <div class="search-field">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.75"/><path d="m10.5 10.5 3.5 3.5"/></svg>
+    <label class="visually-hidden" for="search-input">Search the guides and the reference</label>
+    <input id="search-input" type="search" placeholder="Search guides and API" autocomplete="off" spellcheck="false"
+           role="combobox" aria-autocomplete="list" aria-expanded="true" aria-controls="search-results">
+    <span class="esc" aria-hidden="true">Esc</span>
+  </div>
+  <ul class="search-results" id="search-results" role="listbox" aria-label="Results"></ul>
+  <p class="search-hint">Arrow keys to move, Enter to open, Esc to close.</p>
+</dialog>
+<main id="main" tabindex="-1">
+  <article>
+    <header class="wrap page-head">
+      <span class="label">Guided experience</span>
+      <h1>A radar</h1>
+      <p class="lede">Show the guards around the player on a minimap in the hud.</p>
+    </header>
+    <div class="doc">
+    <aside class="side" aria-label="All guides">
+      <button class="side-toggle" type="button" aria-expanded="false" aria-controls="side-nav"><span>All guides</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></button>
+      <nav class="side-nav" id="side-nav" aria-label="Guides">
+        <div class="side-group"><p class="side-title">Guides</p><ol><li><a href="getting-started.html">Getting started</a></li><li><a href="drawing.html">Drawing in 2D</a></li><li><a href="drawing-3d.html">Drawing in 3D</a></li><li><a href="input.html">Input</a></li><li><a href="textures-and-fonts.html">Textures &amp; fonts</a></li><li><a href="audio.html">Audio</a></li><li><a href="utilities.html">Utilities</a></li><li><a href="diagnostics.html">Diagnostics</a></li><li><a href="json.html">JSON files</a></li><li><a href="models.html">Models</a></li><li><a href="under-the-hood.html">Under the hood</a></li><li><a href="changes.html">Changes</a></li></ol></div>
+        <div class="side-group"><p class="side-title">Guided experiences</p><ol><li><a href="guided-experiences.html">Guided experiences</a></li><li><a href="camera-2d.html">A 2D camera</a></li><li><a href="sprite-animation.html">Sprite animation</a></li><li><a href="sprite-batching.html">Sprite batching</a></li><li><a href="animation-player.html">An animation player</a></li><li><a href="collision.html">Collision</a></li><li><a href="asset-cache.html">An asset cache</a></li><li><a href="radar.html" aria-current="page">A radar</a></li></ol></div>
+      </nav>
+    </aside>
+    <div class="prose">
+<blockquote class="note"><p><strong>Guided exercise:</strong> Use the 3D template and write the radar yourself (see <a href="guided-experiences.html">Guided experiences</a>). The screen renderer draws circles, lines and triangles in window pixels; you will work out where on the radar each guard belongs.</p></blockquote>
+<h2 id="what-you-will-build">What you will build<a class="anchor" href="#what-you-will-build" aria-label="Link to this section">#</a></h2>
+<p>In a stealth game the player needs to know where the guards are without seeing them. A <strong>radar</strong> in a corner of the hud shows the area around the player from above: the player is always at its center, the guards nearby are dots, and the whole picture turns with the player, so that whatever is in front of the player is above the center. Guards too far away are left out or pinned to the edge, and nothing is drawn outside the radar&#x27;s circle or square.</p>
+<p>Drawing a dot takes one call to the screen renderer. The work is in deciding where the dot goes: a guard&#x27;s position passes through a chain of small transformations from the 3D world to the window, and each of them has a sign or an order that is easy to get wrong. That is why the steps below give the transformations in math and pseudocode only, even the formulas that fit on one line. Working them out, turning them into C++ and finding out why the dots move the wrong way is how you learn what each transformation does.</p>
+<h2 id="step-1-place-the-radar-on-the-screen">Step 1: place the radar on the screen<a class="anchor" href="#step-1-place-the-radar-on-the-screen" aria-label="Link to this section">#</a></h2>
+<p>The radar is part of the hud, so you draw it in <code>on_render_screen</code>, with the <a href="../reference/classbuz_1_1screen__renderer.html"><code><span class="ns">buz::</span>screen_renderer</code></a> that function receives. It draws in window pixels: <code>(0, 0)</code> is the top-left corner and y points down. <a href="../reference/classbuz_1_1window.html"><code><span class="ns">buz::</span>window::get_size</code></a>, through <code>engine.get_window().get_size()</code>, gives the window&#x27;s size, so you can keep the radar in a corner when the window has another size.</p>
+<p>Describe the radar with a few numbers:</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">radar_center   // in window pixels, for example 120 pixels from the right and top edges
+radar_radius   // in pixels: half the width of the circle or the square, say 100
+radar_range    // in world units (meters): how far from the player the radar reaches, say 30
+
+pixels_per_meter = radar_radius / radar_range</code></pre></figure>
+<p>Draw the background with <a href="../reference/classbuz_1_1renderer__2d.html"><code><span class="ns">buz::</span>renderer_2d::draw_circle</code></a> for a round radar or <a href="../reference/classbuz_1_1renderer__2d.html"><code><span class="ns">buz::</span>renderer_2d::draw_rect</code></a> for a square one, and the player as a dot of a different color at <code>radar_center</code>. The screen renderer has no outline for a circle; a ring of short <a href="../reference/classbuz_1_1renderer__2d.html"><code><span class="ns">buz::</span>renderer_2d::draw_line</code></a> segments makes one if you want it.</p>
+<p><strong>Check:</strong> The radar stays in the same corner when you start the game with another window size, for example with <code>-window_width=1920</code> on the command line.</p>
+<h2 id="step-2-from-the-world-to-the-radar-north-up">Step 2: from the world to the radar, north up<a class="anchor" href="#step-2-from-the-world-to-the-radar-north-up" aria-label="Link to this section">#</a></h2>
+<p>Start with a radar that doesn&#x27;t turn: one world direction, call it north, is always up on the radar.</p>
+<p>The radar looks at the world from above, so it uses the two horizontal axes of the world, x and z, and ignores y, the height. A guard on a staircase above the player is in the same place on the radar as one standing at the bottom of it.</p>
+<p>Three operations take a guard&#x27;s world position to a radar position:</p>
+<ol>
+<li><strong>Translate</strong> by the player: the offset from the player to the guard, <code>(g.x - p.x, g.z - p.z)</code>, where <code>g</code> is the guard&#x27;s position and <code>p</code> the player&#x27;s. The player ends up at <code>(0, 0)</code>.</li>
+<li><strong>Scale</strong> by <code>pixels_per_meter</code>, so a guard at <code>radar_range</code> meters ends up <code>radar_radius</code> pixels from the center.</li>
+<li><strong>Map to the window</strong>: add <code>radar_center</code>, and decide which world axis becomes which screen axis, and with which sign.</li>
+</ol>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">world_to_radar(guard_position):
+    offset = horizontal part of (guard_position - player_position)
+    pixels = offset * pixels_per_meter
+    return radar_center + screen_direction_of(pixels)</code></pre></figure>
+<p>The engine&#x27;s 3D world has y up and is right-handed. Look at it from above, with +x to the right of the radar. Does +z point up or down on the radar? Work it out from the right-hand rule before you write any code, then write down which world direction your radar calls north. On the screen, y grows downwards, so &quot;up on the radar&quot; means a smaller screen y.</p>
+<p>Draw each guard with <a href="../reference/classbuz_1_1renderer__2d.html"><code><span class="ns">buz::</span>renderer_2d::draw_circle</code></a> at the position <code>world_to_radar</code> returns.</p>
+<p><strong>Check:</strong> Walk the player towards north: every dot moves down on the radar. Place a guard due east of the player; it is to the right of the center. If a guard is mirrored, one axis has the wrong sign.</p>
+<h2 id="step-3-turn-the-radar-with-the-player">Step 3: turn the radar with the player<a class="anchor" href="#step-3-turn-the-radar-with-the-player" aria-label="Link to this section">#</a></h2>
+<p>A radar that turns with the player keeps the player&#x27;s facing up: a guard straight ahead is always straight above the center. Turning the radar is one more step between the translation and the scale: rotate the offset around the player by the player&#x27;s turn, in the other direction.</p>
+<p>Suppose the player&#x27;s facing is an angle <code>yaw</code> around the y axis, as in the mouse look of <a href="input.html">Input</a>, where a positive yaw turns to the left. When the player turns left, the world seems to turn right around the player, so the radar rotates every offset by <code>-yaw</code>:</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">world_to_radar(guard_position):
+    offset  = horizontal part of (guard_position - player_position)
+    turned  = rotate(offset, -yaw)
+    pixels  = turned * pixels_per_meter
+    return radar_center + screen_direction_of(pixels)</code></pre></figure>
+<p>A rotation by an angle θ in a plane with axes <code>a</code> and <code>b</code> is:</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">a&#x27; = a·cos θ - b·sin θ
+b&#x27; = a·sin θ + b·cos θ</code></pre></figure>
+<p>That formula turns counterclockwise when <code>a</code> points right and <code>b</code> points up. Your plane is x and z seen from above, and you found the direction of +z in step 2: check whether it is the same turn, and what yaw 0 means in your game (which way does the player face?) before you trust a sign.</p>
+<p>There is a second way to write the same rotation, without angles. If <code>forward</code> is the unit vector the player faces along and <code>right</code> the unit vector to the player&#x27;s right, both horizontal, then <code>dot(offset, right)</code> is how far the guard is to the right of the player and <code>dot(offset, forward)</code> how far in front. Those two numbers are the turned offset: the first goes right on the radar and the second goes up. Try both ways and compare the results; they should agree to a few decimals.</p>
+<p><strong>Check:</strong> Put a guard straight in front of the player and turn on the spot: the dot must stay above the center. Turn the player left: every dot swings to the right around the center, as the world does when you turn your head.</p>
+<h2 id="step-4-guards-out-of-range">Step 4: guards out of range<a class="anchor" href="#step-4-guards-out-of-range" aria-label="Link to this section">#</a></h2>
+<p>A guard far away would be drawn far outside the radar. Decide per guard whether it is in range, and then either leave it out or pin it to the edge.</p>
+<p>For a round radar, the guard is in range when the horizontal distance to the player is at most <code>radar_range</code>:</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">in_range = offset.x² + offset.z² &lt;= radar_range²</code></pre></figure>
+<p>Comparing squared lengths gives the same answer as comparing the lengths and needs no square root. The rotation in step 3 doesn&#x27;t change a length, so for a circle it doesn&#x27;t matter whether you test before or after rotating.</p>
+<p>For a square radar it does matter. The square stays upright on the screen while the world turns under it, so the test has to use the turned offset: the guard is in range when both of its components, in pixels, lie between <code>-radar_radius</code> and <code>radar_radius</code>.</p>
+<p>To <strong>pin</strong> a guard to the edge instead of hiding it, move its dot towards the center along the line from the center to the dot, until it touches the edge. For a circle, that line has a length you can compute, and the new point is the same direction at length <code>radar_radius</code>. For a square, there are two ideas:</p>
+<ul>
+<li>clamp each component to <code>[-radar_radius, radar_radius]</code> separately;</li>
+<li>scale the whole offset down until its largest component is <code>radar_radius</code>.</li>
+</ul>
+<p>Draw both and compare them while a guard walks past at an angle. Which of the two keeps the dot in the guard&#x27;s direction?</p>
+<p>A dot has a size of its own. A dot of radius <code>r</code> whose center is exactly on the edge sticks out by <code>r</code>, so pin it to <code>radar_radius - r</code>.</p>
+<p><strong>Check:</strong> Walk away from a guard: the dot reaches the edge, then disappears or stays on the edge, depending on your choice. With pinning, the dot slides along the edge as you walk around the guard at a distance.</p>
+<h2 id="step-5-clip-what-crosses-the-edge">Step 5: clip what crosses the edge<a class="anchor" href="#step-5-clip-what-crosses-the-edge" aria-label="Link to this section">#</a></h2>
+<p>Step 4 keeps every dot inside the radar. A line is harder: a wall, a patrol route or a guard&#x27;s view cone can start inside the radar and end far outside it. <a href="../reference/classbuz_1_1screen__renderer.html"><code><span class="ns">buz::</span>screen_renderer</code></a> has no clip rectangle and no mask, so whatever you draw lands on the window, also outside the radar. You have to cut every line at the radar&#x27;s edge yourself, before drawing it.</p>
+<p>Describe the segment from <code>A</code> to <code>B</code>, both in radar pixels, as the points</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">P(t) = A + t·(B - A),    0 &lt;= t &lt;= 1</code></pre></figure>
+<p><code>t = 0</code> is <code>A</code> and <code>t = 1</code> is <code>B</code>. Clipping means finding the part of <code>[0, 1]</code> for which <code>P(t)</code> is inside the radar, and drawing from <code>P(t_start)</code> to <code>P(t_end)</code>.</p>
+<p><strong>A circle.</strong> <code>P(t)</code> is inside when its distance to the center is at most the radius:</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">|P(t) - radar_center|² &lt;= radar_radius²</code></pre></figure>
+<p>Write <code>P(t)</code> out and the left-hand side becomes a quadratic in <code>t</code>. Working out its coefficients is part of the exercise.</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">clip_to_circle(A, B):
+    if A == B: handle a single point first
+    solve |P(t) - radar_center|² = radar_radius² for t
+    if there is no real solution: the line misses the circle, draw nothing
+    t_enter, t_exit = the two solutions, smallest first
+    t_start = max(0, t_enter)
+    t_end   = min(1, t_exit)
+    if t_start &gt; t_end: the segment lies outside, draw nothing
+    draw_line(P(t_start), P(t_end))</code></pre></figure>
+<p><strong>A square.</strong> The square is the overlap of four half-planes: right of the left edge, left of the right edge, below the top edge and above the bottom edge. Each edge gives one inequality in <code>t</code>, which limits <code>t</code> from below or from above, depending on the direction of the segment. Start with <code>[0, 1]</code> and narrow it with each edge; if the interval becomes empty, the segment is outside. A segment parallel to an edge gives no limit for that edge, only a yes or a no.</p>
+<p>Draw the clipped lines with <a href="../reference/classbuz_1_1renderer__2d.html"><code><span class="ns">buz::</span>renderer_2d::draw_line</code></a>.</p>
+<p><strong>Check:</strong> Draw a long line through the radar at several angles: one that crosses it, one that ends inside it, one that misses it and one that only touches the edge. Turn the player while you watch, so the line rotates through every case.</p>
+<h2 id="step-6-the-guards-view-cones">Step 6: the guards&#x27; view cones<a class="anchor" href="#step-6-the-guards-view-cones" aria-label="Link to this section">#</a></h2>
+<p>If your guards have a view cone, as in <a href="collision.html">Collision</a>, the radar can show it as a wedge: a point at the guard, two edges at <code>forward</code> turned by <code>+half_angle</code> and <code>-half_angle</code>, each <code>view_distance</code> long, and an arc between their ends.</p>
+<p>Every point of the wedge is a world position, so it goes through the same <code>world_to_radar</code> as the guards: work out the points in the world, then transform them. Lengths in the world become lengths on the radar through the same scale, so a guard that sees 10 meters ahead has a cone of <code>10 · pixels_per_meter</code> pixels.</p>
+<figure class="excerpt" data-kind="text"><figcaption><span><span class="file">text</span></span><button class="copy" type="button" aria-label="Copy this code">Copy</button></figcaption><pre><code class="lang-text">draw_view_cone(guard):
+    tip   = guard.position
+    left  = guard.position + rotate(guard.forward, +half_angle) * view_distance
+    right = guard.position + rotate(guard.forward, -half_angle) * view_distance
+    arc   = a few points between left and right, all at view_distance from tip
+
+    for each segment of tip → left → arc → right → tip:
+        clip_to_radar(world_to_radar(start), world_to_radar(end))</code></pre></figure>
+<p>A filled cone is a fan of triangles from the tip, drawn with <a href="../reference/classbuz_1_1renderer__2d.html"><code><span class="ns">buz::</span>renderer_2d::draw_triangle</code></a>. Clipping a triangle to the radar gives a polygon, not a triangle: cut the triangle by one edge of the radar at a time and keep the part inside (the Sutherland–Hodgman algorithm), then draw the polygon as a fan. A circle has no straight edges to cut with, so approximate it with a polygon of, say, 32 sides first.</p>
+<p><strong>Check:</strong> A guard at the edge of the radar shows the part of its cone that is inside it, and nothing outside it. Turn the player and the guard; the cone keeps its shape and its angle.</p>
+<h2 id="levels">Levels<a class="anchor" href="#levels" aria-label="Link to this section">#</a></h2>
+<p>Complete the basic level before adding the intermediate and hard features.</p>
+<p><strong>Basic</strong></p>
+<ul class="tasklist">
+<li class="task"><input type="checkbox" disabled> Draw the radar&#x27;s background and the player at its center in <code>on_render_screen</code>.</li>
+<li class="task"><input type="checkbox" disabled> Draw every guard as a dot at its position relative to the player, scaled by the radar&#x27;s range, with north up.</li>
+<li class="task"><input type="checkbox" disabled> A guard to the north of the player is above the center and one to the east is to the right.</li>
+</ul>
+<p><strong>Intermediate</strong></p>
+<ul class="tasklist">
+<li class="task"><input type="checkbox" disabled> Turn the radar with the player, so that what is in front of the player is above the center.</li>
+<li class="task"><input type="checkbox" disabled> Hide guards that are out of range, or pin them to the edge in their direction.</li>
+<li class="task"><input type="checkbox" disabled> Keep every dot, including its radius, inside the radar&#x27;s shape.</li>
+</ul>
+<p><strong>Hard</strong></p>
+<ul class="tasklist">
+<li class="task"><input type="checkbox" disabled> Draw each guard&#x27;s view cone on the radar, transformed like the guards.</li>
+<li class="task"><input type="checkbox" disabled> Clip the cones&#x27; lines to the radar&#x27;s circle or square, so nothing is drawn outside it.</li>
+<li class="task"><input type="checkbox" disabled> Support both a round and a square radar, or fill the cones with triangles clipped to the radar&#x27;s shape.</li>
+</ul>
+    </div>
+    <nav class="toc" aria-labelledby="toc-title"><p class="toc-title" id="toc-title">On this page</p><ol><li><a href="#what-you-will-build">What you will build</a></li><li><a href="#step-1-place-the-radar-on-the-screen">Step 1: place the radar on the screen</a></li><li><a href="#step-2-from-the-world-to-the-radar-north-up">Step 2: from the world to the radar, north up</a></li><li><a href="#step-3-turn-the-radar-with-the-player">Step 3: turn the radar with the player</a></li><li><a href="#step-4-guards-out-of-range">Step 4: guards out of range</a></li><li><a href="#step-5-clip-what-crosses-the-edge">Step 5: clip what crosses the edge</a></li><li><a href="#step-6-the-guards-view-cones">Step 6: the guards&#x27; view cones</a></li><li><a href="#levels">Levels</a></li></ol></nav>
+    </div>
+    <nav class="wrap pager" aria-label="Previous and next guide"><a href="../index.html#guides" class="back">&larr; All guides</a><a href="asset-cache.html" class="p" rel="prev"><span class="meta">&larr; Previous</span>An asset cache</a></nav>
+  </article>
+</main>
+<footer class="site-footer">
+  <div class="wrap row">
+    <a href="../index.html" class="mark" aria-label="BuzEngine home">//</a>
+    <p class="who">BuzEngine &middot; Breda University of Applied Sciences &middot; MIT licensed</p>
+    <ul>
+      <li><a href="../guides/getting-started.html">Guides</a></li>
+      <li><a href="../reference/index.html">Reference</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>

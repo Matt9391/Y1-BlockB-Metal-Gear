@@ -53,13 +53,13 @@
     <aside class="side" aria-label="All guides">
       <button class="side-toggle" type="button" aria-expanded="false" aria-controls="side-nav"><span>All guides</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></button>
       <nav class="side-nav" id="side-nav" aria-label="Guides">
-        <div class="side-group"><p class="side-title">Guides</p><ol><li><a href="getting-started.html">Getting started</a></li><li><a href="drawing.html">Drawing in 2D</a></li><li><a href="drawing-3d.html">Drawing in 3D</a></li><li><a href="input.html">Input</a></li><li><a href="textures-and-fonts.html">Textures &amp; fonts</a></li><li><a href="audio.html">Audio</a></li><li><a href="utilities.html">Utilities</a></li><li><a href="diagnostics.html">Diagnostics</a></li><li><a href="json.html">JSON files</a></li><li><a href="models.html">Models</a></li><li><a href="under-the-hood.html">Under the hood</a></li></ol></div>
-        <div class="side-group"><p class="side-title">Guided experiences</p><ol><li><a href="guided-experiences.html" aria-current="page">Guided experiences</a></li><li><a href="camera-2d.html">A 2D camera</a></li><li><a href="sprite-animation.html">Sprite animation</a></li><li><a href="sprite-batching.html">Sprite batching</a></li><li><a href="animation-player.html">An animation player</a></li><li><a href="collision.html">Collision</a></li><li><a href="asset-cache.html">An asset cache</a></li></ol></div>
+        <div class="side-group"><p class="side-title">Guides</p><ol><li><a href="getting-started.html">Getting started</a></li><li><a href="drawing.html">Drawing in 2D</a></li><li><a href="drawing-3d.html">Drawing in 3D</a></li><li><a href="input.html">Input</a></li><li><a href="textures-and-fonts.html">Textures &amp; fonts</a></li><li><a href="audio.html">Audio</a></li><li><a href="utilities.html">Utilities</a></li><li><a href="diagnostics.html">Diagnostics</a></li><li><a href="json.html">JSON files</a></li><li><a href="models.html">Models</a></li><li><a href="under-the-hood.html">Under the hood</a></li><li><a href="changes.html">Changes</a></li></ol></div>
+        <div class="side-group"><p class="side-title">Guided experiences</p><ol><li><a href="guided-experiences.html" aria-current="page">Guided experiences</a></li><li><a href="camera-2d.html">A 2D camera</a></li><li><a href="sprite-animation.html">Sprite animation</a></li><li><a href="sprite-batching.html">Sprite batching</a></li><li><a href="animation-player.html">An animation player</a></li><li><a href="collision.html">Collision</a></li><li><a href="asset-cache.html">An asset cache</a></li><li><a href="radar.html">A radar</a></li></ol></div>
       </nav>
     </aside>
     <div class="prose">
-<p>The guided experiences are exercises, not engine features. The engine deliberately leaves out a few systems that games need, such as a 2D camera, sprite animation and collision, so that you build them yourself. Each exercise names the building blocks the engine does give you, explains the problem, and walks you through a solution one step at a time.</p>
-<p>The steps use <strong>pseudo code</strong>: it shows the structure and the math, but it is not C++ and it does not compile. Turning it into a class of your own is the exercise. The C++ snippets are there to show what the engine already does.</p>
+<p>The engine deliberately leaves out a few systems that games need, such as a 2D camera, sprite animation and collision, so that you build them yourself. The guided experiences are the exercises for those systems. Each exercise names the building blocks the engine does give you, explains the problem, and walks you through a solution one step at a time.</p>
+<p>The steps use <strong>pseudocode</strong>: it shows the structure and the math, but it is not C++ and it does not compile. Turning it into a class of your own is the exercise. The C++ snippets are there to show what the engine already does.</p>
 <h2 id="levels">Levels<a class="anchor" href="#levels" aria-label="Link to this section">#</a></h2>
 <p>Every exercise ends with a checklist in three levels: <strong>basic</strong>, <strong>intermediate</strong> and <strong>hard</strong>. Each level builds on the one before, so make the basic level work first.</p>
 <h2 id="the-exercises">The exercises<a class="anchor" href="#the-exercises" aria-label="Link to this section">#</a></h2>
@@ -74,11 +74,12 @@
 <li><a href="animation-player.html">An animation player</a> : play keyframe clips with looping and blending</li>
 <li><a href="collision.html">Collision</a> : walls, rays, line of sight and view cones</li>
 <li><a href="asset-cache.html">An asset cache</a> : load every model once, however often it is used</li>
+<li><a href="radar.html">A radar</a> : show the guards around the player on a minimap in the hud</li>
 </ul>
     </div>
     <nav class="toc" aria-labelledby="toc-title"><p class="toc-title" id="toc-title">On this page</p><ol><li><a href="#levels">Levels</a></li><li><a href="#the-exercises">The exercises</a></li></ol></nav>
     </div>
-    <nav class="wrap pager" aria-label="Previous and next guide"><a href="../index.html#guides" class="back">&larr; All guides</a><a href="under-the-hood.html" class="p" rel="prev"><span class="meta">&larr; Previous</span>Under the hood</a><a href="camera-2d.html" class="n" rel="next"><span class="meta">Next &rarr;</span>A 2D camera</a></nav>
+    <nav class="wrap pager" aria-label="Previous and next guide"><a href="../index.html#guides" class="back">&larr; All guides</a><a href="changes.html" class="p" rel="prev"><span class="meta">&larr; Previous</span>Changes</a><a href="camera-2d.html" class="n" rel="next"><span class="meta">Next &rarr;</span>A 2D camera</a></nav>
   </article>
 </main>
 <footer class="site-footer">

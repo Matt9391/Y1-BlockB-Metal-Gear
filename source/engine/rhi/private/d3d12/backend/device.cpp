@@ -1,5 +1,6 @@
 #include "d3d12/backend/device.h"
 
+#include "common/data_slot.h"
 #include "core/assert.h"
 #include "core/log.h"
 #include "d3d12/backend/buffer.h"
@@ -20,7 +21,8 @@ using Microsoft::WRL::ComPtr;
 
 namespace
 {
-	// 32 bit float depth: plenty of precision, and the format both backends have
+	// 32 bit float depth: enough precision, and a format both the DirectX 12
+	// and the Vulkan backend support
 	constexpr DXGI_FORMAT k_depth_format = DXGI_FORMAT_D32_FLOAT;
 
 	//--------------------------------------------------------------
@@ -406,14 +408,14 @@ namespace buz::rhi
 	}
 
 	//--------------------------------------------------------------
-	ComPtr<ID3D12RootSignature> device::native::create_root_signature(uint32_t constants_size, texture_filter sampler_filter)
+	ComPtr<ID3D12RootSignature> device::native::create_root_signature(uint32_t constants_size, sampler_filter filter)
 	{
 		// Parameter 0: the per-draw constants, passed as root constants
 		// because they change for every draw call.
-		// (Not a designated initializer like elsewhere: the two array
-		// elements fill different members of the parameter union, and
-		// element 1 needs texture_range which is declared between them.)
-		D3D12_ROOT_PARAMETER parameters[2] = {};
+		// (Not a designated initializer like elsewhere: the array elements
+		// fill different members of the parameter union, and element 1
+		// needs texture_range, which is declared between them.)
+		D3D12_ROOT_PARAMETER parameters[2 + k_data_slot_count] = {};
 		parameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
 		parameters[0].Constants.ShaderRegister = 0; // register(b0)
 		parameters[0].Constants.Num32BitValues = constants_size / 4;
@@ -432,10 +434,20 @@ namespace buz::rhi
 		parameters[1].DescriptorTable.pDescriptorRanges = &texture_range;
 		parameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
+		// Parameters 2 and 3: the shader data and the frame data
+		// (common/data_slot.h), each the gpu address of a constant buffer in
+		// the frame's scratch memory.
+		for (uint32_t slot = 0; slot < k_data_slot_count; ++slot)
+		{
+			parameters[2 + slot].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+			parameters[2 + slot].Descriptor.ShaderRegister = 1 + slot; // register(b1), register(b2)
+			parameters[2 + slot].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+		}
+
 		// A single sampler baked into the root signature; its filter is fixed
 		// for the lifetime of the pipeline.
 		const D3D12_STATIC_SAMPLER_DESC sampler = {
-			.Filter = sampler_filter == texture_filter::nearest ? D3D12_FILTER_MIN_MAG_MIP_POINT : D3D12_FILTER_MIN_MAG_MIP_LINEAR,
+			.Filter = filter == sampler_filter::nearest ? D3D12_FILTER_MIN_MAG_MIP_POINT : D3D12_FILTER_MIN_MAG_MIP_LINEAR,
 			.AddressU = D3D12_TEXTURE_ADDRESS_MODE_CLAMP,
 			.AddressV = D3D12_TEXTURE_ADDRESS_MODE_CLAMP,
 			.AddressW = D3D12_TEXTURE_ADDRESS_MODE_CLAMP,
@@ -482,7 +494,7 @@ namespace buz::rhi
 			return nullptr;
 		}
 
-		ComPtr<ID3D12RootSignature> root_signature = create_root_signature(desc.constants_size, desc.sampler_filter);
+		ComPtr<ID3D12RootSignature> root_signature = create_root_signature(desc.constants_size, desc.filter);
 		if (root_signature == nullptr)
 		{
 			return nullptr;
@@ -658,11 +670,11 @@ namespace buz::rhi
 	}
 
 	//--------------------------------------------------------------
-	std::optional<device::native::scratch_allocation> device::native::allocate_scratch(uint32_t size)
+	std::optional<device::native::scratch_allocation> device::native::allocate_scratch(uint32_t size, uint32_t alignment)
 	{
 		frame& current = m_frames[m_frame_index];
 
-		const std::optional<uint32_t> offset = current.scratch.allocate(size);
+		const std::optional<uint32_t> offset = current.scratch.allocate(size, alignment);
 		if (!offset)
 		{
 			return std::nullopt;

@@ -194,23 +194,23 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a987b38d9baba4203bdc93e8bf9331053" id="r_a987b38d9baba4203bdc93e8bf9331053"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a987b38d9baba4203bdc93e8bf9331053">draw_text</a> (const <a class="el" href="structbuz_1_1font.html">font</a> &amp;text_font, std::string_view text, <a class="el" href="namespacebuz.html#a97def2f877690e2da5aac438c7cfe9b9">vec2</a> position, float pixel_height, <a class="el" href="structbuz_1_1color.html">color</a> tint=<a class="el" href="structbuz_1_1color.html">color</a>{})</td></tr>
 <tr class="memdesc:a987b38d9baba4203bdc93e8bf9331053"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a line of text with a bitmap font. Newlines (<span class="tt">'\n'</span>) continue on the next line.  <br /></td></tr>
 <tr class="memitem:a6a9099128736ff7c2449218044b69130" id="r_a6a9099128736ff7c2449218044b69130"><td class="memItemLeft">sprite_pass &amp;&#160;</td><td class="memItemRight"><a class="el" href="#a6a9099128736ff7c2449218044b69130">get_pass</a> () const</td></tr>
-<tr class="memdesc:a6a9099128736ff7c2449218044b69130"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the engine's side of this renderer (<a class="el" href="classbuz_1_1world__renderer__2d.html#a810d2ed9eda5a29f48ddeb2408ee3598" title="Sets the camera for the rest of this frame.">world_renderer_2d::set_camera</a> changes its camera). A game cannot use it: the type lives in the module's internal headers.  <br /></td></tr>
+<tr class="memdesc:a6a9099128736ff7c2449218044b69130"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the engine's side of this renderer (<a class="el" href="classbuz_1_1world__renderer__2d.html#a810d2ed9eda5a29f48ddeb2408ee3598" title="Sets the camera for the rest of this frame.">world_renderer_2d::set_camera</a> changes its camera). A game cannot use it: sprite_pass is defined in the module's internal headers.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pro-methods" class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:ab31e5136e0b26a7f5257ea074a591965" id="r_ab31e5136e0b26a7f5257ea074a591965"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ab31e5136e0b26a7f5257ea074a591965">renderer_2d</a> (const render_context &amp;context)</td></tr>
+<tr class="memitem:ac6064d84c693a49d6bbeadcbe781d93d" id="r_ac6064d84c693a49d6bbeadcbe781d93d"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ac6064d84c693a49d6bbeadcbe781d93d">renderer_2d</a> (const render_context &amp;context, <a class="el" href="namespacebuz.html#a5e0429f08408e32e673a381a6e82a96c">texture_filter</a> sampler_filter)</td></tr>
 <tr class="memitem:acee5d771e67c06f7ec886dd7bcb0f1ba" id="r_acee5d771e67c06f7ec886dd7bcb0f1ba"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#acee5d771e67c06f7ec886dd7bcb0f1ba">~renderer_2d</a> ()</td></tr>
 <tr class="memitem:a0d1628a2a3fd66cfabc07a4442151c33" id="r_a0d1628a2a3fd66cfabc07a4442151c33"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a0d1628a2a3fd66cfabc07a4442151c33">renderer_2d</a> (const renderer_2d &amp;)=delete</td></tr>
-<tr class="memitem:a2dbd71eff9e0c2fd53ae1775ba1b90c8" id="r_a2dbd71eff9e0c2fd53ae1775ba1b90c8"><td class="memItemLeft"><a class="el" href="#ab31e5136e0b26a7f5257ea074a591965">renderer_2d</a> &amp;&#160;</td><td class="memItemRight"><a class="el" href="#a2dbd71eff9e0c2fd53ae1775ba1b90c8">operator=</a> (const <a class="el" href="#ab31e5136e0b26a7f5257ea074a591965">renderer_2d</a> &amp;)=delete</td></tr>
+<tr class="memitem:a2dbd71eff9e0c2fd53ae1775ba1b90c8" id="r_a2dbd71eff9e0c2fd53ae1775ba1b90c8"><td class="memItemLeft"><a class="el" href="#ac6064d84c693a49d6bbeadcbe781d93d">renderer_2d</a> &amp;&#160;</td><td class="memItemRight"><a class="el" href="#a2dbd71eff9e0c2fd53ae1775ba1b90c8">operator=</a> (const <a class="el" href="#ac6064d84c693a49d6bbeadcbe781d93d">renderer_2d</a> &amp;)=delete</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The drawing functions shared by <a class="el" href="classbuz_1_1world__renderer__2d.html" title="Draws the 2D game world: everything that lives in the level and moves when the camera moves.">world_renderer_2d</a> and <a class="el" href="classbuz_1_1screen__renderer.html" title="Draws on top of the world in plain window pixels: score, lives, menus. It ignores the world&#39;s camera,...">screen_renderer</a>. </p>
-<p>All geometry is a quad: a single unit quad lives in gpu memory and every draw call renders it with its own transformation, texture and tint color. Positions are in pixels (or world units, once the world has a camera) with the y axis pointing down. </p>
+<p>Sprites, rectangles, lines and text are quads: a single unit quad lives in gpu memory and each of those draws renders it with its own transformation, texture and tint color. Circles and triangles are built from triangles on the cpu instead. Positions are in pixels (or world units, once the world has a camera) with the y axis pointing down. </p>
 
-<p class="definition">Definition at line <a class="el" href="renderer__2d_8h_source.html#l00046">46</a> of file <a class="el" href="renderer__2d_8h_source.html">renderer_2d.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="renderer__2d_8h_source.html#l00049">49</a> of file <a class="el" href="renderer__2d_8h_source.html">renderer_2d.h</a>.</p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ab31e5136e0b26a7f5257ea074a591965" name="ab31e5136e0b26a7f5257ea074a591965"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab31e5136e0b26a7f5257ea074a591965">&#9670;&#160;</a></span>renderer_2d() <span class="overload">[1/2]</span></h2>
+<a id="ac6064d84c693a49d6bbeadcbe781d93d" name="ac6064d84c693a49d6bbeadcbe781d93d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6064d84c693a49d6bbeadcbe781d93d">&#9670;&#160;</a></span>renderer_2d() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -221,13 +221,17 @@ Protected Member Functions</h2></td></tr>
         <tr>
           <td class="memname">buz::renderer_2d::renderer_2d </td>
           <td>(</td>
-          <td class="paramtype">const render_context &amp;</td>          <td class="paramname"><span class="paramname"><em>context</em></span></td><td>)</td>
+          <td class="paramtype">const render_context &amp;</td>          <td class="paramname"><span class="paramname"><em>context</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="namespacebuz.html#a5e0429f08408e32e673a381a6e82a96c">texture_filter</a></td>          <td class="paramname"><span class="paramname"><em>sampler_filter</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel explicit">explicit</span><span class="mlabel protected">protected</span></span>  </td>
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -667,7 +671,7 @@ Protected Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Returns the engine's side of this renderer (<a class="el" href="classbuz_1_1world__renderer__2d.html#a810d2ed9eda5a29f48ddeb2408ee3598" title="Sets the camera for the rest of this frame.">world_renderer_2d::set_camera</a> changes its camera). A game cannot use it: the type lives in the module's internal headers. </p>
+<p>Returns the engine's side of this renderer (<a class="el" href="classbuz_1_1world__renderer__2d.html#a810d2ed9eda5a29f48ddeb2408ee3598" title="Sets the camera for the rest of this frame.">world_renderer_2d::set_camera</a> changes its camera). A game cannot use it: sprite_pass is defined in the module's internal headers. </p>
 
 </div>
 </div>
@@ -681,9 +685,9 @@ Protected Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#ab31e5136e0b26a7f5257ea074a591965">renderer_2d</a> &amp; buz::renderer_2d::operator= </td>
+          <td class="memname"><a class="el" href="#ac6064d84c693a49d6bbeadcbe781d93d">renderer_2d</a> &amp; buz::renderer_2d::operator= </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="#ab31e5136e0b26a7f5257ea074a591965">renderer_2d</a> &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="#ac6064d84c693a49d6bbeadcbe781d93d">renderer_2d</a> &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>

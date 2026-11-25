@@ -5,7 +5,7 @@
 
 #include "core/math.h"
 #include "core/rect.h"
-#include "rhi/texture.h"
+#include "render_core/texture.h"
 
 #include <cstdint>
 #include <memory>
@@ -16,16 +16,16 @@ namespace buz
 	/// @brief A fixed-grid bitmap font: one atlas texture holding every
 	/// character in a regular grid, in ascii order.
 	///
-	/// All glyph data lives in the atlas image (content/fonts/), this struct
-	/// only describes the grid so draw_text can find each character:
+	/// All glyph data is in the atlas image (content/shared/fonts/); this
+	/// struct only describes the grid so draw_text can find each character:
 	/// @code{.cpp}
 	/// buz::font font;
-	/// font.atlas = buz::load_texture(engine, "fonts/font_8x8.png");
+	/// font.atlas = buz::load_texture(engine, "shared/fonts/font_8x8.png");
 	/// renderer.draw_text(font, "hello", { 20.0f, 20.0f }, 16.0f);
 	/// @endcode
 	///
 	/// The defaults match the engine's built-in atlas
-	/// (content/fonts/font_8x8.png): 8x8 pixel glyphs, 16 per row, starting
+	/// (content/shared/fonts/font_8x8.png): 8x8 pixel glyphs, 16 per row, starting
 	/// at the space character (ascii 32).
 	struct font
 	{

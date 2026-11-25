@@ -1,14 +1,8 @@
 # The main loop: owns every system, runs the game and draws its frames. Also
-# the window, keyboard and mouse (on top of SDL3), sound effects and music
-# (on top of miniaudio), and the game classes: game, game_2d, and game_3d
-# for the 3D template.
+# the window, keyboard and mouse (on top of SDL3), and sound effects and
+# music (on top of miniaudio). The engine runs anything that implements
+# buz::playable; the game classes that do are in the game_framework module,
+# on top of this one.
 BUZ_MODULE(engine
-           PUBLIC_DEPS buz_renderer_2d yesno buz_renderer_3d
-           PRIVATE_DEPS args buz_core_internal buz_renderer_2d_internal buz_rhi_internal SDL3::SDL3-static miniaudio stb)
-
-IF(NOT WIN32)
-    # miniaudio talks to the audio device from a thread of its own, and
-    # loads the Linux audio libraries (ALSA, PulseAudio) at runtime.
-    FIND_PACKAGE(Threads REQUIRED)
-    TARGET_LINK_LIBRARIES(buz_engine PRIVATE Threads::Threads ${CMAKE_DL_LIBS} m)
-ENDIF()
+           PUBLIC_DEPS buz_render_core yesno
+           PRIVATE_DEPS args buz_core_internal buz_render_core_internal buz_renderer_2d buz_renderer_2d_internal buz_rhi_internal SDL3::SDL3-static miniaudio stb)

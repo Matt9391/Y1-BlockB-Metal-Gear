@@ -41,3 +41,59 @@ FUNCTION(BUZ_CHECK_INTERNAL_LINKS)
         ENDFOREACH()
     ENDFOREACH()
 ENDFUNCTION()
+
+# -------------------------------
+# An ENGINE_ONLY module (the rhi, see cmake/buz_module.cmake) is for other
+# engine modules only: configuring fails when a game can include its
+# headers. That is the case when the game links it, or links a module
+# whose public links lead to it. A private link of a static library still
+# puts it on the linker's command line ($<LINK_ONLY:...>), but no headers
+# come along, so the walk stops there.
+# -------------------------------
+FUNCTION(BUZ_CHECK_ENGINE_ONLY)
+    BUZ_COLLECT_TARGETS(${CMAKE_SOURCE_DIR} all_targets)
+    FOREACH(target ${all_targets})
+        GET_TARGET_PROPERTY(is_module ${target} BUZ_MODULE)
+        GET_TARGET_PROPERTY(is_internal ${target} BUZ_INTERNAL)
+        IF(is_module OR is_internal)
+            CONTINUE()
+        ENDIF()
+
+        # Each entry is "<dependency>|<the target that links it>", for the message
+        GET_TARGET_PROPERTY(links ${target} LINK_LIBRARIES)
+        SET(to_visit "")
+        FOREACH(dependency ${links})
+            LIST(APPEND to_visit "${dependency}|${target}")
+        ENDFOREACH()
+        SET(visited "")
+        WHILE(to_visit)
+            LIST(POP_FRONT to_visit entry)
+            STRING(REPLACE "|" ";" entry "${entry}")
+            LIST(GET entry 0 dependency)
+            LIST(GET entry 1 linked_by)
+            IF(NOT TARGET ${dependency} OR dependency IN_LIST visited)
+                CONTINUE()
+            ENDIF()
+            LIST(APPEND visited ${dependency})
+
+            GET_TARGET_PROPERTY(engine_only ${dependency} BUZ_ENGINE_ONLY)
+            IF(engine_only)
+                IF(linked_by STREQUAL target)
+                    SET(route "links '${dependency}'")
+                ELSE()
+                    SET(route "reaches '${dependency}' through '${linked_by}', which links it publicly")
+                ENDIF()
+                MESSAGE(FATAL_ERROR "'${target}' ${route}, but that module is for the engine only. Link it "
+                                    "privately in the engine modules, and give games the types they need in a "
+                                    "public module.")
+            ENDIF()
+
+            GET_TARGET_PROPERTY(interface_links ${dependency} INTERFACE_LINK_LIBRARIES)
+            FOREACH(next ${interface_links})
+                IF(NOT next MATCHES "^\\$<LINK_ONLY:")
+                    LIST(APPEND to_visit "${next}|${dependency}")
+                ENDIF()
+            ENDFOREACH()
+        ENDWHILE()
+    ENDFOREACH()
+ENDFUNCTION()

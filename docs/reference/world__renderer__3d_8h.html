@@ -152,7 +152,8 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('world__rendere
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#typedef-members">Typedefs</a>  </div>
   <div class="headertitle"><div class="title">world_renderer_3d.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
@@ -161,18 +162,33 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('world__rendere
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="math_8h_source.html">core/math.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="material_8h_source.html">renderer_3d/material.h</a>&quot;</code><br />
+<code>#include &lt;yes_no.h&gt;</code><br />
+<code>#include &lt;cstddef&gt;</code><br />
 <code>#include &lt;memory&gt;</code><br />
+<code>#include &lt;span&gt;</code><br />
 </div>
 <p><a href="world__renderer__3d_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:buz_3A_3Adebug_5Fviews" id="r_buz_3A_3Adebug_5Fviews"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structbuz_1_1debug__views.html">buz::debug_views</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The debug views a <a class="el" href="classbuz_1_1world__renderer__3d.html" title="Draws the 3D game world, through a camera.">world_renderer_3d</a> draws with. <a class="el" href="classbuz_1_1game__3d.html" title="The base class of a game with a 3D world: derive your game from it.">buz::game_3d</a> switches them with the engine's debug keys (<a class="el" href="structbuz_1_1engine__settings.html#ade7634e1d20b582ad081f6034713f2f2" title="The keys that switch the debug views while the game runs.">engine_settings::debug_controls</a>), so a game does not handle them.  <a href="structbuz_1_1debug__views.html#details">More...</a><br /></td></tr>
 <tr class="memitem:buz_3A_3Aworld_5Frenderer_5F3d" id="r_buz_3A_3Aworld_5Frenderer_5F3d"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classbuz_1_1world__renderer__3d.html">buz::world_renderer_3d</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the 3D game world, through a camera.  <a href="classbuz_1_1world__renderer__3d.html#details">More...</a><br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-namespaces" class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:buz" id="r_buz"><td class="memItemLeft">namespace &#160;</td><td class="memItemRight"><a class="el" href="namespacebuz.html">buz</a></td></tr>
+<tr class="memitem:buz_3A_3Arhi" id="r_buz_3A_3Arhi"><td class="memItemLeft">namespace &#160;</td><td class="memItemRight"><a class="el" href="namespacebuz_1_1rhi.html">buz::rhi</a></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-typedef-members" class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a9fb4deb6c6a40ab94c34b44eb161d0cf" id="r_a9fb4deb6c6a40ab94c34b44eb161d0cf"><td class="memItemLeft">using&#160;</td><td class="memItemRight"><a class="el" href="namespacebuz.html#a9fb4deb6c6a40ab94c34b44eb161d0cf">buz::wireframe_view</a> = utl::yes_no_t&lt;struct wireframe_view_tag&gt;</td></tr>
+<tr class="memdesc:a9fb4deb6c6a40ab94c34b44eb161d0cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether meshes are drawn as the edges of their triangles only.  <br /></td></tr>
+<tr class="memitem:abb4cdccd0afe15e3c6da4ce1a72eeddc" id="r_abb4cdccd0afe15e3c6da4ce1a72eeddc"><td class="memItemLeft">using&#160;</td><td class="memItemRight"><a class="el" href="namespacebuz.html#abb4cdccd0afe15e3c6da4ce1a72eeddc">buz::lighting_view</a> = utl::yes_no_t&lt;struct lighting_view_tag&gt;</td></tr>
+<tr class="memdesc:abb4cdccd0afe15e3c6da4ce1a72eeddc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether surfaces are lit, or all drawn at their plain color.  <br /></td></tr>
+<tr class="memitem:a4b609e24fbde408db59f6c05b5bdd6e9" id="r_a4b609e24fbde408db59f6c05b5bdd6e9"><td class="memItemLeft">using&#160;</td><td class="memItemRight"><a class="el" href="namespacebuz.html#a4b609e24fbde408db59f6c05b5bdd6e9">buz::debug_lines_view</a> = utl::yes_no_t&lt;struct debug_lines_view_tag&gt;</td></tr>
+<tr class="memdesc:a4b609e24fbde408db59f6c05b5bdd6e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether debug lines are drawn.  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Draws the 3D game world: meshes, the built-in shapes and debug lines. </p>
@@ -184,7 +200,7 @@ Namespaces</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a href="dir_815db0563159af41b77de82d2ec73be5.html">renderer_3d</a></li><li class="navelem"><a href="world__renderer__3d_8h.html">world_renderer_3d.h</a></li>
+    <li class="navelem"><a href="dir_2c5eb61a5511368cb6e8f5f1449a9bb1.html">renderer_3d</a></li><li class="navelem"><a href="world__renderer__3d_8h.html">world_renderer_3d.h</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
   </ul>
 </div>

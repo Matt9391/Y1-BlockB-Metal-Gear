@@ -59,7 +59,7 @@ namespace buz::d3d12
 		m_cache_file = cache_file;
 		m_base_device = d3d_device;
 
-		// Pipeline libraries need ID3D12Device1 (windows 10 anniversary
+		// Pipeline libraries need ID3D12Device1 (Windows 10 Anniversary
 		// update or newer). When unavailable, the engine still works: every
 		// pipeline is created from scratch each run.
 		if (FAILED(d3d_device->QueryInterface(IID_PPV_ARGS(&m_device))))
@@ -174,7 +174,7 @@ namespace buz::d3d12
 	{
 		// CreatePipelineLibrary fails with specific error codes when the
 		// serialized data was written by a different driver version, a
-		// different gpu or a newer directx runtime. All of those mean "the
+		// different gpu or a newer DirectX runtime. All of those mean "the
 		// cache on disk is unusable".
 		const bool loading_cached_data = data != nullptr && size > 0;
 		d3d::debug_break_guard expected_failure_guard(m_base_device.Get(), D3D12_MESSAGE_SEVERITY_ERROR, FALSE, loading_cached_data);

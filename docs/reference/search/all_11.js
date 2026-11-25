@@ -11,13 +11,13 @@ var searchData=
   ['reference_8',['API reference',['../index.html',1,'']]],
   ['reference_5fhome_2emd_9',['reference_home.md',['../reference__home_8md.html',1,'']]],
   ['remove_10',['remove',['../namespacebuz_1_1fs.html#a5ead0f67c0ec3506c29141da1b0c8873',1,'buz::fs']]],
-  ['render_5fscreen_11',['render_screen',['../classbuz_1_1game.html#ab2a30bf4682c2abe440df7d783f31303',1,'buz::game']]],
-  ['render_5fworld_12',['render_world',['../classbuz_1_1game.html#a867906d8a492948b1a59f638f6fd8746',1,'buz::game']]],
-  ['renderer_5f2d_13',['renderer_2d',['../classbuz_1_1renderer__2d.html',1,'buz::renderer_2d'],['../classbuz_1_1renderer__2d.html#ab31e5136e0b26a7f5257ea074a591965',1,'buz::renderer_2d::renderer_2d(const render_context &amp;context)'],['../classbuz_1_1renderer__2d.html#a0d1628a2a3fd66cfabc07a4442151c33',1,'buz::renderer_2d::renderer_2d(const renderer_2d &amp;)=delete']]],
+  ['render_5fscreen_11',['render_screen',['../classbuz_1_1playable.html#a3645c15db7a782a7ca8fc2dbbdb612e8',1,'buz::playable']]],
+  ['render_5fworld_12',['render_world',['../classbuz_1_1playable.html#ab86a9aded682de823c7b8bc256564fc4',1,'buz::playable']]],
+  ['renderer_5f2d_13',['renderer_2d',['../classbuz_1_1renderer__2d.html',1,'buz::renderer_2d'],['../classbuz_1_1renderer__2d.html#ac6064d84c693a49d6bbeadcbe781d93d',1,'buz::renderer_2d::renderer_2d(const render_context &amp;context, texture_filter sampler_filter)'],['../classbuz_1_1renderer__2d.html#a0d1628a2a3fd66cfabc07a4442151c33',1,'buz::renderer_2d::renderer_2d(const renderer_2d &amp;)=delete']]],
   ['renderer_5f2d_2eh_14',['renderer_2d.h',['../renderer__2d_8h.html',1,'']]],
   ['reset_15',['reset',['../classbuz_1_1timer.html#aed1000454aac672e23161139fb929df2',1,'buz::timer']]],
   ['right_16',['right',['../namespacebuz.html#a5f8814179d73e55467bf33039e0bd9caa7c4f29407893c334a6cb7a87bf045c0d',1,'buz::right'],['../namespacebuz.html#aa745fefb0075db943ff9015d5998caf9a7c4f29407893c334a6cb7a87bf045c0d',1,'buz::right']]],
-  ['rotation_17',['rotation',['../structbuz_1_1joint__pose.html#af60247e1bf5e0b196bf7399a0b318c28',1,'buz::joint_pose']]],
+  ['rotation_17',['rotation',['../structbuz_1_1node__transform.html#a687d53267c912529572d3cfab58426db',1,'buz::node_transform']]],
   ['rotation_5fradians_18',['rotation_radians',['../structbuz_1_1sprite__instance.html#a2bb9a8d79dd74d2f5eacfab47bb7b978',1,'buz::sprite_instance']]],
-  ['run_19',['run',['../classbuz_1_1engine.html#a7c71f3c0fd9ef4cda27942307f08ffe7',1,'buz::engine']]]
+  ['run_19',['run',['../classbuz_1_1engine.html#acd9632a8154e3ecaced1689f81c3ca5e',1,'buz::engine']]]
 ];

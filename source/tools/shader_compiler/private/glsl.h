@@ -27,6 +27,8 @@ enum class glsl_version
 /// GLSL 3.30 has no binding numbers, so the resources get fixed names that
 /// the OpenGL backend looks up instead:
 /// - the per-draw constants: the uniform block buz_constants
+/// - the shader data (register(b1)): the uniform block buz_shader_data
+/// - the frame data (register(b2)): the uniform block buz_frame_data
 /// - the texture and its sampler, combined: buz_texture
 /// - what the vertex shader hands the pixel shader: buz_varying_<location>
 /// @param spirv The SPIR-V words.

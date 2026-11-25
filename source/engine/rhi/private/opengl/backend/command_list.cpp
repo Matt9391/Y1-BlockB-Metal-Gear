@@ -8,6 +8,9 @@
 #include "opengl/backend/pipeline.h"
 #include "opengl/gl_call.h"
 
+#include <algorithm>
+#include <array>
+#include <cstring>
 #include <optional>
 #include <vector>
 
@@ -76,6 +79,18 @@ namespace buz::rhi
 	}
 
 	//--------------------------------------------------------------
+	bool command_list::set_shader_data(std::span<const std::byte> data)
+	{
+		return m_native->set_data(data_slot::shader_data, data);
+	}
+
+	//--------------------------------------------------------------
+	bool command_list::set_frame_data(std::span<const std::byte> data)
+	{
+		return m_native->set_data(data_slot::frame_data, data);
+	}
+
+	//--------------------------------------------------------------
 	void command_list::set_texture(const gpu_texture& sampled_texture)
 	{
 		m_native->set_texture(sampled_texture.get_native());
@@ -111,6 +126,7 @@ namespace buz::rhi
 		, m_pipeline(nullptr)
 		, m_index_type(GL_UNSIGNED_SHORT)
 		, m_enabled_inputs(0)
+		, m_has_data{}
 	{
 	}
 
@@ -120,6 +136,7 @@ namespace buz::rhi
 		m_owner = &owner;
 		m_pipeline = nullptr;
 		m_stats = {};
+		std::ranges::fill(m_has_data, false);
 	}
 
 	//--------------------------------------------------------------
@@ -129,7 +146,17 @@ namespace buz::rhi
 		const pipeline_desc& desc = active_pipeline.get_desc();
 
 		BUZ_GL_CALL(glUseProgram(active_pipeline.get_program()));
-		BUZ_GL_CALL(glBindSampler(0, m_owner->get_sampler(desc.sampler_filter)));
+
+		// Zeros until the frame sets shader data or frame data, so a shader
+		// that reads them never reads last frame's buffer
+		for (uint32_t index = 0; index < k_data_slot_count; ++index)
+		{
+			if (!m_has_data[index])
+			{
+				set_data(static_cast<data_slot>(index), {});
+			}
+		}
+		BUZ_GL_CALL(glBindSampler(0, m_owner->get_sampler(desc.filter)));
 
 		// Standard alpha blending, so drawing with transparency works
 		if (desc.blending)
@@ -213,6 +240,32 @@ namespace buz::rhi
 		{
 			BUZ_GL_CALL(glBindBufferRange(GL_UNIFORM_BUFFER, 0, m_owner->get_scratch_buffer(), static_cast<GLintptr>(*offset), static_cast<GLsizeiptr>(constants.size())));
 		}
+	}
+
+	//--------------------------------------------------------------
+	bool command_list::native::set_data(data_slot slot, std::span<const std::byte> data)
+	{
+		const uint32_t size = get_data_size(slot);
+		BUZ_ASSERT_MSG(data.size() <= size, "this data must be at most {} bytes, not {}", size, data.size());
+
+		// The full size, like the other backends (see get_data_size)
+		std::array<std::byte, k_max_shader_data_size> padded = {};
+		std::memcpy(padded.data(), data.data(), data.size());
+		const std::span<const std::byte> block(padded.data(), size);
+
+		const std::optional<uintptr_t> offset = m_owner->write_scratch(block, std::max(m_owner->get_constants_alignment(), k_data_alignment));
+		if (!offset)
+		{
+			return false;
+		}
+
+		// Uniform block 1 + slot (buz_shader_data or buz_frame_data in the
+		// shaders). OpenGL keeps the binding when the program changes, so
+		// set_pipeline leaves it alone.
+		const uint32_t index = static_cast<uint32_t>(slot);
+		BUZ_GL_CALL(glBindBufferRange(GL_UNIFORM_BUFFER, 1 + index, m_owner->get_scratch_buffer(), static_cast<GLintptr>(*offset), static_cast<GLsizeiptr>(block.size())));
+		m_has_data[index] = true;
+		return true;
 	}
 
 	//--------------------------------------------------------------

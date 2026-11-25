@@ -7,8 +7,8 @@
 // It is much smaller than those two, because OpenGL does for you what they
 // leave to the application: the driver keeps a resource alive until the gpu
 // is done with it, waits when the cpu gets too far ahead, and owns the
-// window's buffers. So there is no swap chain, no fence and no descriptor
-// heap here. What is left is the drawing itself.
+// window's buffers. So this backend has no swap chain, fence or descriptor
+// heap; it only contains the drawing code.
 //
 // It only uses what OpenGL 3.3 core and OpenGL ES 3.0 (WebGL 2) share, so
 // the same code runs on the desktop and in the browser.
@@ -85,7 +85,7 @@ namespace buz::rhi
 
 		//----------------------------------------------------------
 		/// @brief Returns the sampler object for a filter.
-		GLuint get_sampler(texture_filter filter) const;
+		GLuint get_sampler(sampler_filter filter) const;
 
 		//----------------------------------------------------------
 		/// @brief Returns what the per-draw constants' offset must be a
@@ -105,8 +105,9 @@ namespace buz::rhi
 		GLuint m_samplers[2]; // linear, nearest
 
 		// One buffer for data that only lives for this frame: vertices made
-		// on the fly and the per-draw constants. begin_frame hands the old
-		// one back to the driver, which keeps it until the gpu is done.
+		// on the fly, the per-draw constants, the shader data and the frame
+		// data. begin_frame hands the old one back to the driver, which
+		// keeps it until the gpu is done.
 		GLuint m_scratch_buffer;
 		frame_scratch m_scratch;
 		uint32_t m_constants_alignment;

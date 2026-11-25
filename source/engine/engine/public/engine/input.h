@@ -10,13 +10,14 @@
 namespace buz
 {
 	class input_recorder;
+	class native_window;
 
 	//--------------------------------------------------------------
 	/// @brief The keys the engine understands.
 	///
 	/// A key names the physical key position, not the letter printed on it:
-	/// key::w is the key left of e on every keyboard layout, which is what
-	/// wasd movement wants.
+	/// key::w is the key left of e on every keyboard layout, which suits
+	/// wasd movement.
 	enum class key : uint8_t
 	{
 		backspace,
@@ -98,8 +99,9 @@ namespace buz
 	//--------------------------------------------------------------
 	/// @brief The keyboard and mouse state of this frame.
 	///
-	/// The engine owns one instance (engine::get_input) and records every
-	/// keyboard and mouse event into it. Game code just asks questions:
+	/// The engine owns one instance (engine::get_input), which reports the
+	/// keyboard and mouse events of this frame. Game code queries it like
+	/// this:
 	/// @code{.cpp}
 	/// if (input.is_key_down(buz::key::a))            { }  // every frame while held
 	/// if (input.was_key_pressed(buz::key::space))    { }  // only the frame it went down
@@ -111,9 +113,10 @@ namespace buz
 		// Lifetime
 	public:
 		//----------------------------------------------------------
-		/// @brief Answers questions about what the engine recorded; only the
-		/// engine has one to pass in.
-		explicit input(const input_recorder& recorder);
+		/// @brief Reads the input the engine recorded, and locks the cursor
+		/// in the engine's window; only the engine has the recorder and the
+		/// window to pass in.
+		input(const input_recorder& recorder, native_window& window);
 
 		input(const input&) = delete;
 		input& operator=(const input&) = delete;
@@ -158,7 +161,36 @@ namespace buz
 		/// positive away from you, negative towards you, one "click" is 1.
 		float get_mouse_wheel_delta() const;
 
+		//----------------------------------------------------------
+		/// @brief Returns how far the mouse moved this frame, in pixels:
+		/// positive x to the right, positive y down. Unlike the position, the
+		/// movement keeps changing while the cursor is locked, so it is the
+		/// value to use for mouse look:
+		/// @code{.cpp}
+		/// m_yaw -= input.get_mouse_movement().x * k_radians_per_pixel;
+		/// @endcode
+		vec2 get_mouse_movement() const;
+
+		//----------------------------------------------------------
+		// Cursor
+	public:
+		//----------------------------------------------------------
+		/// @brief Hides the cursor and keeps it inside the window, so the
+		/// mouse can turn a camera without the cursor hitting the edge of
+		/// the screen. get_mouse_position stays where it was; read
+		/// get_mouse_movement instead. Unlock it for menus.
+		void lock_cursor();
+
+		//----------------------------------------------------------
+		/// @brief Shows the cursor again and lets it leave the window.
+		void unlock_cursor();
+
+		//----------------------------------------------------------
+		/// @brief Returns true while the cursor is locked.
+		bool is_cursor_locked() const;
+
 	private:
 		const input_recorder& m_recorder; // the engine's side: what happened this frame
+		native_window& m_window;          // the engine's side: the window the cursor is locked in
 	};
 }

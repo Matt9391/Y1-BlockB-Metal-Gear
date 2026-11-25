@@ -8,10 +8,10 @@
 namespace buz
 {
 	//--------------------------------------------------------------
-	/// @brief 2D axis aligned rectangle, the workhorse for collision checks.
+	/// @brief 2D axis aligned rectangle, used for collision checks.
 	///
-	/// Stored as two corners: min is the top-left, max is the bottom-right
-	/// (remember: in screen coordinates the y axis points down).
+	/// It is stored as two corners: min is the top-left, max is the
+	/// bottom-right (in screen coordinates the y axis points down).
 	struct rect
 	{
 		/// @brief The top-left corner.

@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('font_8h_source
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &quot;<a class="code" href="math_8h.html">core/math.h</a>&quot;</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;<a class="code" href="rect_8h.html">core/rect.h</a>&quot;</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;<a class="code" href="texture_8h.html">rhi/texture.h</a>&quot;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;<a class="code" href="texture_8h.html">render_core/texture.h</a>&quot;</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;cstdint&gt;</span></div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;memory&gt;</span></div>
@@ -171,16 +171,16 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('font_8h_source
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="comment">    /// @brief A fixed-grid bitmap font: one atlas texture holding every</span></div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment">    /// character in a regular grid, in ascii order.</span></div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="comment">    ///</span></div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment">    /// All glyph data lives in the atlas image (content/fonts/), this struct</span></div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment">    /// only describes the grid so draw_text can find each character:</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment">    /// All glyph data is in the atlas image (content/shared/fonts/); this</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment">    /// struct only describes the grid so draw_text can find each character:</span></div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment">    /// @code{.cpp}</span></div>
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment">    /// buz::font font;</span></div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment">    /// font.atlas = buz::load_texture(engine, &quot;fonts/font_8x8.png&quot;);</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment">    /// font.atlas = buz::load_texture(engine, &quot;shared/fonts/font_8x8.png&quot;);</span></div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment">    /// renderer.draw_text(font, &quot;hello&quot;, { 20.0f, 20.0f }, 16.0f);</span></div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment">    /// @endcode</span></div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment">    ///</span></div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="comment">    /// The defaults match the engine&#39;s built-in atlas</span></div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="comment">    /// (content/fonts/font_8x8.png): 8x8 pixel glyphs, 16 per row, starting</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="comment">    /// (content/shared/fonts/font_8x8.png): 8x8 pixel glyphs, 16 per row, starting</span></div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="comment">    /// at the space character (ascii 32).</span></div>
 <div class="foldopen" id="foldopen00030" data-start="{" data-end="};">
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="structbuz_1_1font.html">   30</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="structbuz_1_1font.html">font</a></div>
@@ -206,7 +206,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('font_8h_source
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>}</div>
 <div class="ttc" id="amath_8h_html"><div class="ttname"><a href="math_8h.html">math.h</a></div><div class="ttdoc">buz&#39;s vector, matrix and color types, and the 2D projection the engine needs.</div></div>
 <div class="ttc" id="anamespacebuz_html"><div class="ttname"><a href="namespacebuz.html">buz</a></div><div class="ttdef"><b>Definition</b> <a href="aabb_8h_source.html#l00008">aabb.h:9</a></div></div>
-<div class="ttc" id="anamespacebuz_html_a3a472797f264553cab08f1822338670d"><div class="ttname"><a href="namespacebuz.html#a3a472797f264553cab08f1822338670d">buz::uvec2</a></div><div class="ttdeci">glm::uvec2 uvec2</div><div class="ttdef"><b>Definition</b> <a href="math_8h_source.html#l00026">math.h:26</a></div></div>
+<div class="ttc" id="anamespacebuz_html_a3a472797f264553cab08f1822338670d"><div class="ttname"><a href="namespacebuz.html#a3a472797f264553cab08f1822338670d">buz::uvec2</a></div><div class="ttdeci">glm::uvec2 uvec2</div><div class="ttdef"><b>Definition</b> <a href="math_8h_source.html#l00027">math.h:27</a></div></div>
 <div class="ttc" id="arect_8h_html"><div class="ttname"><a href="rect_8h.html">rect.h</a></div><div class="ttdoc">The 2D axis aligned rectangle and the questions to ask it.</div></div>
 <div class="ttc" id="astructbuz_1_1font_html"><div class="ttname"><a href="structbuz_1_1font.html">buz::font</a></div><div class="ttdoc">A fixed-grid bitmap font: one atlas texture holding every character in a regular grid,...</div><div class="ttdef"><b>Definition</b> <a href="#l00030">font.h:31</a></div></div>
 <div class="ttc" id="astructbuz_1_1font_html_a44ad2e64bd6f079223c36a3119677c32"><div class="ttname"><a href="structbuz_1_1font.html#a44ad2e64bd6f079223c36a3119677c32">buz::font::glyphs_per_row</a></div><div class="ttdeci">uint32_t glyphs_per_row</div><div class="ttdoc">How many glyphs one row of the atlas holds.</div><div class="ttdef"><b>Definition</b> <a href="#l00039">font.h:39</a></div></div>
@@ -215,7 +215,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('font_8h_source
 <div class="ttc" id="astructbuz_1_1font_html_a82301b32d21365319151afb8b59f2fd6"><div class="ttname"><a href="structbuz_1_1font.html#a82301b32d21365319151afb8b59f2fd6">buz::font::first_character</a></div><div class="ttdeci">uint32_t first_character</div><div class="ttdoc">The character of the first glyph, in ascii.</div><div class="ttdef"><b>Definition</b> <a href="#l00035">font.h:35</a></div></div>
 <div class="ttc" id="astructbuz_1_1font_html_aa0d0a71844cd92eef4a48054cb69b626"><div class="ttname"><a href="structbuz_1_1font.html#aa0d0a71844cd92eef4a48054cb69b626">buz::font::get_glyph_source_rect</a></div><div class="ttdeci">rect get_glyph_source_rect(char character) const</div><div class="ttdoc">Returns where a character&#39;s glyph sits in the atlas, in pixels. Characters the font does not have com...</div></div>
 <div class="ttc" id="astructbuz_1_1font_html_ae20ba25d1d32e288bc0696d57e8ba225"><div class="ttname"><a href="structbuz_1_1font.html#ae20ba25d1d32e288bc0696d57e8ba225">buz::font::glyph_size</a></div><div class="ttdeci">uvec2 glyph_size</div><div class="ttdoc">Size of one glyph in pixels.</div><div class="ttdef"><b>Definition</b> <a href="#l00041">font.h:41</a></div></div>
-<div class="ttc" id="astructbuz_1_1rect_html"><div class="ttname"><a href="structbuz_1_1rect.html">buz::rect</a></div><div class="ttdoc">2D axis aligned rectangle, the workhorse for collision checks.</div><div class="ttdef"><b>Definition</b> <a href="rect_8h_source.html#l00015">rect.h:16</a></div></div>
+<div class="ttc" id="astructbuz_1_1rect_html"><div class="ttname"><a href="structbuz_1_1rect.html">buz::rect</a></div><div class="ttdoc">2D axis aligned rectangle, used for collision checks.</div><div class="ttdef"><b>Definition</b> <a href="rect_8h_source.html#l00015">rect.h:16</a></div></div>
 <div class="ttc" id="atexture_8h_html"><div class="ttname"><a href="texture_8h.html">texture.h</a></div><div class="ttdoc">A 2D image in gpu memory, ready to be drawn.</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
@@ -223,7 +223,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('font_8h_source
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a href="dir_6f9ba63c1e6703776d3763c2ff46adb4.html">renderer_2d</a></li><li class="navelem"><a href="font_8h.html">font.h</a></li>
+    <li class="navelem"><a href="dir_4eb240cf58aabfdc4f5151186b6d1658.html">renderer_2d</a></li><li class="navelem"><a href="font_8h.html">font.h</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
   </ul>
 </div>

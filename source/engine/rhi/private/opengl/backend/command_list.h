@@ -1,5 +1,6 @@
 #pragma once
 
+#include "common/data_slot.h"
 #include "opengl/gl_functions.h"
 #include "rhi/buffer.h"
 #include "rhi/command_list.h"
@@ -34,6 +35,7 @@ namespace buz::rhi
 		bool set_vertex_data(vertex_rate rate, std::span<const std::byte> data, uint32_t stride);
 		void set_index_buffer(const buffer::native& indices);
 		void set_constants(std::span<const std::byte> constants);
+		bool set_data(data_slot slot, std::span<const std::byte> data);
 		void set_texture(const gpu_texture::native& sampled_texture);
 		void draw(uint32_t vertex_count, uint32_t instance_count);
 		void draw_indexed(uint32_t index_count, uint32_t instance_count);
@@ -64,5 +66,9 @@ namespace buz::rhi
 		GLenum m_index_type;                // of the index buffer set last
 		GLuint m_enabled_inputs;            // how many vertex inputs are switched on
 		frame_stats m_stats;                // what was recorded since begin
+
+		// Whether each slot's uniform block has this frame's data, indexed
+		// by data_slot
+		bool m_has_data[k_data_slot_count];
 	};
 }

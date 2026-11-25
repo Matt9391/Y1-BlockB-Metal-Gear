@@ -3,4 +3,4 @@
 # new folder's name. Everything else (sources, shaders, content) is set up by
 # BUZ_GAME, see cmake/buz_game.cmake.
 BUZ_GAME(sample_2d
-         LINKS buz_engine buz_asset_management)
+         LINKS buz_engine buz_game_framework buz_asset_management)

@@ -1,5 +1,5 @@
 /// @file
-/// @brief Debug lines that show what the code thinks is there.
+/// @brief Debug lines that draw a game's own shapes (colliders, view cones, rays) in the world.
 
 #pragma once
 
@@ -11,9 +11,10 @@ namespace buz
 	class world_renderer_3d;
 
 	//--------------------------------------------------------------
-	// Debug drawing: lines that show what your code thinks is there. Draw
-	// your colliders, a guard's vision cone, a patrol path, a ray you cast,
-	// and you see at a glance whether the math does what you meant.
+	// Debug drawing: lines that show the shapes your game code works with.
+	// Drawing your colliders, a guard's vision cone, a patrol path or a ray
+	// you cast shows at a glance whether the math gives the result you
+	// intended.
 	//
 	// Lines only show while debug lines are on (F4 switches them, see
 	// engine_settings::debug_controls), so they can stay in the code. They

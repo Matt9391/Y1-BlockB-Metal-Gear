@@ -32,9 +32,9 @@ namespace
 sample_2d_game::sample_2d_game(buz::engine& engine)
 	: buz::game_2d(engine)
 	// Load the images once, here. Paths are relative to the content folder
-    // that sits next to the executable.
-	, m_ball(buz::load_texture(engine, "textures/ball.png"))
-	, m_font{ .atlas = buz::load_texture(engine, "fonts/font_8x8.png") }
+	// that sits next to the executable.
+	, m_ball(buz::load_texture(engine, "sample_2d/textures/ball.png"))
+	, m_font{ .atlas = buz::load_texture(engine, "shared/fonts/font_8x8.png") }
 	, m_ball_position{ 640.0f, 0.0f }
 	, m_ball_speed(300.0f)
 	, m_paddle_x(640.0f)
@@ -64,15 +64,15 @@ void sample_2d_game::on_update(buz::engine& engine, float delta_seconds)
 	// The ball falls straight down.
 	m_ball_position.y += m_ball_speed * delta_seconds;
 
-	// Did the paddle catch the ball? Build a rectangle for each and ask the
-	// engine whether they overlap.
+	// Check whether the paddle caught the ball: build a rectangle for each and
+	// test whether the two rectangles overlap.
 	const buz::rect ball_bounds = buz::rect_from_center_size(m_ball_position, { k_ball_size, k_ball_size });
 	const buz::rect paddle_bounds = buz::rect_from_center_size({ m_paddle_x, k_paddle_y }, { k_paddle_width, k_paddle_height });
 
 	if (buz::intersects(ball_bounds, paddle_bounds))
 	{
 		// Caught it: score a point, make the next ball a little faster.
-		engine.get_audio().play_sound("sounds/catch.wav");
+		engine.get_audio().play_sound("sample_2d/sounds/catch.wav");
 		m_score += 1;
 		m_ball_speed += k_speed_bump;
 		respawn_ball();
@@ -92,7 +92,7 @@ void sample_2d_game::on_render_world(buz::engine& /*engine*/, buz::world_rendere
 	// The falling ball.
 	world.draw_sprite(*m_ball, m_ball_position, { k_ball_size, k_ball_size });
 
-	// The paddle is just a filled rectangle.
+	// The paddle is a filled rectangle; it needs no texture.
 	const buz::rect paddle_bounds = buz::rect_from_center_size({ m_paddle_x, k_paddle_y }, { k_paddle_width, k_paddle_height });
 	world.draw_rect(paddle_bounds, { 0.3f, 0.7f, 1.0f, 1.0f });
 }

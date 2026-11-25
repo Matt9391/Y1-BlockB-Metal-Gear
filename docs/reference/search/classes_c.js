@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['texture_0',['texture',['../classbuz_1_1texture.html',1,'buz']]],
-  ['timer_1',['timer',['../classbuz_1_1timer.html',1,'buz']]]
+  ['rect_0',['rect',['../structbuz_1_1rect.html',1,'buz']]],
+  ['renderer_5f2d_1',['renderer_2d',['../classbuz_1_1renderer__2d.html',1,'buz']]]
 ];

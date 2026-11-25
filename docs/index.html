@@ -86,7 +86,7 @@
 <span class="tok-key">public</span>:
     <span class="tok-key">explicit</span> <span class="tok-fn">my_game</span>(<span class="tok-type">buz</span>::engine&amp; engine)
         : <span class="tok-type">buz</span>::<span class="tok-fn">game_2d</span>(engine)
-        , <span class="tok-fn">m_ball</span>(<span class="tok-type">buz</span>::<span class="tok-fn">load_texture</span>(engine, <span class="tok-str">&quot;textures/ball.png&quot;</span>))
+        , <span class="tok-fn">m_ball</span>(<span class="tok-type">buz</span>::<span class="tok-fn">load_texture</span>(engine, <span class="tok-str">&quot;my_game/textures/ball.png&quot;</span>))
     {
     }
 
@@ -105,7 +105,7 @@
         <p>Your game connects to the engine through a class that derives from <code>buz::game_2d</code>, like <code>my_game</code> here, or from <code>buz::game_3d</code> for a 3D world. Its constructor loads what the game needs while it runs, in this case the texture of a ball. From then on the engine calls the class every frame: in <code>on_update</code> the game reacts to input and moves things, and in <code>on_render_world</code> and <code>on_render_screen</code> it draws them, each with the renderer it gets. This example has nothing to move, so it only draws.</p>
         <p>In a real game, this class doesn't do all the work itself. The player, the enemies and the level are usually classes of their own, in separate files, and the game class creates them and updates them every frame. All of it is plain C++; there is no editor or scripting language.</p>
         <h3>Your template</h3>
-        <p>You don't start from an empty folder. A template is a CMake project that already contains the engine's source code, a small game that runs, and scripts to build, run and package your games. Run that game first, then change it or add your own next to it.</p>
+        <p>A template is a CMake project that already contains the engine's source code, a small game that runs, and scripts to build, run and package your games. Run that game first, then change it or add your own next to it.</p>
         <a class="more" href="about.html">About BuzEngine &gt;</a>
       </div>
     </div>
@@ -120,7 +120,7 @@
     <ol class="path">
       <li><div class="card"><h3><a href="guides/getting-started.html">Getting started</a></h3><p class="sum">Build the project and write your first game.</p></div></li>
       <li><div class="card"><h3><a href="guides/drawing.html">Drawing in 2D</a></h3><p class="sum">Sprites, shapes and text, in the world and on the screen.</p></div></li>
-      <li><div class="card"><h3><a href="guides/drawing-3d.html">Drawing in 3D</a></h3><p class="sum">Cameras, shapes, materials and debug lines.</p></div></li>
+      <li><div class="card"><h3><a href="guides/drawing-3d.html">Drawing in 3D</a></h3><p class="sum">Cameras, shapes, meshes and textures, your own shaders, debug lines.</p></div></li>
       <li><div class="card"><h3><a href="guides/input.html">Input</a></h3><p class="sum">Reading the keyboard and mouse each frame.</p></div></li>
       <li><div class="card"><h3><a href="guides/textures-and-fonts.html">Textures &amp; fonts</a></h3><p class="sum">Loading images, procedural textures, bitmap fonts.</p></div></li>
       <li><div class="card"><h3><a href="guides/audio.html">Audio</a></h3><p class="sum">Sound effects and music.</p></div></li>
@@ -129,6 +129,7 @@
       <li><div class="card"><h3><a href="guides/json.html">JSON files</a></h3><p class="sum">Reading and writing json.</p></div></li>
       <li><div class="card"><h3><a href="guides/models.html">Models</a></h3><p class="sum">glTF meshes, characters made of rigid parts, and their animations.</p></div></li>
       <li><div class="card"><h3><a href="guides/under-the-hood.html">Under the hood</a></h3><p class="sum">How the engine works inside, module by module.</p></div></li>
+      <li><div class="card"><h3><a href="guides/changes.html">Changes</a></h3><p class="sum">What to change in a game written for an earlier version.</p></div></li>
     </ol>
 
     <div class="blocks">
@@ -146,6 +147,7 @@
           <li><a href="guides/animation-player.html"><strong>An animation player</strong><span>Play keyframe clips with looping and blending.</span></a></li>
           <li><a href="guides/collision.html"><strong>Collision</strong><span>Walls, rays, line of sight and view cones.</span></a></li>
           <li><a href="guides/asset-cache.html"><strong>An asset cache</strong><span>Load every model once, however often it is used.</span></a></li>
+          <li><a href="guides/radar.html"><strong>A radar</strong><span>Show the guards around the player on a minimap in the hud.</span></a></li>
         </ul>
       </div>
     </div>

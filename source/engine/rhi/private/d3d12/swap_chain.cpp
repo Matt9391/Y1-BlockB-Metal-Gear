@@ -10,14 +10,14 @@ namespace buz::d3d12
 {
 	//--------------------------------------------------------------
 	swap_chain::swap_chain()
-		: m_vsync(vsync::yes)
+		: m_vsync(rhi::vsync::yes)
 		, m_width(0)
 		, m_height(0)
 	{
 	}
 
 	//--------------------------------------------------------------
-	bool swap_chain::initialize(device& graphics_device, command_queue& direct_queue, HWND window_handle, uint32_t width, uint32_t height, vsync wait_for_vsync)
+	bool swap_chain::initialize(device& graphics_device, command_queue& direct_queue, HWND window_handle, uint32_t width, uint32_t height, rhi::vsync wait_for_vsync)
 	{
 		m_width = width;
 		m_height = height;

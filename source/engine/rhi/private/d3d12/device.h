@@ -9,7 +9,7 @@
 namespace buz::d3d12
 {
 	//--------------------------------------------------------------
-	/// @brief Owns the directx 12 device and the adapter it was created on.
+	/// @brief Owns the DirectX 12 device and the adapter it was created on.
 	///
 	/// Initialization enables the debug layer (in debug builds), enumerates
 	/// and scores all graphics cards, selects one based on the given
@@ -18,13 +18,13 @@ namespace buz::d3d12
 	{
 	public:
 		//----------------------------------------------------------
-		/// @brief Creates the directx 12 device.
-		/// @param preference Whether to run on the highest or lowest scoring graphics card.
+		/// @brief Creates the DirectX 12 device.
+		/// @param preference Which graphics card to run on: the highest or lowest scoring one, or a software rasterizer.
 		/// @return True when the device was created successfully.
-		bool initialize(adapter_preference preference);
+		bool initialize(rhi::adapter_preference preference);
 
 		//----------------------------------------------------------
-		/// @brief Returns the underlying directx 12 device.
+		/// @brief Returns the underlying DirectX 12 device.
 		ID3D12Device* get_d3d_device() const;
 
 		//----------------------------------------------------------
