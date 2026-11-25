@@ -16,9 +16,9 @@ void snake::on_update(float dt, const buz::vec3& dir, const std::vector<collider
 	buz::vec3 displacement = dir * dt * m_movement_speed;
 
 	if(dir.x != 0 || dir.z != 0){
-		m_character.get_animator().set_animation(m_character.get_model().find_clip("walk"));
+		m_character.set_animation(animations::walk);
 	}else{
-		m_character.get_animator().set_animation(m_character.get_model().find_clip("idle"));
+		m_character.set_animation(animations::idle);
 	}
 
 	buz::vec3 next_pos = collision::resolve_boxes(m_character.get_centre(), 
