@@ -1,7 +1,7 @@
 #pragma once
 
 #include "core/math.h"
-#include "engine/game_3d.h"
+#include "game_framework/game_3d.h"
 #include "renderer_2d/font.h"
 #include "renderer_3d/material.h"
 #include "renderer_3d/world_renderer_3d.h"
@@ -45,15 +45,6 @@ protected:
 	void on_render_screen(buz::engine& engine, buz::screen_renderer& screen) override;
 
 private:
-
-
-	std::shared_ptr<buz::mesh> m_crate_mesh;  // one mesh, drawn at every crate position
-	buz::material m_crate_material;           // how the crates look
-	std::vector<buz::vec3> m_crate_positions; // where the crates stand
-
-	std::shared_ptr<buz::mesh> m_soldier_mesh; // every part of the soldier in one mesh, or nullptr
-	buz::vec3 m_soldier_position;              // his feet, in world meters
-
 
 	asset_cache m_asset_cache;
 	game_settings m_game_settings;

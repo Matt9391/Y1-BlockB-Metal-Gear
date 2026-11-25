@@ -24,28 +24,16 @@ namespace
 	const buz::material k_fatigues = { { 0.36f, 0.40f, 0.30f, 1.0f } };
 
 	// Unlit: a pickup glows the same color from every side
-	const buz::material k_pickup = { { 0.30f, 1.00f, 0.50f, 1.0f }, nullptr, buz::lighting::no };
+	const buz::material k_pickup = { { 0.30f, 1.00f, 0.50f, 1.0f }, {}, buz::lighting::no };
 }
 
 //--------------------------------------------------------------
 metal_gear_game::metal_gear_game(buz::engine& engine)
 	: buz::game_3d(engine)
-	, m_soldier_position{ 0.0f, 0.0f, 2.0f }
 	, m_asset_cache(engine)
 	, m_game_settings("settings/game_settings.json")
 	, m_scene_handler(scene_type::menu, m_asset_cache, m_game_settings)
 {
-
-	// load_mesh gives the triangles only; the texture is loaded separately
-	// so the same mesh can be drawn with other materials too.
-	m_crate_mesh = buz::load_mesh(engine, "models/crate.gltf");
-	m_crate_material.base_texture = buz::load_texture(engine, "models/crate.png");
-	m_crate_positions = { { 3.0f, 0.0f, -1.0f }, { 4.1f, 0.0f, -1.2f }, { 3.5f, 1.0f, -1.1f }, { -4.0f, 0.0f, 3.0f } };
-
-	// load_mesh merges the soldier's parts into one statue, as they stand in
-	// the file. To animate him, load_model keeps the parts, their hierarchy
-	// and the walk and idle clips apart (see the Models guide).
-	m_soldier_mesh = buz::load_mesh(engine, "models/soldier.glb");
 }
 
 //--------------------------------------------------------------
