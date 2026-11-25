@@ -1,9 +1,10 @@
 #include "snake.h"
 #include "engine/input.h"
 #include "core/log.h"
-#include "collision/collision.h"
+#include "collision/collision_world.h"
 #include "settings/setting_types.h"
 #include "assets/textured_model.h"
+
 
 #include <glm/gtc/type_ptr.hpp> //for the make_vec3
 
@@ -13,7 +14,7 @@ snake::snake(const textured_model& textured_model, const snake_settings& setting
 {
 }
 
-void snake::on_update(float dt, const buz::vec3& dir, const std::vector<collider::box>& boxes)
+void snake::on_update(float dt, const buz::vec3& dir, const collision_world& world)
 {
 	buz::vec3 displacement = dir * dt * m_movement_speed;
 
@@ -23,15 +24,8 @@ void snake::on_update(float dt, const buz::vec3& dir, const std::vector<collider
 		m_character.set_animation(animations::idle);
 	}
 
-	buz::vec3 next_pos = collision::resolve_boxes(m_character.get_centre(), 
-												  m_character.get_size(), 
-												  displacement, 
-												  boxes);
-
-	next_pos -= buz::vec3{0.f, m_character.get_size().y / 2.f, 0.f};
-
 	m_character.turn_toward(dir, dt);
-	m_character.set_pos(next_pos);
+	m_character.move(displacement, world);
 
 	m_character.get_animator().play_animation(dt);
 }
