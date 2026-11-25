@@ -2,6 +2,9 @@
 #include "renderer_3d/world_renderer_3d.h"
 #include "renderer_3d/debug_draw.h"
 #include "core/math.h"
+
+#include "assets/textured_model.h"
+
 #include <cmath>
 #include <iostream>
 
@@ -16,15 +19,15 @@ namespace
 	}
 }
 
-character::character(const buz::model& model, buz::vec3 pos, float turn_speed_deg_per_s)
+character::character(const textured_model& textured_model, buz::vec3 pos, float turn_speed_deg_per_s)
 	: m_yaw_degrees{ 0 }
 	, m_yaw_turning_speed_degrees{ turn_speed_deg_per_s }
 	, m_pos(pos)
 	, m_size({ 1.f, 2.f, 1.f })
-	, m_model(model)
-	, m_animator(m_model.get_rest_pose())
+	, m_textured_model(textured_model)
+	, m_animator(m_textured_model.model.get_rest_pose())
 {
-	m_animator.set_animation(m_model.find_clip("walk"));
+	m_animator.set_animation(m_textured_model.model.find_clip("walk"));
 }
 
 void character::turn_toward(buz::vec3 intent, float dt)
@@ -63,7 +66,7 @@ void character::set_size(buz::vec3 new_size)
 
 void character::set_animation(const animations& animation){
 	const std::string animation_name = m_animation_names[static_cast<std::size_t>(animation)];
-	const buz::keyframe_clip* clip = m_model.find_clip(animation_name);
+	const buz::keyframe_clip* clip = m_textured_model.model.find_clip(animation_name);
 	m_animator.set_animation(clip);
 }
 
@@ -94,7 +97,7 @@ buz::vec3 character::get_size() const
 
 const buz::model& character::get_model() const
 {
-	return m_model;
+	return m_textured_model.model;
 }
 
 animator& character::get_animator(){
@@ -108,16 +111,16 @@ void character::draw_3d(buz::world_renderer_3d& world_3d) const
 	root_m4 *= glm::rotate(glm::mat4(1.0f), buz::radians(m_yaw_degrees), glm::vec3(0.0f, 1.0f, 0.0f));
 	std::vector<buz::mat4> model_m4s;
 
-	for (std::size_t i = 0; i < m_model.nodes.size(); i++)
+	for (std::size_t i = 0; i < m_textured_model.model.nodes.size(); i++)
 	{
-		const std::vector<buz::joint_pose>& current_pose = m_animator.get_pose();
+		const std::vector<buz::node_transform>& current_pose = m_animator.get_pose();
 
 		buz::mat4 move = glm::translate(glm::mat4(1.0f), current_pose[i].translation);
 		buz::mat4 rotate = glm::mat4_cast(current_pose[i].rotation);
 		buz::mat4 scale = glm::scale(glm::mat4(1.0f), current_pose[i].scale) ;
 		buz::mat4 local_m4 = move * rotate * scale;
 
-		int indx = m_model.nodes[i].parent;
+		int indx = m_textured_model.model.nodes[i].parent;
 		if (indx == -1)
 		{
 			model_m4s.push_back(root_m4 * local_m4);
@@ -127,9 +130,9 @@ void character::draw_3d(buz::world_renderer_3d& world_3d) const
 			model_m4s.push_back(model_m4s[indx] * local_m4);
 		}
 
-		if (m_model.nodes[i].shape != nullptr)
-		{
-			world_3d.draw(*m_model.nodes[i].shape, m_model.nodes[i].look, model_m4s[i]);
+		if (m_textured_model.model.nodes[i].shape != nullptr)
+		{																								//if nullptr undefined behaviour to ask
+			world_3d.draw(*m_textured_model.model.nodes[i].shape, m_textured_model.model.nodes[i].look, *m_textured_model.textures[i], model_m4s[i]);
 		}
 	}
 

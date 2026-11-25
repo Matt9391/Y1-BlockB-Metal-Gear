@@ -5,6 +5,7 @@
 #include "animation/animator.h"
 
 #include <vector>
+#include <array>
 #include <string>
 
 namespace buz{
@@ -18,11 +19,13 @@ enum class animations{
 	count
 };
 
+struct textured_model;
+
 
 class character{
 public:
 
-    character(const buz::model& model, buz::vec3 pos, float turn_speed_deg_per_s);
+    character(const textured_model& textured_model, buz::vec3 pos, float turn_speed_deg_per_s);
     ~character() = default;
 
     void turn_toward(buz::vec3 intent, float dt);
@@ -50,7 +53,7 @@ private:
     buz::vec3 m_pos;
     buz::vec3 m_size;
 
-    const buz::model& m_model;
+    const textured_model& m_textured_model;
     
 	std::array<std::string, static_cast<std::size_t>(animations::count)> m_animation_names{"idle", "walk"};
 
