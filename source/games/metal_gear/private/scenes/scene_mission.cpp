@@ -13,8 +13,8 @@
 scene_mission::scene_mission(scene_type this_scene, scene_type next_scene, asset_cache& asset_cache_, game_settings& game_settings_)
 	: scene(this_scene, next_scene, asset_cache_)
 	, m_camera(20.f, { 0.f, 8.f, 10.f })
-	, m_snake(get_asset_cache().get_model("models/soldier.glb"), game_settings_.get_snake())
-	, m_level(get_asset_cache().get_model("models/dock_v6.glb"))
+	, m_snake(get_asset_cache().get_textured_model("sample_3d/models/soldier.glb"), game_settings_.get_snake())
+	, m_level(get_asset_cache().get_textured_model("models/dock_v6.glb"))
 {
 	// m_snake.get_character().set_pose(m_snake.get_character().get_model().find_clip("walk")->frames[4]);
 
