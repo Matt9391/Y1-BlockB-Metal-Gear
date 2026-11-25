@@ -56,7 +56,7 @@ const buz::font& asset_cache::get_font(const std::string& key)
 }
 
 //DONE: shouldnt I return a reference here? 
-std::shared_ptr<buz::texture>& asset_cache::get_texture(const std::string& key)
+const std::shared_ptr<buz::texture>& asset_cache::get_texture(const std::string& key)
 {
 
     auto it = m_cache_texture.find(key);
