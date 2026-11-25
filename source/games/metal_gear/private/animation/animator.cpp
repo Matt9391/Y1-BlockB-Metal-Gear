@@ -1,7 +1,7 @@
 #include "animator.h"
 #include <cmath>
 
-animator::animator(const std::vector<buz::joint_pose>& rest_pose)
+animator::animator(const std::vector<buz::node_transform>& rest_pose)
 	: m_clip{ nullptr }
 	, m_pose(rest_pose)
 	, m_current_frame{ 0 }
@@ -10,7 +10,7 @@ animator::animator(const std::vector<buz::joint_pose>& rest_pose)
 {
 }
 
-void animator::set_pose(const std::vector<buz::joint_pose>& new_pose)
+void animator::set_pose(const std::vector<buz::node_transform>& new_pose)
 {
 	m_pose = new_pose;
 }
@@ -27,14 +27,14 @@ void animator::set_animation(const buz::keyframe_clip* clip)
 	set_pose(m_clip->frames[m_current_frame]);
 }
 
-const std::vector<buz::joint_pose>& animator::get_pose() const
+const std::vector<buz::node_transform>& animator::get_pose() const
 {
 	return m_pose;
 }
 
 //TODO: implement catmull spline
 //start will be the one that gets edited and returned so it has to be copy
-std::vector<buz::joint_pose> animator::blend_pose(std::vector<buz::joint_pose> start_pose, const std::vector<buz::joint_pose>& end_pose, float t)
+std::vector<buz::node_transform> animator::blend_pose(std::vector<buz::node_transform> start_pose, const std::vector<buz::node_transform>& end_pose, float t)
 {
 	assert(start_pose.size() == end_pose.size() && "poses sizes mismatch");
 
@@ -42,8 +42,8 @@ std::vector<buz::joint_pose> animator::blend_pose(std::vector<buz::joint_pose> s
 	for (size_t i = 0; i < start_pose.size(); i++)
 	{
 
-        buz::joint_pose& start_joint = start_pose[i];
-        const buz::joint_pose& end_joint = end_pose[i];
+        buz::node_transform& start_joint = start_pose[i];
+        const buz::node_transform& end_joint = end_pose[i];
 
         start_joint.translation = glm::mix(start_joint.translation, end_joint.translation, t);
         start_joint.rotation = glm::slerp(start_joint.rotation, end_joint.rotation, t);
