@@ -16,7 +16,8 @@ void animator::set_pose(const std::vector<buz::joint_pose>& new_pose)
 }
 
 void animator::set_animation(const buz::keyframe_clip* clip)
-{
+{	
+	if(clip == nullptr) return;
 	if(m_clip == clip) return;
 
 	m_clip = clip;
@@ -31,6 +32,7 @@ const std::vector<buz::joint_pose>& animator::get_pose() const
 	return m_pose;
 }
 
+//TODO: implement catmull spline
 //start will be the one that gets edited and returned so it has to be copy
 std::vector<buz::joint_pose> animator::blend_pose(std::vector<buz::joint_pose> start_pose, const std::vector<buz::joint_pose>& end_pose, float t)
 {
