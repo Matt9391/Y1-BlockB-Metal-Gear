@@ -20,7 +20,7 @@ enum class animations{
 };
 
 struct textured_model;
-
+class collision_world;
 
 class character{
 public:
@@ -35,6 +35,8 @@ public:
     void set_size(buz::vec3 new_size);
 
     void set_animation(const animations& animation);
+
+    void move(buz::vec3 displacement, const collision_world& world);
 
     buz::vec3 get_forward() const;
     float get_yaw() const;

@@ -4,6 +4,7 @@
 #include "core/math.h"
 
 #include "assets/textured_model.h"
+#include "collision/collision_world.h"
 
 #include <cmath>
 #include <iostream>
@@ -69,6 +70,15 @@ void character::set_animation(const animations& animation){
 	const buz::keyframe_clip* clip = m_textured_model.model.find_clip(animation_name);
 	m_animator.set_animation(clip);
 }
+
+
+void character::move(buz::vec3 displacement, const collision_world& world){
+	collider::box box = {get_centre(), m_size};
+	buz::vec3 new_centre = world.resolve_move(box, displacement);
+
+	m_pos = new_centre - buz::vec3{0.f, m_size.y / 2.f, 0.f};
+}
+
 
 buz::vec3 character::get_forward() const
 {
