@@ -2,6 +2,7 @@
 
 #include "renderer_3d/model.h"
 #include "collision/collider.h"
+#include "collision/collision_world.h"
 #include "assets/textured_model.h"
 
 #include <vector>
@@ -10,6 +11,9 @@ namespace buz{
     class world_renderer_3d;
 }
 
+namespace{
+    std::vector<collider::box> create_boxes(const buz::model& map_model);
+}
 
 class level{
 public:
@@ -17,14 +21,14 @@ public:
     level(const level& other) = delete;
     ~level() = default;
 
-    const std::vector<collider::box>& get_solid_boxes() const;
+    const collision_world& get_collision_world() const;
 
     void draw_3d(buz::world_renderer_3d& world_3d) const;
 private:
 
     const textured_model& m_map;
 
-    std::vector<collider::box> m_solid_boxes;
+    collision_world m_collision_world;
     std::vector<buz::mat4> m_local_m4s;
 
 };
