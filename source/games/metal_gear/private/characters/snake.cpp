@@ -3,10 +3,12 @@
 #include "core/log.h"
 #include "collision/collision.h"
 #include "settings/setting_types.h"
-#include <glm/gtc/type_ptr.hpp>
+#include "assets/textured_model.h"
 
-snake::snake(const buz::model& model, const snake_settings& settings)
-	: m_character(model, glm::make_vec3(settings.spawn_position.data()), settings.turn_speed_deg_per_s)
+#include <glm/gtc/type_ptr.hpp> //for the make_vec3
+
+snake::snake(const textured_model& textured_model, const snake_settings& settings)
+	: m_character(textured_model, glm::make_vec3(settings.spawn_position.data()), settings.turn_speed_deg_per_s)
 	, m_movement_speed{ settings.walk_speed_m_per_s }
 {
 }

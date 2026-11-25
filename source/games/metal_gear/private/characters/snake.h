@@ -9,11 +9,13 @@ namespace buz{
 };
 
 struct snake_settings;
+struct textured_model;
+
 
 class snake
 {
 public:
-	snake(const buz::model& model, const snake_settings& settings);
+	snake(const textured_model& textured_model, const snake_settings& settings);
 	~snake() = default;
 
 	void on_update(float dt, const buz::vec3& dir,  const std::vector<collider::box>& boxes);
