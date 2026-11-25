@@ -20,6 +20,6 @@ namespace collision{
                             buz::vec3 displacement,  
                             const std::vector<collider::box>& boxes);
 
-    buz::vec3 resolve_single_axe_over_boxes(int axis_index, buz::vec3 centre, buz::vec3 size, buz::vec3 displacement, const std::vector<collider::box>& boxes);
+    buz::vec3 resolve_single_axis_over_boxes(int axis_index, buz::vec3 centre, buz::vec3 size, buz::vec3 displacement, const std::vector<collider::box>& boxes);
 
 }

@@ -30,23 +30,23 @@ namespace collision{
             return {centre + displacement};
         }
         
-        //TODO: replace 0,2 with axe::z, axe::z
-        centre = resolve_single_axe_over_boxes(0, centre, size, displacement,boxes); //new x moved centre
-        centre = resolve_single_axe_over_boxes(2, centre, size, displacement,boxes); //new z moved centre
+        //TODO: replace 0,2 with axis::z, axis::z
+        centre = resolve_single_axis_over_boxes(0, centre, size, displacement,boxes); //new x moved centre
+        centre = resolve_single_axis_over_boxes(2, centre, size, displacement,boxes); //new z moved centre
 
         return centre; //new centre 
 
     }
 
-    buz::vec3 resolve_single_axe_over_boxes(int axis_index, buz::vec3 centre, buz::vec3 size, buz::vec3 displacement, const std::vector<collider::box>& boxes){
+    buz::vec3 resolve_single_axis_over_boxes(int axis_index, buz::vec3 centre, buz::vec3 size, buz::vec3 displacement, const std::vector<collider::box>& boxes){
         assert((axis_index > - 1 && axis_index < 3) && "[collision.cpp] wrong axis indexed for collision resolution");
 
         if(displacement[axis_index] == 0) return centre;
 
-        buz::vec3 half_size = size / 2.f;
+        // buz::vec3 half_size = size / 2.f;
 
         
-        int sign = displacement[axis_index] < 0 ? -1 : 1;
+        // int sign = displacement[axis_index] < 0 ? -1 : 1;
         for(const collider::box& b : boxes){
             buz::vec3 centre_moved = centre;
             centre_moved[axis_index] += displacement[axis_index]; 
@@ -55,10 +55,11 @@ namespace collision{
             if(aabb_is_overlapping(overlap)){
                 
                 displacement[axis_index] = 0;
-                centre[axis_index] = b.centre[axis_index] - ((b_half_size[axis_index] + half_size[axis_index]) * sign);               
+                // centre[axis_index] = b.centre[axis_index] - ((b_half_size[axis_index] + half_size[axis_index]) * sign);               
                 
             }
         }
+
         centre[axis_index] += displacement[axis_index];
 
         return centre;
