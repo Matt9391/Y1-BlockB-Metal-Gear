@@ -25,8 +25,10 @@ class collision_world;
 class character{
 public:
 
-    character(const textured_model& textured_model, buz::vec3 pos, float turn_speed_deg_per_s);
+    character(const textured_model& textured_model, buz::vec3 pos, float turn_speed_deg_per_s, float walk_speed_m_per_s);
     ~character() = default;
+
+	void on_update(float dt, const buz::vec3& dir, const collision_world& world);
 
     void turn_toward(buz::vec3 intent, float dt);
 
@@ -51,7 +53,8 @@ public:
 private:
 
     float m_yaw_degrees{0};
-    float m_yaw_turning_speed_degrees{1.f};
+    float m_yaw_turn_speed_deg_per_s{1.f};
+    float m_walk_speed_m_per_s;
     buz::vec3 m_pos;
     buz::vec3 m_size;
 
@@ -60,5 +63,4 @@ private:
 	std::array<std::string, static_cast<std::size_t>(animations::count)> m_animation_names{"idle", "walk"};
 
     animator m_animator;
-
 };

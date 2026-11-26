@@ -2,6 +2,7 @@
 #include "renderer_3d/world_renderer_3d.h"
 #include "renderer_3d/debug_draw.h"
 #include "core/math.h"
+#include "core/assert.h"
 
 #include "assets/textured_model.h"
 #include "collision/collision_world.h"
@@ -20,9 +21,10 @@ namespace
 	}
 }
 
-character::character(const textured_model& textured_model, buz::vec3 pos, float turn_speed_deg_per_s)
+character::character(const textured_model& textured_model, buz::vec3 pos, float turn_speed_deg_per_s, float walk_speed_m_per_s)
 	: m_yaw_degrees{ 0 }
-	, m_yaw_turning_speed_degrees{ turn_speed_deg_per_s }
+	, m_yaw_turn_speed_deg_per_s{ turn_speed_deg_per_s }
+	, m_walk_speed_m_per_s(walk_speed_m_per_s)
 	, m_pos(pos)
 	, m_size({ 1.f, 2.f, 1.f })
 	, m_textured_model(textured_model)
@@ -30,6 +32,24 @@ character::character(const textured_model& textured_model, buz::vec3 pos, float 
 {
 	m_animator.set_animation(m_textured_model.model.find_clip("walk"));
 }
+
+
+void character::on_update(float dt, const buz::vec3& dir, const collision_world& world)
+{
+	buz::vec3 displacement = dir * dt * m_walk_speed_m_per_s;
+
+	if(dir.x != 0 || dir.z != 0){
+		set_animation(animations::walk);
+	}else{
+		set_animation(animations::idle);
+	}
+
+	turn_toward(dir, dt);
+	move(displacement, world);
+
+	m_animator.play_animation(dt);
+}
+
 
 void character::turn_toward(buz::vec3 intent, float dt)
 {
@@ -42,7 +62,7 @@ void character::turn_toward(buz::vec3 intent, float dt)
 	float angle_diff = angle_pointing - m_yaw_degrees;
 	float wrapped = wrap_angle(angle_diff);
 
-	float max_step = m_yaw_turning_speed_degrees * dt;
+	float max_step = m_yaw_turn_speed_deg_per_s * dt;
 	float incr = buz::clamp(wrapped, -max_step, max_step);
 
 	set_yaw(m_yaw_degrees + incr);
@@ -68,6 +88,10 @@ void character::set_size(buz::vec3 new_size)
 void character::set_animation(const animations& animation){
 	const std::string animation_name = m_animation_names[static_cast<std::size_t>(animation)];
 	const buz::keyframe_clip* clip = m_textured_model.model.find_clip(animation_name);
+	if(clip == nullptr){
+		buz::fatal_error("[character] animation clip {} is null", animation_name);
+	}
+
 	m_animator.set_animation(clip);
 }
 
