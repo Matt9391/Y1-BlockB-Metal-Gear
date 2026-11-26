@@ -11,7 +11,9 @@ public:
     game_settings(std::string_view path);
 
     const snake_settings& get_snake() const;
+    const guard_settings& get_guard() const;
 
 private:
     snake_settings m_snake_settings;
+    guard_settings m_guard_settings;
 };
