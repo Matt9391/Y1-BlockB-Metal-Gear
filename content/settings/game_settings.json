@@ -7,6 +7,6 @@
     "guard" : {
         "walk_speed_m_per_s" : 6,
         "turn_speed_deg_per_s" : 500,
-        "arrival_radius" : 0.1
+        "arrival_radius" : 0.15
     }
 }   
