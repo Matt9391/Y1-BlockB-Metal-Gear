@@ -3,6 +3,7 @@
 #include "renderer_3d/world_renderer_3d.h"
 #include "renderer_3d/debug_draw.h"
 #include "core/math.h"
+#include "core/assert.h"
 
 namespace
 {
@@ -10,6 +11,9 @@ namespace
 	const std::string_view k_path_node_name = "path_";
 	const int k_minimum_guards = 2;
 	const buz::vec3 k_path_point_size{0.1f, .1f, .1f};
+	const buz::color k_path_point_color = { 1.f, 0.0f, 0.0f, 1.0f };
+	const buz::color k_collider_color = { 0.2f, 1.0f, 0.2f, 1.0f };
+
 }
 
 level::level(const textured_model& map)
@@ -34,7 +38,6 @@ const collision_world& level::get_collision_world() const{
 
 void level::draw_3d(buz::world_renderer_3d& world_3d) const
 {
-	const buz::color collider_color = { 0.2f, 1.0f, 0.2f, 1.0f };
 
 	for (size_t i = 0; i < m_map.model.nodes.size(); i++)
 	{
@@ -57,7 +60,7 @@ void level::draw_3d(buz::world_renderer_3d& world_3d) const
 		buz::debug_draw::box(world_3d,
 							buz::aabb_from_center_size(boxes[i].centre,
 							boxes[i].size),
-							collider_color);
+							k_collider_color);
 	}
 	
 	for (size_t i = 0; i < m_guard_paths.size(); i++)
@@ -67,7 +70,7 @@ void level::draw_3d(buz::world_renderer_3d& world_3d) const
 			buz::debug_draw::box(world_3d,
 								buz::aabb_from_center_size(m_guard_paths[i][j],
 								k_path_point_size),
-								collider_color);
+								k_path_point_color);
 		}
 	}
 }
@@ -111,7 +114,11 @@ std::vector<std::vector<buz::vec3>> level::create_paths(const buz::model& map_mo
 			
 			std::size_t divider = path_data.find('_');
 			int guard_index = std::stoi(path_data.substr(0, divider));
-			// int path_point  = std::stoi(path_data.substr(divider + 1)); 
+			std::string path_point_str = path_data.substr(divider + 1);
+			if(path_point_str.size() > 2){
+				buz::fatal_error("something is wrong with the path_point of the guard index: {}. error caused by: {}", guard_index, path_point_str);
+			}
+			// int path_point  = std::stoi(path_point_str); 
 			
 			if(paths.size() <= guard_index){
 				paths.resize(guard_index + 1);
