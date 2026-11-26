@@ -2,6 +2,7 @@
 #include "scene.h"
 #include "camera/camera.h"
 #include "characters/snake.h"
+#include "characters/guard_unit.h"
 #include "world/level.h"
 
 class game_settings;
@@ -25,4 +26,5 @@ private:
 	camera m_camera;
 	snake m_snake;
 	level m_level;
+	guard_unit m_guard_unit;
 };
