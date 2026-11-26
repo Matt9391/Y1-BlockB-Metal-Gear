@@ -14,6 +14,7 @@ namespace
 {
 	const float k_full_angle = 360.f;
 	const float k_epsilon = 0.0001f;
+	const buz::vec3 k_character_collider_size = { 0.7f, 1.7f, 0.7f };
 
 	float wrap_angle(float angle)
 	{
@@ -26,7 +27,7 @@ character::character(const textured_model& textured_model, buz::vec3 pos, float 
 	, m_yaw_turn_speed_deg_per_s{ turn_speed_deg_per_s }
 	, m_walk_speed_m_per_s(walk_speed_m_per_s)
 	, m_pos(pos)
-	, m_size({ 1.f, 2.f, 1.f })
+	, m_size(k_character_collider_size)
 	, m_textured_model(textured_model)
 	, m_animator(m_textured_model.model.get_rest_pose())
 {
