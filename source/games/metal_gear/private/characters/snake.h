@@ -24,5 +24,4 @@ public:
 
 private:
 	character m_character;
-	float m_movement_speed;
 };
