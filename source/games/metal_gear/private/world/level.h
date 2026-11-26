@@ -11,20 +11,18 @@ namespace buz{
     class world_renderer_3d;
 }
 
-namespace{
-    std::vector<collider::box> create_boxes(const buz::model& map_model);
-}
 
 class level{
-public:
+    public:
     level(const textured_model& map);
     level(const level& other) = delete;
     ~level() = default;
-
+    
     const collision_world& get_collision_world() const;
-
+    
     void draw_3d(buz::world_renderer_3d& world_3d) const;
 private:
+    std::vector<collider::box> create_boxes(const buz::model& map_model);
 
     const textured_model& m_map;
 

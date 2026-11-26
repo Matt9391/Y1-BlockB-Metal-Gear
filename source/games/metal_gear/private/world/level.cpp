@@ -7,30 +7,11 @@
 namespace
 {
 	const std::string_view k_collision_node_name = "col_";
-
-	std::vector<collider::box> create_boxes(const buz::model& map_model)
-	{	
-		std::vector<collider::box> boxes;
-		for (const auto& node : map_model.nodes)
-		{
-			// DONE change "col_" with some k costant so you dont have 2 failure point in the code (here and draw)
-			if (node.name.starts_with(k_collision_node_name))
-			{
-				buz::vec3 centre = node.shape->get_bounds().center() + node.local_transform.translation;
-				buz::vec3 size = node.shape->get_bounds().size() * node.local_transform.scale;
-
-				boxes.emplace_back(collider::box{ centre, size });
-			}
-		}
-
-		return boxes;
-	}
-	
 }
 
 level::level(const textured_model& map)
 	: m_map(map)
-	, m_collision_world(std::move(create_boxes(m_map.model)))
+	, m_collision_world(create_boxes(m_map.model))
 {
 	for (const auto& node : m_map.model.nodes)
 	{
@@ -55,7 +36,11 @@ void level::draw_3d(buz::world_renderer_3d& world_3d) const
 	{
 		auto& node = m_map.model.nodes.at(i);
 		auto& texture = m_map.textures[i];
-		world_3d.draw(*node.shape, node.look, *texture, m_local_m4s.at(i));
+		if(texture){
+			world_3d.draw(*node.shape, node.look, *texture, m_local_m4s.at(i));
+		}else{
+			world_3d.draw(*node.shape, node.look, m_local_m4s.at(i));
+		}
 	}
 
 	const std::vector<collider::box>& boxes = m_collision_world.get_boxes();
@@ -67,4 +52,24 @@ void level::draw_3d(buz::world_renderer_3d& world_3d) const
 							boxes[i].size),
 							collider_color);
 	}
+}
+
+
+
+std::vector<collider::box> level::create_boxes(const buz::model& map_model)
+{	
+	std::vector<collider::box> boxes;
+	for (const auto& node : map_model.nodes)
+	{
+		// DONE change "col_" with some k costant so you dont have 2 failure point in the code (here and draw)
+		if (node.name.starts_with(k_collision_node_name))
+		{
+			buz::vec3 centre = node.shape->get_bounds().center() + node.local_transform.translation;
+			buz::vec3 size = node.shape->get_bounds().size() * node.local_transform.scale;
+
+			boxes.emplace_back(collider::box{ centre, size });
+		}
+	}
+
+	return boxes;
 }
