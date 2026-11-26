@@ -38,7 +38,9 @@ metal_gear_game::metal_gear_game(buz::engine& engine)
 
 //--------------------------------------------------------------
 void metal_gear_game::on_update(buz::engine& engine, float dt_s)
-{
+{	
+	//let's hope it never runs below 30fps.
+	dt_s = buz::clamp(dt_s, 0.f, 0.033f);
 	m_scene_handler.get_current_scene().on_update(engine, dt_s);
 	if (m_scene_handler.has_pending_scene())
 	{
