@@ -17,7 +17,7 @@ void animator::set_pose(const std::vector<buz::node_transform>& new_pose)
 
 void animator::set_animation(const buz::keyframe_clip* clip)
 {	
-	if(clip == nullptr) return;
+	assert(clip != nullptr && "selected clip does not exist");
 	if(m_clip == clip) return;
 
 	m_clip = clip;
