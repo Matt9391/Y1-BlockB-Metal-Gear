@@ -26,5 +26,5 @@ private:
 	camera m_camera;
 	snake m_snake;
 	level m_level;
-	guard_unit m_guard_unit;
+	std::vector<guard_unit> m_guard_units;
 };

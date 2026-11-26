@@ -9,46 +9,47 @@
 #include "characters/control.h"
 #include "settings/game_settings.h"
 
-
 scene_mission::scene_mission(scene_type this_scene, scene_type next_scene, asset_cache& asset_cache_, game_settings& game_settings_)
 	: scene(this_scene, next_scene, asset_cache_)
 	, m_camera(60.f, { 0.f, 8.f, 10.f })
 	, m_snake(get_asset_cache().get_textured_model("sample_3d/models/soldier.glb"), game_settings_.get_snake())
-	, m_level(get_asset_cache().get_textured_model("models/dock_v9.glb"))
-	, m_guard_unit{ 
-		//TODO: temporary hardcoded index, it will be all in a vector later
-		guard_brain(m_level.get_path(0), game_settings_.get_guard().arrival_radius),
-		character(get_asset_cache().get_textured_model("sample_3d/models/soldier.glb"), 
-				  m_level.get_path(0)[0],
-				  game_settings_.get_guard().turn_speed_deg_per_s,
-				  game_settings_.get_guard().walk_speed_m_per_s)
-	  }
+	, m_level(get_asset_cache().get_textured_model("models/dock_v10.glb"))
 {
-	// m_snake.get_character().set_pose(m_snake.get_character().get_model().find_clip("walk")->frames[4]);
+	// TODO: change guard number to some variable or settings	
+	for (int i = 0; i < 2; i++)
+	{
+		m_guard_units.emplace_back(guard_brain(m_level.get_path(i), game_settings_.get_guard().arrival_radius),
+			character(get_asset_cache().get_textured_model("sample_3d/models/soldier.glb"),
+				m_level.get_path(i).at(0),
+				game_settings_.get_guard().turn_speed_deg_per_s,
+				game_settings_.get_guard().walk_speed_m_per_s));
+	}
 
-	
-	
-	// boxes.emplace_back(collider::box{b_centre, b_size});
 }
 
 void scene_mission::on_update(buz::engine& engine, float delta_seconds)
 {
 	const buz::input& input = engine.get_input();
 	if (input.was_key_pressed(buz::key::space)) { set_invoke_next_scene(true); }
-	if (input.was_key_pressed(buz::key::b)) { collision_math::collision_disabled = !collision_math::collision_disabled; buz::log::info("coll {}", collision_math::collision_disabled); }
+	if (input.was_key_pressed(buz::key::b))
+	{
+		collision_math::collision_disabled = !collision_math::collision_disabled;
+		buz::log::info("coll {}", collision_math::collision_disabled);
+	}
 
 	const buz::vec3 player_direction = player_control::compute_direction(input, m_camera.get_forward(), m_camera.get_right());
 	m_snake.on_update(delta_seconds, player_direction, m_level.get_collision_world());
-	
 
-	m_guard_unit.brain.advance_if_arrived(m_guard_unit.body.get_pos());
-	const buz::vec3 guard_direction = m_guard_unit.brain.compute_direction(m_guard_unit.body.get_pos());
-	m_guard_unit.body.on_update(delta_seconds, guard_direction, m_level.get_collision_world());
-
+	for (int i = 0; i < m_guard_units.size(); i++)
+	{
+		guard_unit& g = m_guard_units[i];
+		g.brain.advance_if_arrived(g.body.get_pos());
+		const buz::vec3 guard_direction = g.brain.compute_direction(g.body.get_pos());
+		g.body.on_update(delta_seconds, guard_direction, m_level.get_collision_world());
+	}
 
 	m_camera.set_target(m_snake.get_character().get_pos());
 }
-
 
 void scene_mission::on_render_world(buz::engine& engine, buz::world_renderer_3d& world_3d)
 {
@@ -58,7 +59,11 @@ void scene_mission::on_render_world(buz::engine& engine, buz::world_renderer_3d&
 
 	m_snake.get_character().draw_3d(world_3d);
 
-	m_guard_unit.body.draw_3d(world_3d);
+	for (int i = 0; i < m_guard_units.size(); i++)
+	{
+		guard_unit& g = m_guard_units[i];
+		g.body.draw_3d(world_3d);
+	}
 }
 
 void scene_mission::on_render_screen(buz::engine&, buz::screen_renderer& screen)
