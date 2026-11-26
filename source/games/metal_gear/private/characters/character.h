@@ -28,6 +28,7 @@ public:
     character(const textured_model& textured_model, buz::vec3 pos, float turn_speed_deg_per_s, float walk_speed_m_per_s);
     ~character() = default;
 
+    //TODO: remove private behaviour from public access
 	void on_update(float dt, const buz::vec3& dir, const collision_world& world);
 
     void turn_toward(buz::vec3 intent, float dt);
