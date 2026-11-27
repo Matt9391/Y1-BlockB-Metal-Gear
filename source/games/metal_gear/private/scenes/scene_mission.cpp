@@ -8,6 +8,7 @@
 #include "collision/collision_math.h"
 #include "characters/control.h"
 #include "settings/game_settings.h"
+#include "math/game_math.h"
 
 scene_mission::scene_mission(scene_type this_scene, scene_type next_scene, asset_cache& asset_cache_, game_settings& game_settings_)
 	: scene(this_scene, next_scene, asset_cache_)
@@ -47,6 +48,10 @@ void scene_mission::on_update(buz::engine& engine, float delta_seconds)
 		g.brain.on_update(delta_seconds, g.body.get_pos(), false);
 		const buz::vec3 guard_direction = g.brain.compute_direction(g.body.get_pos());
 		g.body.on_update(delta_seconds, guard_direction, m_level.get_collision_world());
+		
+		if(game_math::is_point_in_cone(g.body.get_centre(), g.body.get_forward(), m_view_cone, m_snake.get_character().get_centre())){
+			buz::log::info("cone collision detected in guard {}", i);
+		}
 	}
 
 	m_camera.set_target(m_snake.get_character().get_pos());
@@ -64,7 +69,7 @@ void scene_mission::on_render_world(buz::engine& engine, buz::world_renderer_3d&
 	{
 		guard_unit& g = m_guard_units[i];
 		g.body.draw_3d(world_3d);
-		buz::debug_draw::cone(world_3d, g.body.get_centre(), g.body.get_forward(), m_view_cone.view_distance_m, m_view_cone.cone_full_angle_deg / 2.f, {0.f, 0.f, 1.f, 1.f});	
+		buz::debug_draw::cone(world_3d, g.body.get_centre(), g.body.get_forward(), m_view_cone.view_distance_m, buz::radians(m_view_cone.cone_full_angle_deg / 2.f), {0.f, 0.f, 1.f, 1.f});	
 	}
 }
 
