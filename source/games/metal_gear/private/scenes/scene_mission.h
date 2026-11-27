@@ -7,6 +7,7 @@
 
 class game_settings;
 
+
 class scene_mission : public scene
 {
 public:

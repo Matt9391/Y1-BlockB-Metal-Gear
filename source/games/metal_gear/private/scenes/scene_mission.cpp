@@ -18,7 +18,7 @@ scene_mission::scene_mission(scene_type this_scene, scene_type next_scene, asset
 	// TODO: change guard number to some variable or settings	
 	for (int i = 0; i < 2; i++)
 	{
-		m_guard_units.emplace_back(guard_brain(m_level.get_path(i), game_settings_.get_guard().arrival_radius),
+		m_guard_units.emplace_back(guard_brain(m_level.get_path(i), game_settings_.get_guard().arrival_radius, game_settings_.get_guard().idle_time_s),
 			character(get_asset_cache().get_textured_model("sample_3d/models/soldier.glb"),
 				m_level.get_path(i).at(0),
 				game_settings_.get_guard().turn_speed_deg_per_s,
@@ -43,7 +43,7 @@ void scene_mission::on_update(buz::engine& engine, float delta_seconds)
 	for (int i = 0; i < m_guard_units.size(); i++)
 	{
 		guard_unit& g = m_guard_units[i];
-		g.brain.advance_if_arrived(g.body.get_pos());
+		g.brain.on_update(delta_seconds, g.body.get_pos(), false);
 		const buz::vec3 guard_direction = g.brain.compute_direction(g.body.get_pos());
 		g.body.on_update(delta_seconds, guard_direction, m_level.get_collision_world());
 	}
