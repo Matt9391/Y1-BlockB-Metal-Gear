@@ -5,6 +5,7 @@
 
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(snake_settings, spawn_position,  walk_speed_m_per_s, turn_speed_deg_per_s)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(guard_settings,  walk_speed_m_per_s, turn_speed_deg_per_s, arrival_radius, idle_time_s)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(cone_settings,  view_distance_m, cone_full_angle_deg)
 
 game_settings::game_settings(std::string_view path)
 {   
@@ -18,7 +19,9 @@ game_settings::game_settings(std::string_view path)
     }
     m_snake_settings = file.at("snake").get<snake_settings>();  
     m_guard_settings = file.at("guard").get<guard_settings>();  
+    m_cone_settings  = file.at("cone").get<cone_settings>();  
 }
 
 const snake_settings& game_settings::get_snake() const { return m_snake_settings; }
 const guard_settings& game_settings::get_guard() const { return m_guard_settings; }
+const cone_settings& game_settings::get_cone() const { return m_cone_settings; }

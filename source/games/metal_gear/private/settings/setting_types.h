@@ -14,3 +14,8 @@ struct guard_settings{
     float arrival_radius;
     float idle_time_s;
 };
+
+struct cone_settings{
+    float view_distance_m;
+    float cone_full_angle_deg;
+};

@@ -12,8 +12,10 @@ public:
 
     const snake_settings& get_snake() const;
     const guard_settings& get_guard() const;
+    const cone_settings& get_cone() const;
 
 private:
     snake_settings m_snake_settings;
     guard_settings m_guard_settings;
+    cone_settings m_cone_settings;
 };
