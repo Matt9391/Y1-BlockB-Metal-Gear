@@ -4,7 +4,7 @@
 #include "core/assert.h"
 
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(snake_settings, spawn_position,  walk_speed_m_per_s, turn_speed_deg_per_s)
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(guard_settings,  walk_speed_m_per_s, turn_speed_deg_per_s, arrival_radius)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(guard_settings,  walk_speed_m_per_s, turn_speed_deg_per_s, arrival_radius, idle_time_s)
 
 game_settings::game_settings(std::string_view path)
 {   
