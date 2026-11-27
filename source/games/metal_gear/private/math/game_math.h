@@ -13,4 +13,6 @@ namespace game_math
 
     bool is_point_in_cone(const buz::vec3& apex, const buz::vec3& forward, const view_cone& cone, const buz::vec3& point);
 
+    float remap(float value,float in_min,float in_max,float out_min,float out_max);
+
 } // namespace game_math
