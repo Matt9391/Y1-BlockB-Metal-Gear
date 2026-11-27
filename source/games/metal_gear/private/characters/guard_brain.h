@@ -27,6 +27,8 @@ public:
 
     void advance_if_arrived(const buz::vec3 guard_feet_pos);
 
+    guard_state get_state() const;
+
 private:
     void update_patrolling(const buz::vec3& guard_feet_pos, bool sees_snake);
     void set_state(guard_state next);

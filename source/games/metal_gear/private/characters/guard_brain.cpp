@@ -48,7 +48,7 @@ void guard_brain::on_update(float dt, const buz::vec3& guard_feet_pos, bool sees
 		update_patrolling(guard_feet_pos, sees_snake);
 		break;
 	case guard_state::spotted:
-		/* code */
+		look_around(dt);
 		break;
 	case guard_state::chase:	
 		/* code */
@@ -80,6 +80,11 @@ buz::vec3 guard_brain::compute_direction(const buz::vec3 guard_feet_pos) const
 	return { 0.f, 0.f, 0.f };
 }
 
+guard_state guard_brain::get_state() const{
+	return m_state;
+}
+
+
 void guard_brain::advance_if_arrived(const buz::vec3 guard_feet_pos)
 {
 	const buz::vec3 guard_to_point = game_math::flat_vector_to(guard_feet_pos, m_path[m_next_point_index]);
@@ -90,7 +95,11 @@ void guard_brain::advance_if_arrived(const buz::vec3 guard_feet_pos)
 	}
 }
 
-void guard_brain::update_patrolling(const buz::vec3& guard_feet_pos, bool){
+void guard_brain::update_patrolling(const buz::vec3& guard_feet_pos, bool sees_snake){
+	if(sees_snake){
+		set_state(guard_state::spotted);
+		return;
+	}
 	advance_if_arrived(guard_feet_pos);
 }
 
