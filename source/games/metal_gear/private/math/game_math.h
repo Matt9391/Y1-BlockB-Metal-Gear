@@ -1,6 +1,7 @@
 #pragma once
 #include "core/math.h"
 
+struct view_cone;
 
 namespace game_math
 {
@@ -9,4 +10,7 @@ namespace game_math
     /// @param to end
     /// @return to - from, with y=0 
     buz::vec3 flat_vector_to(const buz::vec3& from, const buz::vec3& to); 
+
+    bool is_point_in_cone(const buz::vec3& apex, const buz::vec3& forward, const view_cone& cone, const buz::vec3& point);
+
 } // namespace game_math
