@@ -8,10 +8,10 @@
         "walk_speed_m_per_s" : 6,
         "turn_speed_deg_per_s" : 500,
         "arrival_radius" : 0.15,
-        "idle_time_s" : 1.2
+        "idle_time_s" : 2.2
     },
     "cone" : {
         "view_distance_m" : 3,
-        "cone_full_angle_deg" : 20
+        "cone_full_angle_deg" : 60
     } 
 }   
