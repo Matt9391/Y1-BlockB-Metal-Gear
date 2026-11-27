@@ -4,6 +4,7 @@
 #include "characters/snake.h"
 #include "characters/guard_unit.h"
 #include "world/level.h"
+#include "math/view_cone.h"
 
 class game_settings;
 
@@ -28,4 +29,6 @@ private:
 	snake m_snake;
 	level m_level;
 	std::vector<guard_unit> m_guard_units;
+
+	view_cone m_view_cone;
 };

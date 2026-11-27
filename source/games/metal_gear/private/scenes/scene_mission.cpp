@@ -14,6 +14,7 @@ scene_mission::scene_mission(scene_type this_scene, scene_type next_scene, asset
 	, m_camera(60.f, { 0.f, 8.f, 10.f })
 	, m_snake(get_asset_cache().get_textured_model("sample_3d/models/soldier.glb"), game_settings_.get_snake())
 	, m_level(get_asset_cache().get_textured_model("models/dock_v10.glb"))
+	, m_view_cone(game_settings_.get_cone().view_distance_m, game_settings_.get_cone().cone_full_angle_deg)
 {
 	// TODO: change guard number to some variable or settings	
 	for (int i = 0; i < 2; i++)
@@ -63,6 +64,7 @@ void scene_mission::on_render_world(buz::engine& engine, buz::world_renderer_3d&
 	{
 		guard_unit& g = m_guard_units[i];
 		g.body.draw_3d(world_3d);
+		buz::debug_draw::cone(world_3d, g.body.get_centre(), g.body.get_forward(), m_view_cone.view_distance_m, m_view_cone.cone_full_angle_deg / 2.f, {0.f, 0.f, 1.f, 1.f});	
 	}
 }
 
